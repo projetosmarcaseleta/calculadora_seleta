@@ -1,0 +1,2838 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Serviços — Marca Seleta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════
+   ✏️  VARIÁVEIS DE MARCA — edite aqui se quiser
+═══════════════════════════════════════════════ */
+:root {
+  --navy:      #010D3D;
+  --dark:      #0C0E16;
+  --card:      #0A1635;
+  --blue:      #0075FF;
+  --blue2:     #1D83FF;
+  --pink:      #FF27AD;
+  --orange:    #FE4C00;
+  --teal:      #4AC8CB;
+  --text:      #E9F4FD;
+  --muted:     #7B9CC4;
+  --white:     #FFFFFF;
+  --success:   #22C55E;
+
+  --font-head: 'Sora', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  --radius:    14px;
+  --radius-sm: 8px;
+}
+
+/* ═══════════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--dark);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════════
+   BLOBS DECORATIVOS
+═══════════════════════════════════════════════ */
+.blobs {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: .18;
+}
+.blob-1 { width:480px; height:480px; background:var(--blue);  top:-120px; right:-80px; }
+.blob-2 { width:360px; height:360px; background:var(--pink);  bottom:5%;  left:-80px; }
+.blob-3 { width:280px; height:280px; background:var(--teal);  bottom:30%; right:-40px; }
+
+/* ═══════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════ */
+.page { position: relative; z-index: 1; }
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ═══════════════════════════════════════════════
+   HEADER / HERO
+═══════════════════════════════════════════════ */
+header {
+  padding: 32px 24px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.logo {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--blue), var(--blue2));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.logo span { color: var(--blue); }
+
+/* ═══════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════ */
+.hero {
+  text-align: center;
+  padding: 56px 24px 48px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,117,255,.12);
+  border: 1px solid rgba(0,117,255,.35);
+  color: var(--blue2);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 24px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.hero-badge::before { content:'✦'; color:var(--blue); }
+
+.hero h1 {
+  font-family: var(--font-head);
+  font-size: clamp(28px, 5vw, 50px);
+  font-weight: 800;
+  line-height: 1.12;
+  color: var(--white);
+  margin-bottom: 20px;
+}
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--blue), var(--teal));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero p {
+  font-size: clamp(15px, 2vw, 18px);
+  color: var(--muted);
+  max-width: 540px;
+  margin: 0 auto 32px;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.stat {
+  text-align: center;
+}
+.stat-num {
+  font-family: var(--font-head);
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--blue);
+  display: block;
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ═══════════════════════════════════════════════
+   CALCULATOR CARD
+═══════════════════════════════════════════════ */
+.calc-wrap {
+  padding: 0 24px 64px;
+}
+
+.calc-card {
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,.5);
+}
+
+/* ─── Progress ─── */
+.calc-progress {
+  background: rgba(255,255,255,.04);
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.prog-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  position: relative;
+}
+.prog-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: calc(50% + 22px);
+  right: calc(-50% + 22px);
+  top: 18px;
+  height: 2px;
+  background: rgba(255,255,255,.1);
+  transition: background .4s;
+}
+.prog-step.done:not(:last-child)::after { background: var(--blue); }
+
+.prog-dot {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.06);
+  border: 2px solid rgba(255,255,255,.15);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  transition: all .35s;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.prog-step.active .prog-dot {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--white);
+  box-shadow: 0 0 20px rgba(0,117,255,.5);
+}
+.prog-step.done .prog-dot {
+  background: var(--success);
+  border-color: var(--success);
+  color: var(--white);
+}
+.prog-step.done .prog-dot::before { content: '✓'; }
+
+.prog-info { display: none; }
+@media(min-width:560px) {
+  .prog-info { display: block; }
+  .prog-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .prog-step.active .prog-label { color: var(--blue); }
+  .prog-step.done  .prog-label { color: var(--success); }
+}
+
+/* ─── Body ─── */
+.calc-body {
+  padding: 40px 32px;
+  min-height: 360px;
+}
+
+@media(max-width:520px) {
+  .calc-body { padding: 28px 20px; }
+  .calc-progress { padding: 16px 20px; }
+}
+
+/* Step heading */
+.step-title {
+  font-family: var(--font-head);
+  font-size: clamp(18px,3vw,24px);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.step-sub {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 32px;
+}
+
+/* ─── STEP 1: Service cards ─── */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.svc-card {
+  background: rgba(255,255,255,.04);
+  border: 2px solid rgba(255,255,255,.08);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  cursor: pointer;
+  transition: all .25s;
+  position: relative;
+  overflow: hidden;
+}
+.svc-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent, var(--blue));
+  transform: scaleX(0);
+  transition: transform .25s;
+}
+.svc-card:hover { border-color: rgba(255,255,255,.18); transform: translateY(-2px); }
+.svc-card:hover::before { transform: scaleX(1); }
+.svc-card.selected {
+  border-color: var(--accent, var(--blue));
+  background: rgba(0,117,255,.08);
+}
+.svc-card.selected::before { transform: scaleX(1); }
+
+.svc-card[data-svc="catalogacao"] { --accent: var(--pink); }
+.svc-card[data-svc="sac"]         { --accent: var(--orange); }
+.svc-card[data-svc="ambos"]       { --accent: var(--blue); }
+
+.svc-card.selected[data-svc="catalogacao"] { background: rgba(255,39,173,.08); border-color: var(--pink); }
+.svc-card.selected[data-svc="sac"]         { background: rgba(254,76,0,.08);   border-color: var(--orange); }
+.svc-card.selected[data-svc="ambos"]       { background: rgba(0,117,255,.08);  border-color: var(--blue); }
+
+.svc-icon {
+  font-size: 28px;
+  margin-bottom: 12px;
+  display: block;
+}
+.svc-name {
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.svc-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.svc-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin-top: 10px;
+  background: var(--accent, var(--blue));
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+/* ─── STEP 2: Volume options ─── */
+.volume-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vol-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,.04);
+  border: 2px solid rgba(255,255,255,.08);
+  border-radius: var(--radius-sm);
+  padding: 18px 22px;
+  cursor: pointer;
+  transition: all .22s;
+}
+.vol-option:hover { border-color: rgba(255,255,255,.2); }
+.vol-option.selected {
+  border-color: var(--blue);
+  background: rgba(0,117,255,.08);
+}
+
+.vol-left { display: flex; align-items: center; gap: 14px; }
+
+.vol-radio {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.25);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .22s;
+  flex-shrink: 0;
+}
+.vol-option.selected .vol-radio {
+  border-color: var(--blue);
+  background: var(--blue);
+}
+.vol-option.selected .vol-radio::after {
+  content: '';
+  width: 7px; height: 7px;
+  background: white;
+  border-radius: 50%;
+}
+
+.vol-info {}
+.vol-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+}
+.vol-subtitle {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.vol-price {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--blue);
+}
+.vol-price-period {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* dual volume (ambos) */
+.dual-section { margin-bottom: 24px; }
+.dual-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dual-label::before {
+  content: '';
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+.dual-label.cat::before { background: var(--pink); }
+.dual-label.sac::before { background: var(--orange); }
+
+/* ─── STEP 3: Lead form ─── */
+.lead-highlight {
+  background: linear-gradient(135deg, rgba(0,117,255,.1), rgba(74,200,203,.08));
+  border: 1px solid rgba(0,117,255,.25);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  margin-bottom: 28px;
+  display: flex;
+  gap: 14px;
+}
+.lead-highlight-icon { font-size: 24px; flex-shrink: 0; }
+.lead-highlight-text p { font-size: 13px; color: var(--muted); }
+.lead-highlight-text strong { color: var(--white); display: block; font-size: 14px; margin-bottom: 4px; }
+
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.form-input {
+  width: 100%;
+  background: rgba(255,255,255,.05);
+  border: 2px solid rgba(255,255,255,.1);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 15px;
+  outline: none;
+  transition: border-color .22s;
+}
+.form-input::placeholder { color: var(--muted); }
+.form-input:focus { border-color: var(--blue); }
+
+.privacy-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.privacy-note::before { content: '🔒'; }
+
+/* ─── STEP 4: Result ─── */
+.result-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+.result-congrats {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(34,197,94,.12);
+  border: 1px solid rgba(34,197,94,.3);
+  color: var(--success);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.result-congrats::before { content: '✓'; }
+
+.result-name {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.result-cards {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.result-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.result-card-info {}
+.result-card-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 4px;
+}
+.result-card-name {
+  font-family: var(--font-head);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 2px;
+}
+.result-card-vol {
+  font-size: 13px;
+  color: var(--muted);
+}
+.result-card-price {
+  text-align: right;
+}
+.result-card-amount {
+  font-family: var(--font-head);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--blue);
+}
+.result-card-period {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.result-total-card {
+  background: linear-gradient(135deg, rgba(0,117,255,.15), rgba(0,117,255,.05));
+  border: 2px solid var(--blue);
+  border-radius: var(--radius);
+  padding: 28px;
+  text-align: center;
+  margin-bottom: 28px;
+}
+.result-total-label {
+  font-size: 13px;
+  color: var(--blue);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 8px;
+}
+.result-total-amount {
+  font-family: var(--font-head);
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.result-total-sub {
+  font-size: 13px;
+  color: var(--muted);
+}
+.result-discount-badge {
+  display: inline-block;
+  background: var(--success);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 100px;
+  margin-top: 10px;
+}
+
+.result-includes {
+  margin-bottom: 28px;
+}
+.result-includes-title {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 14px;
+}
+.result-includes-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+@media(max-width:480px) { .result-includes-list { grid-template-columns: 1fr; } }
+
+.include-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text);
+}
+.include-item::before {
+  content: '✓';
+  width: 18px; height: 18px;
+  background: rgba(0,117,255,.15);
+  color: var(--blue);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ─── Buttons ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 32px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all .22s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--blue);
+  color: var(--white);
+  width: 100%;
+}
+.btn-primary:hover { background: var(--blue2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,117,255,.4); }
+.btn-primary:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.btn-whatsapp {
+  background: #25D366;
+  color: var(--white);
+  width: 100%;
+  font-size: 16px;
+  padding: 18px;
+}
+.btn-whatsapp:hover { background: #1ebe5d; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(37,211,102,.4); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 12px 24px;
+  font-size: 14px;
+}
+.btn-outline:hover { color: var(--white); border-color: rgba(255,255,255,.25); }
+
+.btn-back {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  margin-bottom: 28px;
+  transition: color .2s;
+}
+.btn-back:hover { color: var(--white); }
+.btn-back::before { content: '←'; }
+
+/* ─── Nav (calc footer) ─── */
+.calc-footer {
+  padding: 0 32px 32px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+@media(max-width:520px) { .calc-footer { padding: 0 20px 24px; } }
+
+/* ═══════════════════════════════════════════════
+   ACCOUNT MANAGEMENT SECTION
+═══════════════════════════════════════════════ */
+.am-section {
+  padding: 0 24px 48px;
+}
+.am-card {
+  background: linear-gradient(135deg, rgba(74,200,203,.08), rgba(0,117,255,.05));
+  border: 1px solid rgba(74,200,203,.25);
+  border-radius: 20px;
+  padding: 40px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.am-left {}
+.am-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--teal);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 10px;
+}
+.am-title {
+  font-family: var(--font-head);
+  font-size: clamp(18px, 3vw, 24px);
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.am-desc {
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 460px;
+  line-height: 1.6;
+}
+.am-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.am-item {
+  font-size: 12px;
+  color: var(--teal);
+  background: rgba(74,200,203,.1);
+  border: 1px solid rgba(74,200,203,.2);
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+.am-right { flex-shrink: 0; }
+.btn-am {
+  background: transparent;
+  border: 2px solid var(--teal);
+  color: var(--teal);
+  padding: 14px 28px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .22s;
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-am:hover { background: var(--teal); color: var(--dark); }
+
+/* ═══════════════════════════════════════════════
+   TRUST / SOCIAL PROOF
+═══════════════════════════════════════════════ */
+.trust-section {
+  padding: 0 24px 64px;
+}
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+.trust-card {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-align: center;
+}
+.trust-icon { font-size: 28px; margin-bottom: 10px; }
+.trust-title {
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.trust-desc { font-size: 13px; color: var(--muted); }
+
+/* ═══════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════ */
+footer {
+  border-top: 1px solid rgba(255,255,255,.06);
+  padding: 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+footer a { color: var(--blue); text-decoration: none; }
+
+/* ═══════════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════════ */
+.hidden { display: none !important; }
+.text-center { text-align: center; }
+
+/* Pulse animation para o botão do resultado */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 8px 28px rgba(37,211,102,.35); }
+  50%       { box-shadow: 0 8px 40px rgba(37,211,102,.6); }
+}
+.btn-whatsapp { animation: pulse-glow 2.5s ease-in-out infinite; }
+
+/* Fade-in das steps */
+.step { animation: fadeSlide .35s ease; }
+@keyframes fadeSlide {
+  from { opacity:0; transform: translateY(10px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* Pontual form */
+.pontual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+@media(max-width:500px) { .pontual-grid { grid-template-columns: 1fr; } }
+
+.pontual-field { display: flex; flex-direction: column; gap: 6px; }
+.pontual-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.pontual-input {
+  background: rgba(255,255,255,.05);
+  border: 2px solid rgba(255,255,255,.1);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 15px;
+  outline: none;
+  transition: border-color .22s;
+  width: 100%;
+}
+.pontual-input::placeholder { color: var(--muted); }
+.pontual-input:focus { border-color: var(--pink); }
+
+.pontual-toggles { margin-bottom: 18px; }
+.toggle-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.toggle-row:last-child { border-bottom: none; }
+.toggle-info {}
+.toggle-title { font-size: 14px; font-weight: 600; color: var(--white); }
+.toggle-desc  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.toggle-switch {
+  position: relative;
+  width: 46px; height: 26px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+.toggle-track {
+  position: absolute; inset: 0;
+  background: rgba(255,255,255,.12);
+  border-radius: 13px;
+  transition: background .25s;
+}
+.toggle-track::after {
+  content: '';
+  position: absolute;
+  left: 3px; top: 3px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: white;
+  transition: transform .25s;
+}
+.toggle-switch input:checked + .toggle-track { background: var(--pink); }
+.toggle-switch input:checked + .toggle-track::after { transform: translateX(20px); }
+
+.pontual-min-note {
+  background: rgba(255,39,173,.08);
+  border: 1px solid rgba(255,39,173,.25);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--pink);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pontual-min-note::before { content: 'ℹ️'; }
+
+.svc-card[data-svc="pontual"] { --accent: var(--teal); }
+.svc-card.selected[data-svc="pontual"] { background: rgba(74,200,203,.08); border-color: var(--teal); }
+.svc-card[data-svc="assessoria"] { --accent: var(--blue); }
+.svc-card.selected[data-svc="assessoria"] { background: rgba(0,117,255,.08); border-color: var(--blue); }
+.svc-card[data-svc="full"] { --accent: var(--blue); border: 2px solid rgba(0,117,255,.2); background: linear-gradient(135deg, rgba(0,117,255,.04), rgba(74,200,203,.03)); }
+.svc-card.selected[data-svc="full"] { background: linear-gradient(135deg, rgba(0,117,255,.12), rgba(74,200,203,.08)); border-color: var(--blue); }
+
+/* ─── SAC Services Panel ─── */
+.sac-services-panel { display:flex; flex-direction:column; gap:12px; }
+.sac-svc-card {
+  background: rgba(255,255,255,.04);
+  border: 2px solid rgba(255,255,255,.08);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  transition: border-color .22s;
+}
+.sac-svc-card.active { border-color: var(--orange); background: rgba(254,76,0,.06); }
+.sac-svc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.sac-svc-info {}
+.sac-svc-name { font-size:14px; font-weight:700; color:var(--white); margin-bottom:3px; }
+.sac-svc-desc { font-size:12px; color:var(--muted); line-height:1.45; }
+.sac-vol-row {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.07);
+}
+.sac-overage-note {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.sac-overage-note::before { content:'ℹ️'; }
+
+/* ─── Full package dual-section title ─── */
+.section-divider {
+  font-size: 11px; font-weight: 700;
+  color: var(--muted); text-transform: uppercase;
+  letter-spacing: .07em;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px; margin-top: 22px;
+}
+.section-divider::before {
+  content:''; width:8px; height:8px;
+  border-radius:50%; background: var(--divider-color, var(--blue));
+  flex-shrink:0;
+}
+.section-divider:first-child { margin-top:0; }
+
+/* ─── Planos Assessoria ─── */
+.plano-list { display: flex; flex-direction: column; gap: 12px; }
+
+.plano-card {
+  background: rgba(255,255,255,.04);
+  border: 2px solid rgba(255,255,255,.08);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  cursor: pointer;
+  transition: all .25s;
+  position: relative;
+  overflow: hidden;
+}
+.plano-card:hover { border-color: rgba(255,255,255,.2); transform: translateY(-1px); }
+.plano-card.selected { border-color: var(--blue); background: rgba(0,117,255,.07); }
+.plano-card .pop-badge {
+  position: absolute; top: -1px; right: 20px;
+  background: var(--blue);
+  color: white;
+  font-size: 10px; font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 0 0 8px 8px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.plano-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.plano-left { display: flex; align-items: center; gap: 14px; }
+.plano-radio {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.25);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all .22s;
+}
+.plano-card.selected .plano-radio { border-color: var(--blue); background: var(--blue); }
+.plano-card.selected .plano-radio::after { content:''; width:7px; height:7px; background:white; border-radius:50%; }
+
+.plano-name {
+  font-family: var(--font-head);
+  font-size: 17px; font-weight: 700;
+  color: var(--white);
+}
+.plano-contrato {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px; font-weight: 600;
+  color: var(--blue);
+  background: rgba(0,117,255,.12);
+  border: 1px solid rgba(0,117,255,.25);
+  padding: 3px 10px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.plano-card.selected .plano-contrato { background: rgba(0,117,255,.2); }
+
+.plano-desc {
+  font-size: 13px; color: var(--muted);
+  line-height: 1.5; margin-bottom: 12px;
+}
+.plano-includes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.plano-tag {
+  font-size: 11px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  color: var(--text);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+/* Resultado assessoria */
+.result-nao-inclui {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+.result-nao-inclui-title {
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .05em;
+  margin-bottom: 10px;
+}
+.result-nao-inclui-list {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.nao-inclui-tag {
+  font-size: 11px; color: var(--muted);
+  background: rgba(255,255,255,.04);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+/* ─── Anymarket Banner ─── */
+.anymarket-banner {
+  background: linear-gradient(135deg, rgba(0,117,255,.12), rgba(74,200,203,.08));
+  border: 1.5px solid rgba(0,117,255,.35);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.anymarket-banner-icon { font-size: 26px; flex-shrink: 0; }
+.anymarket-banner-body { flex: 1; min-width: 200px; }
+.anymarket-banner-title {
+  font-family: var(--font-head);
+  font-size: 14px; font-weight: 700;
+  color: var(--white);
+  margin-bottom: 3px;
+}
+.anymarket-banner-sub { font-size: 12px; color: var(--muted); }
+.anymarket-banner-cta {
+  background: var(--blue);
+  color: var(--white);
+  font-family: var(--font-head);
+  font-size: 12px; font-weight: 700;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all .22s;
+  flex-shrink: 0;
+}
+.anymarket-banner-cta:hover { background: var(--blue2); transform: translateY(-1px); }
+
+/* ─── Result card breakdown ─── */
+.result-card-breakdown {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,.07);
+  display: flex; gap: 14px; flex-wrap: wrap;
+}
+.result-card-breakdown-item {
+  font-size: 11px; color: var(--muted);
+}
+.result-card-breakdown-item span { color: var(--text); font-weight: 600; }
+
+/* ─── Pontual form novo ─── */
+.pontual-section {
+  background: rgba(255,255,255,.04);
+  border: 1.5px solid rgba(255,255,255,.08);
+  border-radius: var(--radius);
+  padding: 20px 20px 16px;
+  margin-bottom: 14px;
+  transition: border-color .22s;
+}
+.pontual-section:focus-within { border-color: rgba(255,255,255,.2); }
+.pontual-section.type-standard { border-color: rgba(255,39,173,.2); }
+.pontual-section.type-standard:focus-within { border-color: var(--pink); }
+.pontual-section.type-kit { border-color: rgba(0,117,255,.2); }
+.pontual-section.type-kit:focus-within { border-color: var(--blue); }
+
+.pontual-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.pontual-section-title {
+  font-size: 13px; font-weight: 700;
+  color: var(--white);
+  display: flex; align-items: center; gap: 8px;
+}
+.pontual-section-badge {
+  font-size: 10px; font-weight: 700;
+  padding: 2px 10px; border-radius: 100px;
+  text-transform: uppercase; letter-spacing: .04em;
+}
+.badge-standard { background: rgba(255,39,173,.15); color: var(--pink); }
+.badge-kit      { background: rgba(0,117,255,.15);  color: var(--blue); }
+
+.pontual-section-preview {
+  font-size: 12px; color: var(--muted);
+  text-align: right;
+}
+.pontual-section-preview strong { color: var(--white); }
+
+.pontual-inline-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media(max-width:480px) { .pontual-inline-grid { grid-template-columns: 1fr; } }
+
+.pontual-summary {
+  background: rgba(0,117,255,.06);
+  border: 1.5px solid rgba(0,117,255,.2);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  margin-top: 4px;
+}
+.pontual-summary-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; color: var(--muted);
+  padding: 4px 0;
+}
+.pontual-summary-row.total {
+  border-top: 1px solid rgba(255,255,255,.08);
+  margin-top: 6px; padding-top: 10px;
+  font-size: 14px; font-weight: 700; color: var(--white);
+}
+.pontual-summary-row.total span { color: var(--blue); }
+.pontual-summary-row span { color: var(--text); font-weight: 600; }
+.pontual-prazo {
+  font-size: 11px; color: var(--teal);
+  margin-top: 8px; display: flex; align-items: center; gap: 5px;
+}
+.pontual-prazo::before { content: '📅'; }
+
+/* ─── Parcelamento highlight ─── */
+.parcelamento-banner {
+  background: linear-gradient(135deg, rgba(34,197,94,.1), rgba(74,200,203,.06));
+  border: 1.5px solid rgba(34,197,94,.3);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.parcelamento-icon { font-size: 24px; flex-shrink: 0; }
+.parcelamento-body {}
+.parcelamento-title {
+  font-family: var(--font-head); font-size: 14px; font-weight: 700;
+  color: var(--white); margin-bottom: 3px;
+}
+.parcelamento-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.parcelamento-badge {
+  display: inline-block;
+  background: var(--success); color: white;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 10px; border-radius: 100px;
+  margin-top: 6px; text-transform: uppercase; letter-spacing: .04em;
+}
+
+/* ─── Form required ─── */
+.form-input.required-field:invalid,
+.form-input.field-error { border-color: var(--danger) !important; }
+.form-section-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 22px 0 16px;
+}
+.form-section-divider-line {
+  flex: 1; height: 1px; background: rgba(255,255,255,.08);
+}
+.form-section-divider-label {
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .07em; white-space: nowrap;
+}
+.form-input-select {
+  -webkit-appearance: none; appearance: none;
+  background-color: #0A1635 !important;
+  color: var(--white) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234AC8CB' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  padding-right: 38px !important;
+}
+.form-input-select option {
+  background-color: #0A1635;
+  color: var(--white);
+}
+.form-input-select:focus { border-color: var(--blue) !important; }
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width:480px) { .form-grid-2 { grid-template-columns: 1fr; } }
+
+/* ─── ROI Card (Catalogação Pontual) ─── */
+.roi-card {
+  background: linear-gradient(135deg, rgba(34,197,94,.06), rgba(74,200,203,.04));
+  border: 1.5px solid rgba(34,197,94,.25);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.roi-title {
+  font-family: var(--font-head); font-size: 14px; font-weight: 700;
+  color: var(--white); margin-bottom: 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.roi-subtitle { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+.roi-compare {
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px;
+  align-items: center; margin-bottom: 16px;
+}
+@media(max-width:480px) { .roi-compare { grid-template-columns: 1fr; } }
+.roi-box {
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  text-align: center;
+}
+.roi-box-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing:.05em; margin-bottom: 8px; }
+.roi-box-value { font-family: var(--font-head); font-size: 26px; font-weight: 800; line-height: 1; }
+.roi-box-sub { font-size: 11px; margin-top: 4px; }
+.roi-box-pay { background: rgba(0,117,255,.08); border: 1px solid rgba(0,117,255,.2); }
+.roi-box-pay .roi-box-label { color: var(--blue); }
+.roi-box-pay .roi-box-value { color: var(--blue); }
+.roi-box-earn { background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.2); }
+.roi-box-earn .roi-box-label { color: var(--success); }
+.roi-box-earn .roi-box-value { color: var(--success); }
+.roi-vs { font-size: 18px; font-weight: 800; color: var(--muted); text-align: center; }
+.roi-multiplier {
+  background: linear-gradient(90deg, var(--success), var(--teal));
+  border-radius: 100px; padding: 10px 20px;
+  text-align: center; font-family: var(--font-head);
+  font-size: 13px; font-weight: 700; color: var(--dark);
+}
+.roi-note { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
+
+/* Divs dinâmicos vazios não criam espaço */
+#result-nao-inclui-wrap:empty,
+#result-roi-card:empty,
+#result-parcelamento:empty,
+#result-anymarket-banner:empty { display:none; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius:3px; }
+</style>
+</head>
+<body>
+
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <a href="https://marcaseleta.com.br" class="logo" target="_blank">
+      <div class="logo-icon">✦</div>
+      marca<span>seleta</span>
+    </a>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">Calculadora de Serviços</div>
+      <h1>Descubra o valor para<br>escalar sua operação <em>de marketplace</em></h1>
+      <p>Simule o investimento em Catalogação e SAC em menos de 1 minuto — sem compromisso, sem enrolação.</p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">+50</span>
+          <span class="stat-label">Clientes ativos</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">135.000+</span>
+          <span class="stat-label">Transmissões/mês</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">Foco em marketplace</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALCULATOR -->
+  <section class="calc-wrap">
+    <div class="container">
+      <div class="calc-card">
+
+        <!-- Progress bar -->
+        <div class="calc-progress">
+          <div class="prog-step active" id="prog-1">
+            <div class="prog-dot">1</div>
+            <div class="prog-info">
+              <div class="prog-label">Serviço</div>
+            </div>
+          </div>
+          <div class="prog-step" id="prog-2">
+            <div class="prog-dot">2</div>
+            <div class="prog-info">
+              <div class="prog-label">Volume</div>
+            </div>
+          </div>
+          <div class="prog-step" id="prog-3">
+            <div class="prog-dot">3</div>
+            <div class="prog-info">
+              <div class="prog-label">Seus dados</div>
+            </div>
+          </div>
+          <div class="prog-step" id="prog-4">
+            <div class="prog-dot">4</div>
+            <div class="prog-info">
+              <div class="prog-label">Resultado</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Steps -->
+        <div class="calc-body">
+
+          <!-- ── STEP 1: Escolher serviço ── -->
+          <div id="step-1" class="step">
+            <div class="step-title">Qual serviço você precisa?</div>
+            <div class="step-sub">Selecione o que melhor descreve sua necessidade operacional.</div>
+
+            <div class="service-grid">
+              <div class="svc-card" data-svc="catalogacao" onclick="selectService(this)">
+                <span class="svc-icon">📦</span>
+                <div class="svc-name">Backoffice / Catalogação</div>
+                <div class="svc-desc">Cadastro, padronização e transmissão de anúncios em escala via Anymarket.</div>
+                <span class="svc-tag" style="background:var(--pink)">Escala de Catálogo</span>
+              </div>
+
+              <div class="svc-card" data-svc="sac" onclick="selectService(this)">
+                <span class="svc-icon">💬</span>
+                <div class="svc-name">SAC Operacional</div>
+                <div class="svc-desc">Atendimento, reclamações, devoluções e gestão de reputação nos marketplaces.</div>
+                <span class="svc-tag" style="background:var(--orange)">Atendimento Escalável</span>
+              </div>
+
+              <div class="svc-card" data-svc="ambos" onclick="selectService(this)">
+                <span class="svc-icon">⚙️</span>
+                <div class="svc-name">Pacote Operação</div>
+                <div class="svc-desc">Catalogação + SAC em um só contrato — catálogo estruturado e atendimento organizado.</div>
+                <span class="svc-tag" style="background:var(--pink)">Catalogação + SAC</span>
+              </div>
+
+              <div class="svc-card" data-svc="pontual" onclick="selectService(this)">
+                <span class="svc-icon">🗂️</span>
+                <div class="svc-name">Catalogação Pontual</div>
+                <div class="svc-desc">Serviço avulso de publicação, enriquecimento e produção de conteúdo — sem mensalidade.</div>
+                <span class="svc-tag" style="background:var(--teal)">Serviço Avulso</span>
+              </div>
+
+              <div class="svc-card" data-svc="assessoria" onclick="selectService(this)">
+                <span class="svc-icon">🎯</span>
+                <div class="svc-name">Assessoria de Marketplace</div>
+                <div class="svc-desc">Acompanhamento especializado recorrente com foco em gestão, indicadores, reputação e uso eficiente do Anymarket.</div>
+                <span class="svc-tag" style="background:var(--blue)">Acompanhamento Recorrente</span>
+              </div>
+
+              <div class="svc-card" data-svc="full" onclick="selectService(this)">
+                <span class="svc-icon">🏆</span>
+                <div class="svc-name">Pacote Full</div>
+                <div class="svc-desc">Assessoria + Catalogação + SAC — parceria operacional completa em um único contrato.</div>
+                <span class="svc-tag" style="background:var(--blue)">Solução Completa</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── STEP 2: Volume ── -->
+          <div id="step-2" class="step hidden">
+            <button class="btn-back" onclick="goStep(1)">Voltar</button>
+            <div class="step-title" id="step2-title">Qual é o seu volume?</div>
+            <div class="step-sub" id="step2-sub">Escolha o volume que melhor representa sua operação atual ou esperada.</div>
+
+            <!-- Volume para Catalogação only -->
+            <div id="vol-catalogacao" class="volume-list hidden"></div>
+
+            <!-- Volume para SAC only -->
+            <div id="vol-sac" class="hidden"><div class="sac-panel-slot"></div></div>
+
+            <!-- Volume para AMBOS (Pacote Operação) -->
+            <div id="vol-ambos" class="hidden">
+              <div class="dual-section">
+                <div class="section-divider" style="--divider-color:var(--pink)">Catalogação — volume de transmissões</div>
+                <div id="vol-ambos-cat" class="volume-list"></div>
+              </div>
+              <div class="dual-section">
+                <div class="section-divider" style="--divider-color:var(--orange)">SAC — serviços de atendimento</div>
+                <div class="sac-panel-slot"></div>
+              </div>
+            </div>
+
+            <!-- Volume para FULL (Assessoria + Catalogação + SAC) -->
+            <div id="vol-full" class="hidden">
+              <div>
+                <div class="section-divider" style="--divider-color:var(--blue)">Assessoria de Marketplace — escolha seu plano</div>
+                <div id="plano-list-full" class="plano-list"></div>
+              </div>
+              <div>
+                <div class="section-divider" style="--divider-color:var(--pink)">Catalogação — volume de transmissões</div>
+                <div id="vol-full-cat" class="volume-list"></div>
+              </div>
+              <div>
+                <div class="section-divider" style="--divider-color:var(--orange)">SAC — serviços de atendimento</div>
+                <div class="sac-panel-slot"></div>
+              </div>
+            </div>
+
+            <!-- Painel Catalogação Pontual -->
+            <div id="vol-pontual" class="hidden">
+
+              <!-- Anúncios Padrão -->
+              <div class="pontual-section type-standard">
+                <div class="pontual-section-header">
+                  <div class="pontual-section-title">
+                    📦 Anúncios Padrão
+                    <span class="pontual-section-badge badge-standard" id="badge-std">Desconto progressivo</span>
+                  </div>
+                  <div class="pontual-section-preview" id="preview-standard">—</div>
+                </div>
+                <div class="pontual-inline-grid">
+                  <div class="pontual-field">
+                    <label class="pontual-label">Anúncios (SKUs/variações)</label>
+                    <input class="pontual-input" id="pt-anuncios-std" type="number" min="0" placeholder="Ex: 200" oninput="calcPontual()">
+                  </div>
+                  <div class="pontual-field">
+                    <label class="pontual-label">Marketplaces</label>
+                    <input class="pontual-input" id="pt-mkp-std" type="number" min="1" value="1" oninput="calcPontual()">
+                  </div>
+                </div>
+                <div style="font-size:11px;color:var(--muted);margin-top:6px">
+                  1 anúncio × 2 marketplaces = 2 transmissões
+                </div>
+              </div>
+
+              <!-- Anúncios Kit / Catálogo Meli -->
+              <div class="pontual-section type-kit">
+                <div class="pontual-section-header">
+                  <div class="pontual-section-title">
+                    🏷️ Kit / Catálogo Meli
+                    <span class="pontual-section-badge badge-kit" id="badge-kit">Desconto progressivo</span>
+                  </div>
+                  <div class="pontual-section-preview" id="preview-kit">—</div>
+                </div>
+                <div class="pontual-inline-grid">
+                  <div class="pontual-field">
+                    <label class="pontual-label">Anúncios Kit / Catálogo Meli</label>
+                    <input class="pontual-input" id="pt-anuncios-kit" type="number" min="0" placeholder="Ex: 50" oninput="calcPontual()">
+                  </div>
+                  <div class="pontual-field">
+                    <label class="pontual-label">Marketplaces</label>
+                    <input class="pontual-input" id="pt-mkp-kit" type="number" min="1" value="1" oninput="calcPontual()">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Resumo dinâmico -->
+              <div class="pontual-summary" id="pontual-summary" style="display:none">
+                <div class="pontual-summary-row">
+                  <span id="sum-std-label">Anúncios padrão</span>
+                  <span id="sum-std-val">—</span>
+                </div>
+                <div class="pontual-summary-row" id="sum-kit-row">
+                  <span id="sum-kit-label">Kit / Catálogo Meli</span>
+                  <span id="sum-kit-val">—</span>
+                </div>
+                <div class="pontual-summary-row total">
+                  <span>Total de transmissões</span>
+                  <span id="sum-total-transm">—</span>
+                </div>
+                <div class="pontual-prazo" id="sum-prazo"></div>
+              </div>
+
+              <div class="pontual-min-note" style="margin-top:12px">
+                O valor do pacote aparece após você preencher seus dados de contato.
+              </div>
+            </div>
+
+            <!-- Painel Assessoria de Marketplace -->
+            <div id="vol-assessoria" class="hidden">
+              <div class="plano-list" id="plano-list-container"></div>
+            </div>
+          </div>
+
+          <!-- ── STEP 3: Lead form ── -->
+          <div id="step-3" class="step hidden">
+            <button class="btn-back" onclick="goStep(2)">Voltar</button>
+            <div class="step-title">Quase lá! Informe seus dados</div>
+            <div class="step-sub">Preencha para ver o valor personalizado da sua operação.</div>
+
+            <div class="lead-highlight">
+              <div class="lead-highlight-icon">🔍</div>
+              <div class="lead-highlight-text">
+                <strong>Sua simulação está pronta!</strong>
+                <p>Preencha seus dados pessoais e da empresa para ver o valor personalizado.</p>
+              </div>
+            </div>
+
+            <!-- Dados pessoais -->
+            <div class="form-section-divider">
+              <div class="form-section-divider-line"></div>
+              <div class="form-section-divider-label">Seus dados</div>
+              <div class="form-section-divider-line"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="lead-name">Nome completo *</label>
+              <input class="form-input" id="lead-name" type="text" placeholder="Seu nome completo" autocomplete="name" required>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="lead-email">E-mail *</label>
+                <input class="form-input" id="lead-email" type="email" placeholder="seu@empresa.com.br" autocomplete="email" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="lead-phone">WhatsApp *</label>
+                <input class="form-input" id="lead-phone" type="tel" placeholder="(44) 9 9999-9999" autocomplete="tel" required>
+              </div>
+            </div>
+
+            <!-- Dados da empresa -->
+            <div class="form-section-divider">
+              <div class="form-section-divider-line"></div>
+              <div class="form-section-divider-label">Dados da empresa</div>
+              <div class="form-section-divider-line"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="lead-empresa">Nome da empresa *</label>
+              <input class="form-input" id="lead-empresa" type="text" placeholder="Razão social ou nome fantasia" required>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="lead-skus">Quantidade de SKUs *</label>
+                <input class="form-input" id="lead-skus" type="number" min="1" placeholder="Ex: 500" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="lead-ticket">Ticket médio dos produtos *</label>
+                <select class="form-input form-input-select" id="lead-ticket" required>
+                  <option value="">Selecione a faixa</option>
+                  <option value="100-200">R$ 100 a R$ 200</option>
+                  <option value="200-300">R$ 200 a R$ 300</option>
+                  <option value="300-400">R$ 300 a R$ 400</option>
+                  <option value="400-500">R$ 400 a R$ 500</option>
+                  <option value="500+">Acima de R$ 500</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="privacy-note" style="margin-top:16px">Todos os campos são obrigatórios. Seus dados são usados apenas para contato e elaboração da proposta.</div>
+          </div>
+
+          <!-- ── STEP 4: Resultado ── -->
+          <div id="step-4" class="step hidden">
+            <div class="result-header">
+              <div class="result-congrats">Simulação gerada com sucesso</div>
+              <div class="result-name" id="result-greeting"></div>
+            </div>
+
+            <div id="result-cards" class="result-cards"></div>
+
+            <div id="result-total-wrap"></div>
+
+            <div class="result-includes" id="result-includes-wrap" style="display:none">
+              <div class="result-includes-title">O que está incluído</div>
+              <div id="result-includes-list" class="result-includes-list"></div>
+            </div>
+
+            <div id="result-nao-inclui-wrap"></div>
+            <div id="result-roi-card"></div>
+            <div id="result-parcelamento"></div>
+            <div id="result-anymarket-banner"></div>
+
+            <a id="btn-whatsapp" href="#" class="btn btn-whatsapp" target="_blank">
+              💬 Quero começar — falar com o time
+            </a>
+
+            <div style="margin-top:12px; text-align:center; font-size:12px; color:var(--muted)">
+              Ou envie um e-mail: <a href="mailto:contato@marcaseleta.com.br" style="color:var(--blue)">contato@marcaseleta.com.br</a>
+            </div>
+
+            <div style="margin-top:20px; text-align:center;">
+              <button class="btn-outline btn" onclick="restart()" style="width:auto; font-size:13px; padding:10px 20px;">
+                ↺ Nova simulação
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /calc-body -->
+
+        <!-- Footer da calc (botão avançar) -->
+        <div class="calc-footer" id="calc-footer">
+          <button class="btn btn-primary" id="btn-next" onclick="nextStep()" disabled>
+            Continuar →
+          </button>
+        </div>
+
+      </div><!-- /calc-card -->
+    </div>
+  </section>
+
+  <!-- ASSESSORIA DE MARKETPLACE (detalhe expandido) -->
+  <section class="am-section">
+    <div class="container">
+      <div class="am-card" style="flex-direction:column; align-items:stretch; gap:28px;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:20px;">
+          <div>
+            <div class="am-badge">✦ Acompanhamento recorrente</div>
+            <div class="am-title">Assessoria de Marketplace</div>
+            <div class="am-desc" style="max-width:580px">"Sua empresa continua executando a operação. A Marca Seleta atua como parceira de gestão — trazendo acompanhamento especializado, direcionamento e boas práticas para que a operação evolua com mais segurança e previsibilidade."</div>
+          </div>
+          <a href="#" onclick="selecionarAssessoria(); return false;" class="btn-am" style="align-self:center">
+            Simular meu plano →
+          </a>
+        </div>
+
+        <!-- 3 pilares resumidos -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; margin-top:4px;">
+          <div style="background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:8px; padding:12px 14px; display:flex; align-items:flex-start; gap:10px;">
+            <span style="font-size:15px; flex-shrink:0;">📊</span>
+            <div>
+              <div style="font-size:12px; font-weight:700; color:var(--white); margin-bottom:2px;">Apoio à Gestão</div>
+              <div style="font-size:11px; color:var(--muted); line-height:1.4">Indicadores, catálogo, reputação e concorrência.</div>
+            </div>
+          </div>
+          <div style="background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:8px; padding:12px 14px; display:flex; align-items:flex-start; gap:10px;">
+            <span style="font-size:15px; flex-shrink:0;">📅</span>
+            <div>
+              <div style="font-size:12px; font-weight:700; color:var(--white); margin-bottom:2px;">Planejamento Comercial</div>
+              <div style="font-size:11px; color:var(--muted); line-height:1.4">Campanhas, calendário e sazonalidades.</div>
+            </div>
+          </div>
+          <div style="background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:8px; padding:12px 14px; display:flex; align-items:flex-start; gap:10px;">
+            <span style="font-size:15px; flex-shrink:0;">⚙️</span>
+            <div>
+              <div style="font-size:12px; font-weight:700; color:var(--white); margin-bottom:2px;">Anymarket & Relatórios</div>
+              <div style="font-size:11px; color:var(--muted); line-height:1.4">Boas práticas, eficiência e plano de ação.</div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section class="trust-section">
+    <div class="container">
+      <div class="trust-grid">
+        <div class="trust-card">
+          <div class="trust-icon">📦</div>
+          <div class="trust-title">Escala sem ampliar equipe</div>
+          <div class="trust-desc">Você cresce o volume sem contratar proporcionalmente mais pessoas internas.</div>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon">⭐</div>
+          <div class="trust-title">Reputação protegida</div>
+          <div class="trust-desc">SLA cumprido, atendimento rápido e score preservado nos canais.</div>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon">⚙️</div>
+          <div class="trust-title">Processos padronizados</div>
+          <div class="trust-desc">Operação documentada, replicável e preparada para crescer com eficiência.</div>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon">🤖</div>
+          <div class="trust-title">Pronto para IA</div>
+          <div class="trust-desc">Estrutura preparada para automações e inteligência operacional no futuro.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 <a href="https://marcaseleta.com.br" target="_blank">Marca Seleta</a> by ANYTOOLS · Todos os direitos reservados</p>
+  </footer>
+
+</div><!-- /page -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   ✏️  CONFIGURAÇÃO DE PREÇOS — EDITE AQUI COM FACILIDADE
+   
+   Para alterar os preços, basta editar os valores abaixo.
+   "price" = valor em reais (apenas o número, sem R$ ou pontos)
+   "label" = descrição do volume
+   "sub"   = texto auxiliar que aparece abaixo do volume
+═══════════════════════════════════════════════════════════════ */
+const CONFIG = {
+
+  /* ─── CATALOGAÇÃO / BACKOFFICE ─── */
+  catalogacao: {
+    name: "Backoffice / Catalogação",
+    icon: "📦",
+    volumes: [
+      {
+        id: "cat-1",
+        label: "Plano Básico",
+        sub: "Até 500 transmissões/mês",
+        price: 3000,
+        max: 500,
+        overage: 6
+      },
+      {
+        id: "cat-2",
+        label: "Plano Plus",
+        sub: "Até 2.000 transmissões/mês",
+        price: 10000,
+        max: 2000,
+        overage: 5
+      },
+      {
+        id: "cat-3",
+        label: "Plano Pró",
+        sub: "Até 5.000 transmissões/mês",
+        price: 20000,
+        max: 5000,
+        overage: 4
+      },
+      {
+        id: "cat-4",
+        label: "Plano Prime",
+        sub: "Até 10.000 transmissões/mês",
+        price: 25000,
+        max: 10000,
+        overage: 2.5
+      }
+    ],
+    includes: [
+      "Cadastro e criação de anúncios",
+      "Padronização de catálogo",
+      "Transmissão via Anymarket",
+      "Upload em massa",
+      "Tratamento de erros",
+      "Manutenção e revisão operacional"
+    ]
+  },
+
+  /* ─── SAC OPERACIONAL — novo modelo de contratação ─── */
+  sac: {
+    name: "SAC Operacional",
+    icon: "💬",
+    /* Pré-vendas: base até 500 msg/mês · excedente R$ 1/msg */
+    preVendas: { base: 1500, max: 500, overage: 1 },
+    /* Chat e pós-vendas: base até 250 msg/mês · excedente R$ 2/msg */
+    chatPos:   { base: 1000, max: 250, overage: 2 },
+    includes: [
+      "Atendimento ao consumidor",
+      "Tratativa de reclamações",
+      "Gestão de devoluções e trocas",
+      "Mediações nos marketplaces",
+      "Acompanhamento de SLA",
+      "Gestão ativa de reputação"
+    ]
+  },
+
+  /* ─── CATALOGAÇÃO PONTUAL ─── */
+  /* ✏️ Edite os preços e regras aqui — desconto progressivo por volume */
+  pontual: {
+    /* Tabela padrão (anúncios sem Kit/Catálogo Meli) */
+    tiersStd: [
+      { max: 500,        price: 6, faixa: "Faixa 1 · até 500 transm."          },
+      { max: 2000,       price: 5, faixa: "Faixa 2 · 501 a 2.000 transm."      },
+      { max: 5000,       price: 4, faixa: "Faixa 3 · 2.001 a 5.000 transm."    },
+      { max: Infinity,   price: 3, faixa: "Faixa 4 · acima de 5.000 transm."   }
+    ],
+    /* Tabela Kit / Catálogo Meli */
+    tiersKit: [
+      { max: 50,         price: 10, faixa: "Faixa 1 · até 50 transm."          },
+      { max: 100,        price: 8,  faixa: "Faixa 2 · 51 a 100 transm."        },
+      { max: Infinity,   price: 6,  faixa: "Faixa 3 · acima de 100 transm."    }
+    ],
+    minimoGeral:          1000,  // ✏️ Pacote mínimo em R$
+    limiteEntregaMensal:  2000,  // ✏️ Transmissões entregues por mês
+    minimoParcelamento:   5000   // ✏️ A partir deste valor, exibe opção de parcelamento
+  },
+
+  /* ─── DESCONTO PACOTE COMPLETO (Catalogação + SAC) ─── */
+  /* 
+    desconto: porcentagem de desconto ao contratar os dois (ex: 10 = 10%)
+    Se não quiser desconto, coloque 0
+  */
+  descontoAmbos: 0,
+
+  /* ─── ASSESSORIA DE MARKETPLACE ─── */
+  assessoria: {
+    planos: [
+      {
+        id: "essencial",
+        name: "Plano Essencial",
+        contrato: "12 meses",
+        desc: "Para empresas que precisam de acompanhamento contínuo e apoio à gestão da operação de marketplace.",
+        price: 1800,
+        tags: ["1h de reunião/semana", "12 meses", "Acompanhamento contínuo"]
+      },
+      {
+        id: "crescimento",
+        name: "Plano Crescimento",
+        contrato: "6 meses",
+        desc: "Para operações em expansão que precisam de acompanhamento mais próximo e evolução operacional.",
+        price: 2200,
+        popular: true,
+        tags: ["1h de reunião/semana", "6 meses", "Operações em crescimento"]
+      },
+      {
+        id: "performance",
+        name: "Plano Performance",
+        contrato: "3 meses",
+        desc: "Para empresas que precisam acelerar a estruturação ou enfrentar desafios específicos de marketplace.",
+        price: 2500,
+        tags: ["1h de reunião/semana", "3 meses", "Aceleração e desafios"]
+      }
+    ],
+    includes: [
+      "Reunião semanal de 1h",
+      "Análise de indicadores e KPIs",
+      "Análise de catálogo e anúncios",
+      "Análise de reputação e concorrência",
+      "Planejamento de campanhas",
+      "Calendário promocional",
+      "Apoio ao uso do Anymarket",
+      "Relatórios e recomendações",
+      "Plano de ação e prioridades",
+      "Identificação de oportunidades"
+    ],
+    naoInclui: [
+      "Cadastro de produtos",
+      "Criação de anúncios",
+      "Atendimento ao consumidor",
+      "Operação diária",
+      "Gestão de estoque",
+      "Gestão financeira",
+      "Gestão logística"
+    ]
+  },
+
+  /* ─── WHATSAPP ─── */
+  /* Coloque o número completo com DDI, ex: 5511999999999 */
+  whatsapp: "5544991465252",
+
+  /* ─── LINK PARA ORÇAMENTO DE ACCOUNT MANAGEMENT ─── */
+  accountManagementLink: "https://api.whatsapp.com/send?phone=5544991465252&text=Ol%C3%A1%2C%20tenho%20interesse%20no%20servi%C3%A7o%20de%20Account%20Management%20da%20Marca%20Seleta!"
+
+};
+/* ═══════════════════════════════════════════════════════════════
+   FIM DA CONFIGURAÇÃO — não edite abaixo desta linha
+   a não ser que saiba o que está fazendo
+═══════════════════════════════════════════════════════════════ */
+
+// State
+let state = {
+  step: 1,
+  service: null,
+  volCat: null,
+  sacState: { preVendas: { selected: false, volume: 0 }, chatPos: { selected: false, volume: 0 } },
+  pontualTotal: 0,
+  pontualConfig: null,
+  planoAssessoria: null,
+  planoFull: null,
+  leadName: '',
+  leadEmail: '',
+  leadPhone: '',
+  leadEmpresa: '',
+  leadSKUs: '',
+  leadTicketMedio: ''
+};
+
+// Helpers
+const fmt = (v) => 'R$ ' + v.toLocaleString('pt-BR');
+const $ = (id) => document.getElementById(id);
+
+// Init: build volume lists
+function buildVolList(containerId, volumes, type) {
+  const wrap = $(containerId);
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  volumes.forEach(vol => {
+    const div = document.createElement('div');
+    div.className = 'vol-option';
+    div.dataset.id = vol.id;
+    div.dataset.type = type;
+    div.dataset.price = vol.price;
+    if (vol.overage !== undefined) div.dataset.overage = vol.overage;
+    if (vol.max !== undefined) div.dataset.max = vol.max;
+    div.innerHTML = `
+      <div class="vol-left">
+        <div class="vol-radio"></div>
+        <div class="vol-info">
+          <div class="vol-title">${vol.label}</div>
+          <div class="vol-subtitle">${vol.sub}</div>
+        </div>
+      </div>
+    `;
+    div.onclick = () => selectVolume(div);
+    wrap.appendChild(div);
+  });
+}
+
+buildVolList('vol-catalogacao', CONFIG.catalogacao.volumes, 'cat');
+buildVolList('vol-ambos-cat',   CONFIG.catalogacao.volumes, 'cat');
+buildVolList('vol-full-cat',    CONFIG.catalogacao.volumes, 'cat');
+
+// Update Account Management link
+if ($('btn-am-link')) {
+  $('btn-am-link').href = CONFIG.accountManagementLink;
+}
+
+// ─── Navigation ───
+function goStep(n) {
+  $(`step-${state.step}`).classList.add('hidden');
+  $(`prog-${state.step}`).classList.remove('active');
+  $(`prog-${state.step}`).classList.add('done');
+
+  if (n < state.step) {
+    for (let i = n; i <= state.step; i++) {
+      $(`prog-${i}`).classList.remove('done', 'active');
+    }
+    $(`prog-${n}`).classList.add('active');
+    if ($(`step-${n-1}`)) $(`prog-${n-1}`).classList.add('done');
+  }
+
+  state.step = n;
+  $(`step-${n}`).classList.remove('hidden');
+  $(`prog-${n}`).classList.add('active');
+  $(`prog-${n}`).classList.remove('done');
+
+  // Mostra o painel de volume correto ao entrar na step 2
+  if (n === 2) showVolStep();
+
+  updateFooter();
+}
+
+function nextStep() {
+  if (state.step === 1 && !state.service) return;
+  if (state.step === 2) {
+    const sacOk = state.sacState.preVendas.selected || state.sacState.chatPos.selected;
+    if (state.service === 'catalogacao' && !state.volCat)               return;
+    if (state.service === 'sac'         && !sacOk)                      return;
+    if (state.service === 'ambos'       && (!state.volCat || !sacOk))   return;
+    if (state.service === 'full'        && (!state.planoFull || !state.volCat || !sacOk)) return;
+    if (state.service === 'assessoria'  && !state.planoAssessoria)      return;
+    if (state.service === 'pontual') {
+      if (!state.pontualConfig || !state.pontualConfig.totalTransm) return;
+    }
+    goStep(3);
+    return;
+  }
+  if (state.step === 3) {
+    submitLead();
+    return;
+  }
+  goStep(state.step + 1);
+}
+
+function updateFooter() {
+  const footer = $('calc-footer');
+  const btn = $('btn-next');
+  if (!footer || !btn) return;
+
+  if (state.step === 4) {
+    footer.classList.add('hidden');
+    return;
+  }
+  footer.classList.remove('hidden');
+
+  if (state.step === 3) {
+    btn.textContent = '🔍 Ver minha simulação →';
+  } else if (state.step === 2 && (state.service === 'pontual' || state.service === 'assessoria' || state.service === 'full')) {
+    btn.textContent = 'Informar meus dados →';
+  } else {
+    btn.textContent = 'Continuar →';
+  }
+  checkNextEnabled();
+}
+
+function checkNextEnabled() {
+  const btn = $('btn-next');
+  if (!btn) return;
+  let ok = false;
+  if (state.step === 1) ok = !!state.service;
+  if (state.step === 2) {
+    const sacOk = state.sacState.preVendas.selected || state.sacState.chatPos.selected;
+    if (state.service === 'catalogacao') ok = !!state.volCat;
+    if (state.service === 'sac')         ok = sacOk;
+    if (state.service === 'ambos')       ok = !!(state.volCat && sacOk);
+    if (state.service === 'full')        ok = !!(state.planoFull && state.volCat && sacOk);
+    if (state.service === 'assessoria')  ok = !!state.planoAssessoria;
+    if (state.service === 'pontual') {
+      ok = !!(state.pontualConfig && state.pontualConfig.totalTransm > 0);
+    }
+  }
+  if (state.step === 3) ok = true; // validate on click
+  btn.disabled = !ok;
+}
+
+// ─── Select service ───
+function selectService(el) {
+  document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.service = el.dataset.svc;
+
+  // Reset volume state
+  state.volCat = null;
+  state.volSac = null;
+  checkNextEnabled();
+}
+
+// ─── Select volume ───
+function selectVolume(el) {
+  const type = el.dataset.type; // 'cat' or 'sac'
+  const container = el.closest('.volume-list');
+  container.querySelectorAll('.vol-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+
+  const vol = {
+    id:      el.dataset.id,
+    price:   parseInt(el.dataset.price),
+    label:   el.querySelector('.vol-title').textContent,
+    sub:     el.querySelector('.vol-subtitle')?.textContent || '',
+    overage: el.dataset.overage ? parseFloat(el.dataset.overage) : null,
+    max:     el.dataset.max     ? parseInt(el.dataset.max)        : null,
+  };
+
+  if (type === 'cat') state.volCat = vol;
+  if (type === 'sac') state.volSac = vol;
+
+  checkNextEnabled();
+}
+
+// ─── Submit lead → show result ───
+function submitLead() {
+  const name    = $('lead-name').value.trim();
+  const email   = $('lead-email').value.trim();
+  const phone   = $('lead-phone').value.trim();
+  const empresa = $('lead-empresa').value.trim();
+  const skus    = $('lead-skus').value.trim();
+  const ticket  = $('lead-ticket').value;
+
+  const fields = [
+    [!name,                      'lead-name',    'Informe seu nome completo.'],
+    [!email||!email.includes('@'),'lead-email',   'Informe um e-mail válido.'],
+    [!phone,                     'lead-phone',   'Informe seu WhatsApp.'],
+    [!empresa,                   'lead-empresa', 'Informe o nome da empresa.'],
+    [!skus||Number(skus)<1,      'lead-skus',    'Informe a quantidade de SKUs.'],
+    [!ticket,                    'lead-ticket',  'Selecione o ticket médio dos produtos.'],
+  ];
+  for (const [err, id, msg] of fields) {
+    if (err) { $(id).focus(); $(id).style.borderColor='var(--danger)'; alert(msg); return; }
+    else { $(id).style.borderColor=''; }
+  }
+
+  state.leadName       = name;
+  state.leadEmail      = email;
+  state.leadPhone      = phone;
+  state.leadEmpresa    = empresa;
+  state.leadSKUs       = skus;
+  state.leadTicketMedio = ticket;
+
+  // Aqui você pode integrar com Webhook/CRM/Make/Zapier:
+  sendToWebhook({ name, email, phone, empresa, skus, ticket, service: state.service, volCat: state.volCat, volSac: state.volSac, pontualTotal: state.pontualTotal, pontualConfig: state.pontualConfig });
+
+  buildResult();
+  goStep(4);
+}
+
+// ─── Build result screen ───
+function buildResult() {
+  const firstName = state.leadName.split(' ')[0];
+  $('result-greeting').textContent = `Aqui está sua simulação, ${firstName}!`;
+
+  let totalPrice = 0;
+  const cards = [];
+  const includes = [];
+
+  // ─ Assessoria de Marketplace ─
+  if (state.service === 'assessoria') {
+    const plano = state.planoAssessoria;
+    totalPrice = plano.price;
+    cards.push({
+      label: 'Assessoria de Marketplace',
+      name: `${plano.name} · ${plano.contrato}`,
+      price: plano.price,
+      color: 'var(--blue)'
+    });
+    CONFIG.assessoria.includes.forEach(i => includes.push(i));
+    state._assessoriaPlano = plano;
+  }
+
+  // ─ Catalogação Pontual ─
+  else if (state.service === 'pontual') {
+    totalPrice = state.pontualTotal;
+    var c = state.pontualConfig;
+    var p = CONFIG.pontual;
+    var fmtN = function(n) { return n.toLocaleString('pt-BR'); };
+    var fmtR = function(n) { return 'R$ ' + n.toLocaleString('pt-BR', {minimumFractionDigits:2,maximumFractionDigits:2}); };
+
+    // Nome resumido do card
+    var parts = [];
+    if (c.transmStd > 0) parts.push(fmtN(c.transmStd) + ' transm. padrão');
+    if (c.transmKit > 0) parts.push(fmtN(c.transmKit) + ' transm. Kit/Meli');
+    var cardName = parts.join(' + ') + ' · ' + (c.mesesEntrega > 1 ? c.mesesEntrega + ' meses de entrega' : 'entrega em até 1 mês');
+
+    // Breakdown com faixa de desconto aplicada
+    var bd = [];
+    if (c.transmStd > 0) bd.push({
+      label: fmtN(c.transmStd) + ' transm. × ' + fmtR(c.tierStd.price) + ' (' + c.tierStd.faixa + ')',
+      value: c.valorStd
+    });
+    if (c.transmKit > 0) bd.push({
+      label: fmtN(c.transmKit) + ' transm. Kit/Meli × ' + fmtR(c.tierKit.price) + ' (' + c.tierKit.faixa + ')',
+      value: c.valorKit
+    });
+    if (totalPrice === p.minimoGeral && (c.valorStd + c.valorKit) < p.minimoGeral) {
+      bd.push({ label: 'Pacote mínimo aplicado', value: p.minimoGeral });
+    }
+
+    cards.push({ label: 'Catalogação Pontual', name: cardName, price: totalPrice, color: 'var(--teal)', breakdown: bd });
+
+    includes.push(fmtN(c.totalTransm) + ' transmissões contratadas');
+    includes.push('Entrega de até 2.000 transmissões/mês');
+    includes.push('Desconto progressivo aplicado ao volume');
+    includes.push('Catalogação e publicação nos marketplaces');
+    includes.push('Transmissão via Anymarket');
+    includes.push('Padronização e revisão operacional');
+    if (c.mesesEntrega > 1) includes.push('Prazo estimado: ' + c.mesesEntrega + ' meses');
+  }
+
+  // ─ Catalogação ─
+  if (['catalogacao', 'ambos', 'full'].includes(state.service)) {
+    const v = state.volCat;
+    totalPrice += v.price;
+    const overageInfo = v.overage
+      ? ` · Excedente: ${fmt(v.overage).replace('R$ ','R$ ')}/transmissão`
+      : '';
+    const catName = `${v.label} (${v.sub})${overageInfo}`;
+    cards.push({ label: 'Backoffice / Catalogação', name: catName, price: v.price, color: 'var(--pink)' });
+    CONFIG.catalogacao.includes.forEach(i => includes.push(i));
+  }
+
+  // ─ SAC — novo modelo ─
+  if (['sac', 'ambos', 'full'].includes(state.service)) {
+    const sacTotal = calcSacTotal();
+    const sacDesc  = sacDescription();
+    totalPrice += sacTotal;
+    cards.push({ label: 'SAC Operacional', name: sacDesc, price: sacTotal, color: 'var(--orange)' });
+    CONFIG.sac.includes.forEach(i => includes.push(i));
+  }
+
+  // ─ Assessoria (standalone ou como parte do Full) ─
+  if (state.service === 'full') {
+    const plano = state.planoFull;
+    if (plano) {
+      totalPrice += plano.price;
+      cards.push({ label: 'Assessoria de Marketplace', name: `${plano.name} · ${plano.contrato}`, price: plano.price, color: 'var(--blue)' });
+      CONFIG.assessoria.includes.forEach(i => includes.push(i));
+      state._assessoriaPlano = plano;
+    }
+  }
+
+  // Desconto ambos
+  let discount = 0;
+  if (state.service === 'ambos' && CONFIG.descontoAmbos > 0) {
+    discount = Math.round(totalPrice * CONFIG.descontoAmbos / 100);
+    totalPrice -= discount;
+  }
+
+  // Cards individuais
+  const cardsEl = $('result-cards');
+  cardsEl.innerHTML = '';
+  cards.forEach(c => {
+    const period = state.service === 'pontual' ? 'estimativa' : '/mês';
+    // Para assessoria, mostrar contrato
+    const extra = state.service === 'assessoria' && state.planoAssessoria
+      ? `<div style="font-size:11px;color:var(--teal);margin-top:2px">${state.planoAssessoria.contrato}</div>`
+      : '';
+    const breakdownHtml = (c.breakdown && c.breakdown.length)
+      ? '<div class="result-card-breakdown">' +
+        c.breakdown.map(b => `<div class="result-card-breakdown-item">${b.label}: <span>${fmt(b.value)}</span></div>`).join('') +
+        '</div>'
+      : '';
+    cardsEl.innerHTML += `
+      <div class="result-card">
+        <div class="result-card-info">
+          <div class="result-card-label">${c.label}</div>
+          <div class="result-card-name">${c.name}</div>
+          ${breakdownHtml}
+        </div>
+        <div class="result-card-price">
+          <div class="result-card-amount">${fmt(c.price)}</div>
+          <div class="result-card-period">${period}</div>
+          ${extra}
+        </div>
+      </div>
+    `;
+  });
+
+  // Total
+  const totalWrap = $('result-total-wrap');
+  const discountBadge = discount > 0
+    ? `<div class="result-discount-badge">Desconto de ${fmt(discount)} aplicado 🎉</div>`
+    : '';
+  totalWrap.innerHTML = `
+    <div class="result-total-card">
+      <div class="result-total-label">${state.service === 'pontual' ? 'Estimativa do projeto pontual' : state.service === 'full' ? 'Pacote Full — investimento mensal' : 'Investimento total estimado'}</div>
+      <div class="result-total-amount">${fmt(totalPrice)}</div>
+      <div class="result-total-sub">${state.service === 'pontual' ? 'estimativa · sujeito a confirmação pela equipe' : '/mês · contrato sem fidelidade mínima obrigatória'}</div>
+      ${discountBadge}
+    </div>
+  `;
+
+  // Includes
+  const incList = $('result-includes-list');
+  incList.innerHTML = '';
+  // Remove duplicates
+  [...new Set(includes)].forEach(item => {
+    incList.innerHTML += `<div class="include-item">${item}</div>`;
+  });
+
+  // ROI card (apenas para Catalogação Pontual)
+  const roiWrap = $('result-roi-card');
+  if (roiWrap) {
+    if (state.service === 'pontual' && state.pontualConfig && state.leadTicketMedio) {
+      var c = state.pontualConfig;
+      var p = CONFIG.pontual;
+      var fmtN = function(n) { return n.toLocaleString('pt-BR'); };
+      var fmtR2 = function(n) {
+        return 'R$ ' + n.toLocaleString('pt-BR', {minimumFractionDigits:0, maximumFractionDigits:0});
+      };
+
+      // Ticket médio: ponto médio de cada faixa
+      var ticketMidpoints = {
+        '100-200': 150, '200-300': 250, '300-400': 350,
+        '400-500': 450, '500+':    600
+      };
+      var ticketLabels = {
+        '100-200':'R$100 a R$200', '200-300':'R$200 a R$300',
+        '300-400':'R$300 a R$400', '400-500':'R$400 a R$500',
+        '500+':'Acima de R$500'
+      };
+      var ticketMid   = ticketMidpoints[state.leadTicketMedio] || 0;
+      var ticketLabel = ticketLabels[state.leadTicketMedio]    || '';
+
+      // Anúncios únicos criados (não transmissões)
+      var totalAnuncios     = (c.anunciosStd || 0) + (c.anunciosKit || 0);
+      // Cenário conservador: 50% dos anúncios com pelo menos 6 vendas em 6 meses
+      var anunciosAtivos    = Math.floor(totalAnuncios * 0.5);
+      var vendasPorAnuncio  = 6;
+      var faturamento6m     = anunciosAtivos * vendasPorAnuncio * ticketMid;
+      var investimento      = totalPrice;
+      var roi               = investimento > 0 ? (faturamento6m / investimento) : 0;
+
+      // Só exibe ROI se for >= 10x (R$10 para cada R$1 investido)
+      var showRoi = totalAnuncios > 0 && faturamento6m > 0 && roi >= 10;
+
+      roiWrap.innerHTML = showRoi ? `
+        <div class="roi-card">
+          <div class="roi-title">📈 Seu potencial de retorno</div>
+          <div class="roi-subtitle">
+            Cenário conservador: 50% dos anúncios (${fmtN(anunciosAtivos)} de ${fmtN(totalAnuncios)}) com 6 vendas × ticket médio ${ticketLabel} × 6 meses
+          </div>
+          <div class="roi-compare">
+            <div class="roi-box roi-box-pay">
+              <div class="roi-box-label">Você investe</div>
+              <div class="roi-box-value">${fmtR2(investimento)}</div>
+              <div class="roi-box-sub" style="color:var(--blue)">Catalogação Pontual</div>
+            </div>
+            <div class="roi-vs">→</div>
+            <div class="roi-box roi-box-earn">
+              <div class="roi-box-label">Potencial de faturamento</div>
+              <div class="roi-box-value">${fmtR2(faturamento6m)}</div>
+              <div class="roi-box-sub" style="color:var(--success)">em 6 meses (cenário conservador)</div>
+            </div>
+          </div>
+          <div class="roi-multiplier">
+            🚀 Para cada R$ 1 investido na Marca Seleta, você pode faturar até R$ ${roi.toFixed(1)}
+          </div>
+          <div class="roi-note">
+            *Estimativa conservadora: 50% dos ${fmtN(totalAnuncios)} anúncios publicados (${fmtN(anunciosAtivos)} produtos)
+            atingem ao menos 6 vendas nos 6 primeiros meses, com ticket médio de ${ticketLabel}.
+            Resultados reais podem variar conforme segmento, precificação e operação.
+          </div>
+        </div>` : '';
+    } else {
+      roiWrap.innerHTML = '';
+    }
+  }
+
+  // Parcelamento (para pontual com total >= minimoParcelamento)
+  const parcBanner = $('result-parcelamento');
+  if (parcBanner) {
+    const showParc = state.service === 'pontual' && totalPrice >= CONFIG.pontual.minimoParcelamento;
+    if (showParc) {
+      const c = state.pontualConfig;
+      const fN = n => n.toLocaleString('pt-BR');
+      const meses = c.mesesEntrega || 1;
+      const parcMensal = Math.ceil(totalPrice / meses);
+      parcBanner.innerHTML = `
+        <div class="parcelamento-banner">
+          <div class="parcelamento-icon">💳</div>
+          <div class="parcelamento-body">
+            <div class="parcelamento-title">Pagamento facilitado disponível!</div>
+            <div class="parcelamento-desc">
+              Pacotes a partir de R$ ${fN(CONFIG.pontual.minimoParcelamento)} podem ser parcelados conforme o prazo de entrega.
+              ${meses > 1 ? `Para este pedido (${meses} meses de entrega), uma sugestão seria ${meses}× de aproximadamente <strong style="color:var(--white)">R$ ${fN(parcMensal)}/mês</strong>.` : ''}
+              Condições negociáveis com nosso time comercial.
+            </div>
+            <span class="parcelamento-badge">✓ Parcelamento disponível</span>
+          </div>
+        </div>`;
+    } else {
+      parcBanner.innerHTML = '';
+    }
+  }
+
+  // Banner Anymarket (aparece em todos os resultados)
+  const amBanner = $('result-anymarket-banner');
+  if (amBanner) {
+    const amWaMsg = encodeURIComponent('Olá! Vi na calculadora da Marca Seleta sobre condições especiais para implantação do Anymarket. Gostaria de saber mais!');
+    const amWaUrl = `https://api.whatsapp.com/send?phone=${CONFIG.whatsapp}&text=${amWaMsg}`;
+    amBanner.innerHTML = `
+      <div class="anymarket-banner">
+        <div class="anymarket-banner-icon">⚡</div>
+        <div class="anymarket-banner-body">
+          <div class="anymarket-banner-title">Condições especiais para quem está implantando o Anymarket</div>
+          <div class="anymarket-banner-sub">Benefícios exclusivos para novas operações na plataforma. Fale com nosso time e saiba como aproveitar.</div>
+        </div>
+        <a href="${amWaUrl}" class="anymarket-banner-cta" target="_blank">Saiba mais →</a>
+      </div>`;
+  }
+
+  // WhatsApp message
+  const msg = buildWhatsappMsg(firstName, totalPrice, cards);
+  const waUrl = `https://api.whatsapp.com/send?phone=${CONFIG.whatsapp}&text=${encodeURIComponent(msg)}`;
+  $('btn-whatsapp').href = waUrl;
+}
+
+function buildWhatsappMsg(name, total, cards) {
+  const isPontual    = state.service === 'pontual';
+  const isAssessoria = state.service === 'assessoria';
+  let lines = [`Olá! Sou ${name} e quero conhecer melhor os serviços da Marca Seleta.`,''];
+  lines.push('📋 *Simulação realizada:*');
+  cards.forEach(c => {
+    const suffix = isPontual ? ' (pontual)' : '/mês';
+    lines.push(`• ${c.label}: ${fmt(c.price)}${suffix} — ${c.name}`);
+  });
+  lines.push('');
+  const totalSuffix = isPontual ? ' (estimativa pontual)' : '/mês';
+  lines.push(`💰 *Investimento estimado: ${fmt(total)}${totalSuffix}*`);
+  lines.push('');
+  const isFull = state.service === 'full';
+  if (isFull) {
+    lines.push('Tenho interesse no Pacote Full (Assessoria + Catalogação + SAC). Gostaria de receber uma proposta completa!');
+  } else if (isAssessoria) {
+    lines.push('Tenho interesse na Assessoria de Marketplace. Gostaria de entender melhor como funciona e dar início à parceria!');
+  } else if (isPontual) {
+    lines.push('Gostaria de confirmar o orçamento e iniciar o projeto de catalogação!');
+  } else {
+    lines.push('Gostaria de receber uma proposta formal e iniciar a parceria operacional!');
+  }
+  return lines.join('\n');
+}
+
+// ─── Webhook / integração (opcional) ───
+function sendToWebhook(data) {
+  // Salvar lead no localStorage para o CRM
+  try {
+    var lead = {
+      id:        'lead_' + Date.now(),
+      refCode:   sessionStorage.getItem('ms_ref_code') || null,
+      name:      data.name,
+      email:     data.email,
+      phone:     data.phone || '',
+      empresa:   data.empresa || '',
+      skus:      data.skus    || '',
+      ticket:    data.ticket  || '',
+      service:   data.service,
+      serviceLabel: getServiceLabel(data.service),
+      plan:      getPlanLabel(data),
+      value:     state.pontualTotal || calcTotalForLead(data),
+      status:    'novo',
+      createdAt: new Date().toISOString(),
+      notes:     [],
+      sacState:  data.sacState || null,
+      volCat:    data.volCat   || null,
+      pontual:   data.pontualConfig || null
+    };
+    var leads = JSON.parse(localStorage.getItem('ms_crm_leads') || '[]');
+    leads.unshift(lead);
+    localStorage.setItem('ms_crm_leads', JSON.stringify(leads));
+  } catch(e) { console.warn('localStorage indisponível:', e); }
+
+  /* ✏️ WEBHOOK externo (Make/Zapier/RD Station) — descomente e configure:
+  fetch('https://hook.make.com/seu-webhook', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(lead)
+  }).catch(console.warn);
+  */
+}
+
+function getServiceLabel(svc) {
+  var labels = { catalogacao:'Backoffice/Catalogação', sac:'SAC Operacional',
+    ambos:'Pacote Operação', full:'Pacote Full', pontual:'Catalogação Pontual',
+    assessoria:'Assessoria de Marketplace' };
+  return labels[svc] || svc;
+}
+
+function getPlanLabel(data) {
+  if (data.service === 'assessoria' && state.planoAssessoria) return state.planoAssessoria.name;
+  if (data.service === 'full' && state.planoFull) return state.planoFull.name;
+  if (data.volCat) return data.volCat.label;
+  return '';
+}
+
+function calcTotalForLead(data) {
+  var t = 0;
+  if (state.planoAssessoria) t += state.planoAssessoria.price;
+  if (state.planoFull)       t += state.planoFull.price;
+  if (state.volCat)          t += state.volCat.price;
+  t += calcSacTotal();
+  return t || state.pontualTotal || 0;
+}
+
+// ─── Restart ───
+function restart() {
+  state = { step: 1, service: null, volCat: null, volSac: null, leadName: '', leadEmail: '', leadPhone: '' };
+  
+  for (let i = 1; i <= 4; i++) {
+    const s = $(`step-${i}`);
+    const p = $(`prog-${i}`);
+    if (s) s.classList.add('hidden');
+    if (p) { p.classList.remove('active','done'); }
+  }
+  
+  document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.vol-option').forEach(v => v.classList.remove('selected'));
+  ['lead-name','lead-email','lead-phone','lead-empresa','lead-skus',
+    'pt-anuncios-std','pt-anuncios-kit'].forEach(id => { if ($(id)) $(id).value = ''; });
+  if ($('lead-ticket')) $('lead-ticket').value = '';
+  state.leadEmpresa = ''; state.leadSKUs = ''; state.leadTicketMedio = '';
+  ['pt-mkp-std','pt-mkp-kit'].forEach(id => { if ($(id)) $(id).value = '1'; });
+  ['preview-standard','preview-kit'].forEach(id => { const el = $(id); if (el) el.innerHTML = '—'; });
+  const sumEl = $('pontual-summary'); if (sumEl) sumEl.style.display = 'none';
+  state.pontualTotal = 0; state.pontualConfig = null;
+  state.planoAssessoria = null; state.planoFull = null;
+  state.sacState = { preVendas: { selected: false, volume: 0 }, chatPos: { selected: false, volume: 0 } };
+  // Limpar planos e SAC buildados
+  ['plano-list-container','plano-list-full'].forEach(id => { const el = $(id); if (el) el.innerHTML = ''; });
+  document.querySelectorAll('.sac-panel-slot').forEach(el => {
+    el.innerHTML = ''; delete el.dataset.sacBuilt;
+  });
+
+  $('step-2-cat-shown') && ($('step-2-cat-shown').value = '');
+
+  $(`step-1`).classList.remove('hidden');
+  $(`prog-1`).classList.add('active');
+  state.step = 1;
+  updateFooter();
+}
+
+// ─── Step 2: show right volume panel ───
+function showVolStep() {
+  ['vol-catalogacao','vol-sac','vol-ambos','vol-full','vol-pontual','vol-assessoria'].forEach(id => $(`${id}`)?.classList.add('hidden'));
+  
+  const t = $('step2-title');
+  const s = $('step2-sub');
+
+  if (state.service === 'catalogacao') {
+    $('vol-catalogacao').classList.remove('hidden');
+    t.textContent = 'Qual é o volume de transmissões?';
+    s.textContent = 'Escolha o volume de anúncios transmitidos por mês que melhor representa sua operação.';
+  } else if (state.service === 'sac') {
+    $('vol-sac').classList.remove('hidden');
+    buildSacPanelIn($('vol-sac').querySelector('.sac-panel-slot'));
+    t.textContent = 'Quais serviços de SAC você precisa?';
+    s.textContent = 'Selecione um ou ambos os serviços. O valor é revelado após você informar seus dados.';
+  } else if (state.service === 'ambos') {
+    $('vol-ambos').classList.remove('hidden');
+    buildSacPanelIn($('vol-ambos').querySelector('.sac-panel-slot'));
+    t.textContent = 'Configure o Pacote Operação';
+    s.textContent = 'Escolha o volume de catalogação e os serviços de SAC desejados.';
+  } else if (state.service === 'full') {
+    $('vol-full').classList.remove('hidden');
+    buildPlanosAssessoria('plano-list-full', 'planoFull');
+    buildSacPanelIn($('vol-full').querySelector('.sac-panel-slot'));
+    t.textContent = 'Configure o Pacote Full';
+    s.textContent = 'Escolha seu plano de Assessoria, o volume de Catalogação e os serviços de SAC.';
+  } else if (state.service === 'pontual') {
+    $('vol-pontual').classList.remove('hidden');
+    t.textContent = 'Configure seu pedido pontual';
+    s.textContent = 'Informe as quantidades e serviços desejados. O valor aparece após você preencher seus dados.';
+  } else if (state.service === 'assessoria') {
+    $('vol-assessoria').classList.remove('hidden');
+    buildPlanosAssessoria();
+    t.textContent = 'Escolha o plano ideal para sua operação';
+    s.textContent = 'Selecione o plano de Assessoria de Marketplace. O investimento será exibido após você informar seus dados.';
+  }
+}
+
+// ─── Painel SAC: constante HTML + funções ───
+const SAC_PANEL_HTML = `
+<div class="sac-services-panel">
+  <div class="sac-svc-card" data-sac-type="preVendas">
+    <div class="sac-svc-top">
+      <div class="sac-svc-info">
+        <div class="sac-svc-name">&#x1F4AC; Pré-vendas</div>
+        <div class="sac-svc-desc">Atendimento de dúvidas antes da compra &middot; até 500 mensagens/mês no plano base</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" class="sac-toggle">
+        <div class="toggle-track"></div>
+      </label>
+    </div>
+    <div class="sac-vol-row hidden">
+      <label class="pontual-label">Volume esperado (mensagens/mês)</label>
+      <input class="pontual-input sac-vol-input" type="number" min="0" placeholder="Ex: 400">
+      <div class="sac-overage-note">Excedente acima de 500 msg: cobrança adicional por mensagem</div>
+    </div>
+  </div>
+  <div class="sac-svc-card" data-sac-type="chatPos">
+    <div class="sac-svc-top">
+      <div class="sac-svc-info">
+        <div class="sac-svc-name">&#x1F4E9; Chat e Pós-vendas</div>
+        <div class="sac-svc-desc">Mensagens, reclamações e suporte pós-venda &middot; até 250 mensagens/mês no plano base</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" class="sac-toggle">
+        <div class="toggle-track"></div>
+      </label>
+    </div>
+    <div class="sac-vol-row hidden">
+      <label class="pontual-label">Volume esperado (mensagens/mês)</label>
+      <input class="pontual-input sac-vol-input" type="number" min="0" placeholder="Ex: 200">
+      <div class="sac-overage-note">Excedente acima de 250 msg: cobrança adicional por mensagem</div>
+    </div>
+  </div>
+</div>
+`;
+
+function buildSacPanelIn(slotEl) {
+  if (!slotEl || slotEl.dataset.sacBuilt === '1') return;
+  slotEl.dataset.sacBuilt = '1';
+  slotEl.innerHTML = SAC_PANEL_HTML;
+  slotEl.querySelectorAll('.sac-toggle').forEach(function(cb) {
+    cb.addEventListener('change', function() {
+      var card = this.closest('.sac-svc-card');
+      card.classList.toggle('active', this.checked);
+      card.querySelector('.sac-vol-row').classList.toggle('hidden', !this.checked);
+      syncSacState();
+    });
+  });
+  slotEl.querySelectorAll('.sac-vol-input').forEach(function(inp) {
+    inp.addEventListener('input', syncSacState);
+  });
+}
+
+function syncSacState() {
+  state.sacState = { preVendas: { selected: false, volume: 0 }, chatPos: { selected: false, volume: 0 } };
+  document.querySelectorAll('.sac-panel-slot[data-sac-built="1"]').forEach(function(panel) {
+    panel.querySelectorAll('.sac-svc-card').forEach(function(card) {
+      var type = card.dataset.sacType;
+      if (!type || !state.sacState[type]) return;
+      var checked = card.querySelector('.sac-toggle').checked;
+      var vol = parseInt(card.querySelector('.sac-vol-input') && card.querySelector('.sac-vol-input').value) || 0;
+      state.sacState[type] = { selected: checked, volume: vol };
+    });
+  });
+  checkNextEnabled();
+}
+
+function calcSacTotal() {
+  var p = CONFIG.sac;
+  var total = 0;
+  var s = state.sacState;
+  if (s.preVendas.selected) {
+    var over1 = Math.max(0, s.preVendas.volume - p.preVendas.max) * p.preVendas.overage;
+    total += p.preVendas.base + over1;
+  }
+  if (s.chatPos.selected) {
+    var over2 = Math.max(0, s.chatPos.volume - p.chatPos.max) * p.chatPos.overage;
+    total += p.chatPos.base + over2;
+  }
+  return total;
+}
+
+function sacDescription() {
+  var s = state.sacState;
+  var parts = [];
+  if (s.preVendas.selected) {
+    var vol1 = s.preVendas.volume || CONFIG.sac.preVendas.max;
+    parts.push('Pré-vendas (' + vol1 + ' msg/mês)');
+  }
+  if (s.chatPos.selected) {
+    var vol2 = s.chatPos.volume || CONFIG.sac.chatPos.max;
+    parts.push('Chat/Pós-vendas (' + vol2 + ' msg/mês)');
+  }
+  return parts.join(' + ') || 'SAC Operacional';
+}
+
+// ─── Build planos assessoria (genérico: containerId + stateKey) ───
+function buildPlanosAssessoria(containerId, stateKey) {
+  containerId = containerId || 'plano-list-container';
+  stateKey    = stateKey    || 'planoAssessoria';
+  var container = $(containerId);
+  if (!container || container.children.length > 0) return;
+  CONFIG.assessoria.planos.forEach(function(plano) {
+    var div = document.createElement('div');
+    div.className = 'plano-card';
+    if (plano.popular) div.innerHTML += '<div class="pop-badge">&#x2B50; Mais contratado</div>';
+    div.innerHTML += '<div class="plano-top"><div class="plano-left"><div class="plano-radio"></div><div class="plano-name">' + plano.name + '</div></div><div class="plano-contrato">&#x1F4C5; ' + plano.contrato + '</div></div><div class="plano-desc">' + plano.desc + '</div><div class="plano-includes">' + plano.tags.map(function(t){ return '<span class="plano-tag">' + t + '</span>'; }).join('') + '</div>';
+    (function(p, key, cont) {
+      div.onclick = function() {
+        cont.querySelectorAll('.plano-card').forEach(function(c){ c.classList.remove('selected'); });
+        div.classList.add('selected');
+        state[key] = p;
+        checkNextEnabled();
+      };
+    })(plano, stateKey, container);
+    container.appendChild(div);
+  });
+}
+
+function selectPlanoAssessoria(el, plano) {
+  document.querySelectorAll('#plano-list-container .plano-card').forEach(function(c){ c.classList.remove('selected'); });
+  el.classList.add('selected');
+  state.planoAssessoria = plano;
+  checkNextEnabled();
+}
+
+// ─── Calc Pontual (atualiza estado) ───
+// ─── Desconto progressivo pontual ───
+function getTieredPreco(transm, tiers) {
+  for (var t of tiers) { if (transm <= t.max) return t; }
+  return tiers[tiers.length - 1];
+}
+
+function calcPontual() {
+  var p = CONFIG.pontual;
+
+  var anunciosStd = Math.max(0, parseInt($('pt-anuncios-std') && $('pt-anuncios-std').value) || 0);
+  var mkpStd      = Math.max(1, parseInt($('pt-mkp-std')      && $('pt-mkp-std').value)      || 1);
+  var anunciosKit = Math.max(0, parseInt($('pt-anuncios-kit') && $('pt-anuncios-kit').value) || 0);
+  var mkpKit      = Math.max(1, parseInt($('pt-mkp-kit')      && $('pt-mkp-kit').value)      || 1);
+
+  var transmStd   = anunciosStd * mkpStd;
+  var transmKit   = anunciosKit * mkpKit;
+  var totalTransm = transmStd + transmKit;
+
+  // Desconto progressivo — preço depende do volume total de cada tipo
+  var tierStd  = getTieredPreco(transmStd, p.tiersStd);
+  var tierKit  = getTieredPreco(transmKit, p.tiersKit);
+  var valorStd = transmStd * tierStd.price;
+  var valorKit = transmKit * tierKit.price;
+  var total    = Math.max(valorStd + valorKit, totalTransm > 0 ? p.minimoGeral : 0);
+
+  // Prazo de entrega
+  var mesesEntrega = totalTransm > 0
+    ? Math.ceil(totalTransm / p.limiteEntregaMensal) : 0;
+
+  var fmtN = function(n) { return n.toLocaleString('pt-BR'); };
+
+  // Atualizar badge de faixa (sem mostrar preço)
+  var badgeStd = $('badge-std');
+  if (badgeStd) {
+    badgeStd.textContent = transmStd > 0 ? tierStd.faixa : 'Desconto progressivo';
+  }
+  var badgeKit = $('badge-kit');
+  if (badgeKit) {
+    badgeKit.textContent = transmKit > 0 ? tierKit.faixa : 'Desconto progressivo';
+  }
+
+  // Preview transmissões
+  var prevStd = $('preview-standard');
+  if (prevStd) {
+    prevStd.innerHTML = transmStd > 0 ? '<strong>' + fmtN(transmStd) + '</strong> transmissões' : '—';
+  }
+  var prevKit = $('preview-kit');
+  if (prevKit) {
+    prevKit.innerHTML = transmKit > 0 ? '<strong>' + fmtN(transmKit) + '</strong> transmissões' : '—';
+  }
+
+  // Resumo dinâmico
+  var summary = $('pontual-summary');
+  if (summary) {
+    if (totalTransm > 0) {
+      summary.style.display = 'block';
+      $('sum-std-label').textContent = anunciosStd > 0
+        ? fmtN(anunciosStd) + ' anúncios × ' + mkpStd + ' MKP' : 'Anúncios padrão';
+      $('sum-std-val').textContent = fmtN(transmStd) + ' transm.';
+      var kitRow = $('sum-kit-row');
+      if (kitRow) kitRow.style.display = transmKit > 0 ? 'flex' : 'none';
+      if (transmKit > 0) {
+        $('sum-kit-label').textContent = fmtN(anunciosKit) + ' anúncios Kit × ' + mkpKit + ' MKP';
+        $('sum-kit-val').textContent   = fmtN(transmKit) + ' transm.';
+      }
+      $('sum-total-transm').textContent = fmtN(totalTransm);
+      var prazo = $('sum-prazo');
+      if (prazo) {
+        prazo.textContent = mesesEntrega > 1
+          ? 'Entrega estimada em ' + mesesEntrega + ' meses (limite: ' + fmtN(p.limiteEntregaMensal) + ' transmissões/mês)'
+          : 'Entrega em até 1 mês';
+      }
+    } else {
+      summary.style.display = 'none';
+    }
+  }
+
+  state.pontualTotal  = total;
+  state.pontualConfig = {
+    anunciosStd, mkpStd, transmStd, valorStd,
+    tierStd,    // faixa aplicada
+    anunciosKit, mkpKit, transmKit, valorKit,
+    tierKit,    // faixa aplicada
+    totalTransm, mesesEntrega, total
+  };
+  checkNextEnabled();
+}
+
+// ─── Captura parâmetro ?ref= da URL (indicador) ───
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var ref = params.get('ref');
+  if (ref) {
+    sessionStorage.setItem('ms_ref_code', ref.toUpperCase());
+    // Marca o link rastreado como usado
+    var refsUsed = JSON.parse(localStorage.getItem('ms_ref_clicks') || '{}');
+    refsUsed[ref.toUpperCase()] = (refsUsed[ref.toUpperCase()] || 0) + 1;
+    localStorage.setItem('ms_ref_clicks', JSON.stringify(refsUsed));
+  }
+})();
+
+// ─── Atalho: seleciona assessoria e rola para calc ───
+function selecionarAssessoria() {
+  // Garante que está no step 1
+  if (state.step !== 1) restart();
+  // Seleciona o card assessoria
+  const card = document.querySelector('[data-svc="assessoria"]');
+  if (card) {
+    document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    state.service = 'assessoria';
+    state.volCat = null; state.volSac = null;
+    checkNextEnabled();
+  }
+  // Rola para a calculadora
+  document.querySelector('.calc-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Init
+updateFooter();
+</script>
+</body>
+</html>
