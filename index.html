@@ -571,6 +571,7 @@ header {
   font-family: var(--font-head);
   font-size: 28px;
   font-weight: 800;
+  white-space: nowrap;
   color: var(--blue);
 }
 .result-card-period {
@@ -1144,7 +1145,7 @@ footer a { color: var(--blue); text-decoration: none; }
   display: flex; gap: 14px; flex-wrap: wrap;
 }
 .result-card-breakdown-item {
-  font-size: 11px; color: var(--muted);
+  font-size: 11px; color: var(--muted); padding: 1px 0;
 }
 .result-card-breakdown-item span { color: var(--text); font-weight: 600; }
 
@@ -1320,6 +1321,76 @@ footer a { color: var(--blue); text-decoration: none; }
 #result-parcelamento:empty,
 #result-anymarket-banner:empty { display:none; }
 
+/* ─── Assessoria detail section ─── */
+.assessoria-detail {
+  background: rgba(0,117,255,.04);
+  border: 1px solid rgba(0,117,255,.15);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin-bottom: 20px;
+}
+.assessoria-detail-title {
+  font-size: 12px; font-weight: 700; color: var(--blue);
+  text-transform: uppercase; letter-spacing: .07em;
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.assessoria-detail-title::before {
+  content: ''; width: 3px; height: 14px;
+  background: var(--blue); border-radius: 2px; flex-shrink: 0;
+}
+.assessoria-pilares {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.assessoria-pilar {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+}
+.assessoria-pilar-title {
+  font-size: 12px; font-weight: 700; color: var(--white);
+  margin-bottom: 8px; display: flex; align-items: center; gap: 7px;
+}
+.assessoria-pilar-title::before {
+  content: ''; width: 6px; height: 6px;
+  background: var(--blue); border-radius: 50%; flex-shrink: 0;
+}
+.assessoria-pilar ul {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.assessoria-pilar ul li {
+  font-size: 11px; color: var(--muted); padding-left: 12px;
+  position: relative; line-height: 1.45;
+}
+.assessoria-pilar ul li::before {
+  content: '›'; position: absolute; left: 0;
+  color: var(--blue); font-weight: 700;
+}
+
+/* ─── Contas assessoria ─── */
+.contas-assessoria-box {
+  margin-top: 16px;
+  padding: 16px 18px;
+  background: rgba(0,117,255,.05);
+  border: 1px solid rgba(0,117,255,.18);
+  border-radius: var(--radius-sm);
+}
+.contas-info-note {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.contas-info-note strong { color: var(--white); }
+.contas-extra-preview {
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+  min-height: 18px;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar { width:6px; }
 ::-webkit-scrollbar-track { background: var(--dark); }
@@ -1352,11 +1423,11 @@ footer a { color: var(--blue); text-decoration: none; }
       <p>Simule o investimento em Catalogação e SAC em menos de 1 minuto — sem compromisso, sem enrolação.</p>
       <div class="hero-stats">
         <div class="stat">
-          <span class="stat-num">+50</span>
-          <span class="stat-label">Clientes ativos</span>
+          <span class="stat-num" style="font-size:clamp(18px,3.5vw,26px)">+R$ 60 MI</span>
+          <span class="stat-label">GMV transacionados/mês</span>
         </div>
         <div class="stat">
-          <span class="stat-num">135.000+</span>
+          <span class="stat-num">+135.000</span>
           <span class="stat-label">Transmissões/mês</span>
         </div>
         <div class="stat">
@@ -1482,6 +1553,22 @@ footer a { color: var(--blue); text-decoration: none; }
               <div>
                 <div class="section-divider" style="--divider-color:var(--blue)">Assessoria de Marketplace — escolha seu plano</div>
                 <div id="plano-list-full" class="plano-list"></div>
+                <div class="contas-assessoria-box" style="margin-top:14px">
+                  <div class="contas-info-note">
+                    📌 O plano padrão inclui até <strong>2 contas</strong> de marketplace. Contas adicionais têm custo extra calculado na simulação.
+                  </div>
+                  <div class="pontual-grid" style="margin-top:12px">
+                    <div class="pontual-field">
+                      <label class="pontual-label">Quantas contas você precisa de assessoria?</label>
+                      <input class="pontual-input contas-assessoria-input" id="contas-input-full"
+                        type="number" min="1" max="20" value="2"
+                        oninput="updateContasAssessoria(this.value)">
+                    </div>
+                    <div class="pontual-field" style="justify-content:flex-end">
+                      <div class="contas-extra-preview" id="contas-preview-full"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div>
                 <div class="section-divider" style="--divider-color:var(--pink)">Catalogação — volume de transmissões</div>
@@ -1566,6 +1653,22 @@ footer a { color: var(--blue); text-decoration: none; }
             <!-- Painel Assessoria de Marketplace -->
             <div id="vol-assessoria" class="hidden">
               <div class="plano-list" id="plano-list-container"></div>
+              <div class="contas-assessoria-box">
+                <div class="contas-info-note">
+                  📌 O plano padrão inclui até <strong>2 contas</strong> de marketplace. Contas adicionais têm custo extra calculado na simulação.
+                </div>
+                <div class="pontual-grid" style="margin-top:12px">
+                  <div class="pontual-field">
+                    <label class="pontual-label">Quantas contas você precisa de assessoria?</label>
+                    <input class="pontual-input contas-assessoria-input" id="contas-input-asses"
+                      type="number" min="1" max="20" value="2"
+                      oninput="updateContasAssessoria(this.value)">
+                  </div>
+                  <div class="pontual-field" style="justify-content:flex-end">
+                    <div class="contas-extra-preview" id="contas-preview-asses"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1651,6 +1754,7 @@ footer a { color: var(--blue); text-decoration: none; }
               <div id="result-includes-list" class="result-includes-list"></div>
             </div>
 
+            <div id="result-assessoria-detail"></div>
             <div id="result-nao-inclui-wrap"></div>
             <div id="result-roi-card"></div>
             <div id="result-parcelamento"></div>
@@ -1684,46 +1788,107 @@ footer a { color: var(--blue); text-decoration: none; }
     </div>
   </section>
 
-  <!-- ASSESSORIA DE MARKETPLACE (detalhe expandido) -->
+  <!-- CONSULTORIA DEDICADA & GESTÃO DE ADS -->
   <section class="am-section">
     <div class="container">
-      <div class="am-card" style="flex-direction:column; align-items:stretch; gap:28px;">
+      <div class="am-card" style="flex-direction:column; align-items:stretch; gap:20px; align-content:start;">
+
+        <!-- Header -->
         <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:20px;">
           <div>
-            <div class="am-badge">✦ Acompanhamento recorrente</div>
-            <div class="am-title">Assessoria de Marketplace</div>
-            <div class="am-desc" style="max-width:580px">"Sua empresa continua executando a operação. A Marca Seleta atua como parceira de gestão — trazendo acompanhamento especializado, direcionamento e boas práticas para que a operação evolua com mais segurança e previsibilidade."</div>
+            <div class="am-badge">✦ Serviço premium sob consulta</div>
+            <div class="am-title">Consultoria Dedicada &amp; Gestão de Ads</div>
+            <div class="am-desc" style="max-width:600px">
+              Acompanhamento estratégico intensivo com gestão ativa de anúncios, inteligência competitiva e suporte especializado em Anymarket — para operações que precisam de alto nível de performance e dedicação.
+            </div>
           </div>
-          <a href="#" onclick="selecionarAssessoria(); return false;" class="btn-am" style="align-self:center">
-            Simular meu plano →
+          <a href="https://api.whatsapp.com/send?phone=5544991465252&text=Ol%C3%A1%21+Tenho+interesse+na+Consultoria+Dedicada+%26+Gest%C3%A3o+de+Ads+da+Marca+Seleta.+Gostaria+de+receber+um+or%C3%A7amento."
+             class="btn-am" target="_blank" style="align-self:center; white-space:nowrap;">
+            Solicitar orçamento →
           </a>
         </div>
 
-        <!-- 3 pilares resumidos -->
-        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; margin-top:4px;">
-          <div style="background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:8px; padding:12px 14px; display:flex; align-items:flex-start; gap:10px;">
-            <span style="font-size:15px; flex-shrink:0;">📊</span>
-            <div>
-              <div style="font-size:12px; font-weight:700; color:var(--white); margin-bottom:2px;">Apoio à Gestão</div>
-              <div style="font-size:11px; color:var(--muted); line-height:1.4">Indicadores, catálogo, reputação e concorrência.</div>
-            </div>
-          </div>
-          <div style="background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:8px; padding:12px 14px; display:flex; align-items:flex-start; gap:10px;">
-            <span style="font-size:15px; flex-shrink:0;">📅</span>
-            <div>
-              <div style="font-size:12px; font-weight:700; color:var(--white); margin-bottom:2px;">Planejamento Comercial</div>
-              <div style="font-size:11px; color:var(--muted); line-height:1.4">Campanhas, calendário e sazonalidades.</div>
-            </div>
-          </div>
-          <div style="background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:8px; padding:12px 14px; display:flex; align-items:flex-start; gap:10px;">
-            <span style="font-size:15px; flex-shrink:0;">⚙️</span>
-            <div>
-              <div style="font-size:12px; font-weight:700; color:var(--white); margin-bottom:2px;">Anymarket & Relatórios</div>
-              <div style="font-size:11px; color:var(--muted); line-height:1.4">Boas práticas, eficiência e plano de ação.</div>
-            </div>
-          </div>
-        </div>
+        <!-- 5 pilares em grid -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; align-items:start; align-content:start;">
 
+          <!-- Pilar 1 -->
+          <div style="background:rgba(0,117,255,.05); border:1px solid rgba(0,117,255,.18); border-radius:10px; padding:16px 18px;">
+            <div style="font-size:13px; font-weight:700; color:var(--white); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+              <span style="font-size:16px;">🎯</span> Gestão Estratégica da Operação
+            </div>
+            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px;">
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--blue);font-weight:700;">›</span>Reunião semanal de acompanhamento.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--blue);font-weight:700;">›</span>Plano de ação contínuo.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--blue);font-weight:700;">›</span>Priorização das iniciativas de maior impacto.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--blue);font-weight:700;">›</span>Análise de indicadores estratégicos.</li>
+            </ul>
+          </div>
+
+          <!-- Pilar 2 -->
+          <div style="background:rgba(255,39,173,.05); border:1px solid rgba(255,39,173,.18); border-radius:10px; padding:16px 18px;">
+            <div style="font-size:13px; font-weight:700; color:var(--white); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+              <span style="font-size:16px;">📣</span> Gestão de Ads
+            </div>
+            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px;">
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Planejamento de campanhas.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Otimização contínua.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Controle de orçamento.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Acompanhamento de ROAS, ACOS e conversão.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Recomendações de expansão.</li>
+            </ul>
+          </div>
+
+          <!-- Pilar 3 -->
+          <div style="background:rgba(254,76,0,.05); border:1px solid rgba(254,76,0,.18); border-radius:10px; padding:16px 18px;">
+            <div style="font-size:13px; font-weight:700; color:var(--white); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+              <span style="font-size:16px;">🔍</span> Inteligência Competitiva
+            </div>
+            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px;">
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--orange);font-weight:700;">›</span>Monitoramento de concorrentes.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--orange);font-weight:700;">›</span>Avaliação de preços e posicionamento.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--orange);font-weight:700;">›</span>Oportunidades de crescimento.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--orange);font-weight:700;">›</span>Tendências de mercado.</li>
+            </ul>
+          </div>
+
+          <!-- Pilar 4 -->
+          <div style="background:rgba(74,200,203,.05); border:1px solid rgba(74,200,203,.18); border-radius:10px; padding:16px 18px;">
+            <div style="font-size:13px; font-weight:700; color:var(--white); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+              <span style="font-size:16px;">📊</span> Marketplace Intelligence
+            </div>
+            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px;">
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--teal);font-weight:700;">›</span>Monitoramento da saúde da operação.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--teal);font-weight:700;">›</span>Identificação de gargalos.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--teal);font-weight:700;">›</span>Diagnóstico de riscos.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--teal);font-weight:700;">›</span>Recomendações práticas para evolução da conta.</li>
+            </ul>
+          </div>
+
+          <!-- Pilar 5 -->
+          <div style="background:rgba(139,92,246,.05); border:1px solid rgba(139,92,246,.18); border-radius:10px; padding:16px 18px;">
+            <div style="font-size:13px; font-weight:700; color:var(--white); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+              <span style="font-size:16px;">⚙️</span> Apoio Especializado em Anymarket
+            </div>
+            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px;">
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:#8B5CF6;font-weight:700;">›</span>Boas práticas.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:#8B5CF6;font-weight:700;">›</span>Estrutura operacional.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:#8B5CF6;font-weight:700;">›</span>Expansão para canais.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:#8B5CF6;font-weight:700;">›</span>Evolução da governança operacional.</li>
+            </ul>
+          </div>
+
+        </div><!-- /grid pilares -->
+
+        <!-- Nota final -->
+        <div style="background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); border-radius:8px; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;">
+          <div style="font-size:12px; color:var(--muted); max-width:600px; line-height:1.6;">
+            💡 Este é um serviço premium com <strong style="color:var(--white)">escopo e valor personalizado</strong> conforme a complexidade da operação. Fale com nosso time para receber uma proposta sob medida.
+          </div>
+          <a href="https://api.whatsapp.com/send?phone=5544991465252&text=Ol%C3%A1%21+Tenho+interesse+na+Consultoria+Dedicada+%26+Gest%C3%A3o+de+Ads+da+Marca+Seleta.+Gostaria+de+receber+um+or%C3%A7amento."
+             class="btn-am" target="_blank">
+            Solicitar orçamento →
+          </a>
+        </div>
 
       </div>
     </div>
@@ -1735,30 +1900,30 @@ footer a { color: var(--blue); text-decoration: none; }
       <div class="trust-grid">
         <div class="trust-card">
           <div class="trust-icon">📦</div>
-          <div class="trust-title">Escala sem ampliar equipe</div>
+          <div class="trust-title">Escala</div>
           <div class="trust-desc">Você cresce o volume sem contratar proporcionalmente mais pessoas internas.</div>
         </div>
         <div class="trust-card">
           <div class="trust-icon">⭐</div>
-          <div class="trust-title">Reputação protegida</div>
+          <div class="trust-title">Reputação</div>
           <div class="trust-desc">SLA cumprido, atendimento rápido e score preservado nos canais.</div>
         </div>
         <div class="trust-card">
           <div class="trust-icon">⚙️</div>
-          <div class="trust-title">Processos padronizados</div>
+          <div class="trust-title">Processos</div>
           <div class="trust-desc">Operação documentada, replicável e preparada para crescer com eficiência.</div>
         </div>
         <div class="trust-card">
           <div class="trust-icon">🤖</div>
-          <div class="trust-title">Pronto para IA</div>
-          <div class="trust-desc">Estrutura preparada para automações e inteligência operacional no futuro.</div>
+          <div class="trust-title">IA First</div>
+          <div class="trust-desc">Estrutura preparada para uso de automações e inteligência artificial.</div>
         </div>
       </div>
     </div>
   </section>
 
   <footer>
-    <p>© 2026 <a href="https://marcaseleta.com.br" target="_blank">Marca Seleta</a> by ANYTOOLS · Todos os direitos reservados</p>
+    <p>© 2025 <a href="https://marcaseleta.com.br" target="_blank">Marca Seleta</a> by ANYTOOLS · Todos os direitos reservados</p>
   </footer>
 
 </div><!-- /page -->
@@ -1778,38 +1943,43 @@ const CONFIG = {
   catalogacao: {
     name: "Backoffice / Catalogação",
     icon: "📦",
+    setup: 1000, // ✏️ Setup único de Backoffice/Catalogação
     volumes: [
       {
         id: "cat-1",
-        label: "Plano Básico",
-        sub: "Até 500 transmissões/mês",
+        label: "Até 500 transmissões/mês",
+        sub: "Ideal para operações em estruturação",
         price: 3000,
         max: 500,
-        overage: 6
+        overage: 6,
+        overageLabel: "R$ 6,00/transmissão excedente"
       },
       {
         id: "cat-2",
-        label: "Plano Plus",
-        sub: "Até 2.000 transmissões/mês",
+        label: "Até 2.000 transmissões/mês",
+        sub: "Para operações em crescimento",
         price: 10000,
         max: 2000,
-        overage: 5
+        overage: 5,
+        overageLabel: "R$ 5,00/transmissão excedente"
       },
       {
         id: "cat-3",
-        label: "Plano Pró",
-        sub: "Até 5.000 transmissões/mês",
+        label: "Até 5.000 transmissões/mês",
+        sub: "Para grandes volumes operacionais",
         price: 20000,
         max: 5000,
-        overage: 4
+        overage: 4,
+        overageLabel: "R$ 4,00/transmissão excedente"
       },
       {
         id: "cat-4",
-        label: "Plano Prime",
-        sub: "Até 10.000 transmissões/mês",
+        label: "Até 10.000 transmissões/mês",
+        sub: "Para operações de alto volume",
         price: 25000,
         max: 10000,
-        overage: 2.5
+        overage: 2.5,
+        overageLabel: "R$ 2,50/transmissão excedente"
       }
     ],
     includes: [
@@ -1826,10 +1996,11 @@ const CONFIG = {
   sac: {
     name: "SAC Operacional",
     icon: "💬",
+    setup: 1000, // ✏️ Setup único de SAC
     /* Pré-vendas: base até 500 msg/mês · excedente R$ 1/msg */
     preVendas: { base: 1500, max: 500, overage: 1 },
-    /* Chat e pós-vendas: base até 250 msg/mês · excedente R$ 2/msg */
-    chatPos:   { base: 1000, max: 250, overage: 2 },
+    /* Chat e pós-vendas: base até 250 msg/mês · excedente R$ 1/msg */
+    chatPos:   { base: 1000, max: 250, overage: 1 },
     includes: [
       "Atendimento ao consumidor",
       "Tratativa de reclamações",
@@ -1870,31 +2041,34 @@ const CONFIG = {
 
   /* ─── ASSESSORIA DE MARKETPLACE ─── */
   assessoria: {
+    setup: 1000,            // ✏️ Setup único de Assessoria
+    contasInclusas: 2,       // ✏️ Contas de marketplace incluídas no plano base
+    adicionalPorConta: 1000, // ✏️ R$ por conta adicional acima do limite base
     planos: [
       {
         id: "essencial",
-        name: "Plano Essencial",
+        name: "12 meses",
         contrato: "12 meses",
         desc: "Para empresas que precisam de acompanhamento contínuo e apoio à gestão da operação de marketplace.",
         price: 1800,
-        tags: ["1h de reunião/semana", "12 meses", "Acompanhamento contínuo"]
+        tags: ["1h de reunião/semana", "Acompanhamento contínuo"]
       },
       {
         id: "crescimento",
-        name: "Plano Crescimento",
+        name: "6 meses",
         contrato: "6 meses",
         desc: "Para operações em expansão que precisam de acompanhamento mais próximo e evolução operacional.",
         price: 2200,
         popular: true,
-        tags: ["1h de reunião/semana", "6 meses", "Operações em crescimento"]
+        tags: ["1h de reunião/semana", "Operações em crescimento"]
       },
       {
         id: "performance",
-        name: "Plano Performance",
+        name: "3 meses",
         contrato: "3 meses",
         desc: "Para empresas que precisam acelerar a estruturação ou enfrentar desafios específicos de marketplace.",
         price: 2500,
-        tags: ["1h de reunião/semana", "3 meses", "Aceleração e desafios"]
+        tags: ["1h de reunião/semana", "Aceleração e desafios"]
       }
     ],
     includes: [
@@ -1943,6 +2117,7 @@ let state = {
   pontualConfig: null,
   planoAssessoria: null,
   planoFull: null,
+  contasAssessoria: 2,
   leadName: '',
   leadEmail: '',
   leadPhone: '',
@@ -2160,14 +2335,18 @@ function buildResult() {
 
   // ─ Assessoria de Marketplace ─
   if (state.service === 'assessoria') {
-    const plano = state.planoAssessoria;
-    totalPrice = plano.price;
-    cards.push({
-      label: 'Assessoria de Marketplace',
-      name: `${plano.name} · ${plano.contrato}`,
-      price: plano.price,
-      color: 'var(--blue)'
-    });
+    var plano = state.planoAssessoria;
+    var contasExtra   = Math.max(0, (state.contasAssessoria || 2) - CONFIG.assessoria.contasInclusas);
+    var custoContasEx = contasExtra * CONFIG.assessoria.adicionalPorConta;
+    var assMonthly    = plano.price + custoContasEx;
+    totalPrice = assMonthly;
+    var assBd = [];
+    assBd.push({ label: 'Mensalidade base (' + CONFIG.assessoria.contasInclusas + ' contas inclusas)', value: plano.price });
+    if (custoContasEx > 0)
+      assBd.push({ label: contasExtra + ' conta(s) adicional(is) × R$ 1.000/mês', value: custoContasEx });
+    if (CONFIG.assessoria.setup)
+      assBd.push({ label: 'Setup único (Assessoria)', value: CONFIG.assessoria.setup });
+    cards.push({ label: 'Assessoria de Marketplace', name: plano.name + ' de contrato · ' + (state.contasAssessoria || 2) + ' conta(s)', price: assMonthly, color: 'var(--blue)', breakdown: assBd });
     CONFIG.assessoria.includes.forEach(i => includes.push(i));
     state._assessoriaPlano = plano;
   }
@@ -2189,15 +2368,21 @@ function buildResult() {
     // Breakdown com faixa de desconto aplicada
     var bd = [];
     if (c.transmStd > 0) bd.push({
-      label: fmtN(c.transmStd) + ' transm. × ' + fmtR(c.tierStd.price) + ' (' + c.tierStd.faixa + ')',
+      label: fmtN(c.transmStd) + ' transm. padrão × ' + fmtR(c.tierStd.price) + '/transm. (' + c.tierStd.faixa + ')',
       value: c.valorStd
     });
     if (c.transmKit > 0) bd.push({
-      label: fmtN(c.transmKit) + ' transm. Kit/Meli × ' + fmtR(c.tierKit.price) + ' (' + c.tierKit.faixa + ')',
+      label: fmtN(c.transmKit) + ' transm. Kit/Meli × ' + fmtR(c.tierKit.price) + '/transm. (' + c.tierKit.faixa + ')',
       value: c.valorKit
     });
     if (totalPrice === p.minimoGeral && (c.valorStd + c.valorKit) < p.minimoGeral) {
       bd.push({ label: 'Pacote mínimo aplicado', value: p.minimoGeral });
+    }
+    // Taxa de excedente Kit/Meli (conforme tabela de overageLabel dos tiersKit)
+    if (c.transmKit > 0) {
+      var kitOverageMap = {'0-50':'R$ 10,00/excedente Kit/Meli','51-100':'R$ 8,00/excedente Kit/Meli','100+':'R$ 6,00/excedente Kit/Meli'};
+      var kitOvLabel = c.tierKit.faixa.indexOf('50')>=0&&c.tierKit.faixa.indexOf('51')<0?'0-50':c.tierKit.faixa.indexOf('51')>=0?'51-100':'100+';
+      bd.push({ label: '↳ Excedente Kit/Meli: ' + (kitOverageMap[kitOvLabel]||''), value: null });
     }
 
     cards.push({ label: 'Catalogação Pontual', name: cardName, price: totalPrice, color: 'var(--teal)', breakdown: bd });
@@ -2213,22 +2398,32 @@ function buildResult() {
 
   // ─ Catalogação ─
   if (['catalogacao', 'ambos', 'full'].includes(state.service)) {
-    const v = state.volCat;
+    var v = state.volCat;
     totalPrice += v.price;
-    const overageInfo = v.overage
-      ? ` · Excedente: ${fmt(v.overage).replace('R$ ','R$ ')}/transmissão`
-      : '';
-    const catName = `${v.label} (${v.sub})${overageInfo}`;
-    cards.push({ label: 'Backoffice / Catalogação', name: catName, price: v.price, color: 'var(--pink)' });
+    var catBd = [];
+    catBd.push({ label: 'Mensalidade: ' + v.label, value: v.price });
+    if (v.overageLabel) catBd.push({ label: '↳ ' + v.overageLabel, value: null });
+    if (CONFIG.catalogacao.setup) {
+      catBd.push({ label: 'Setup único (Backoffice)', value: CONFIG.catalogacao.setup });
+    }
+    cards.push({ label: 'Backoffice / Catalogação', name: v.label, price: v.price, color: 'var(--pink)', breakdown: catBd });
     CONFIG.catalogacao.includes.forEach(i => includes.push(i));
   }
 
   // ─ SAC — novo modelo ─
   if (['sac', 'ambos', 'full'].includes(state.service)) {
-    const sacTotal = calcSacTotal();
-    const sacDesc  = sacDescription();
+    var sacTotal = calcSacTotal();
+    var sacDesc  = sacDescription();
     totalPrice += sacTotal;
-    cards.push({ label: 'SAC Operacional', name: sacDesc, price: sacTotal, color: 'var(--orange)' });
+    var sacBd = [];
+    var ss = state.sacState;
+    var sp = CONFIG.sac;
+    if (ss.preVendas.selected) sacBd.push({ label: 'Pré-vendas: até ' + sp.preVendas.max + ' msg — R$ ' + fmt(sp.preVendas.base) + '/mês', value: sp.preVendas.base });
+    if (ss.chatPos.selected)   sacBd.push({ label: 'Chat/Pós-vendas: até ' + sp.chatPos.max + ' msg — R$ ' + fmt(sp.chatPos.base) + '/mês', value: sp.chatPos.base });
+    if ((ss.preVendas.selected || ss.chatPos.selected))
+      sacBd.push({ label: '↳ Excedente: R$ 1,00/mensagem adicional', value: null });
+    if (CONFIG.sac.setup) sacBd.push({ label: 'Setup único (SAC)', value: CONFIG.sac.setup });
+    cards.push({ label: 'SAC Operacional', name: sacDesc, price: sacTotal, color: 'var(--orange)', breakdown: sacBd });
     CONFIG.sac.includes.forEach(i => includes.push(i));
   }
 
@@ -2237,9 +2432,19 @@ function buildResult() {
     const plano = state.planoFull;
     if (plano) {
       totalPrice += plano.price;
-      cards.push({ label: 'Assessoria de Marketplace', name: `${plano.name} · ${plano.contrato}`, price: plano.price, color: 'var(--blue)' });
-      CONFIG.assessoria.includes.forEach(i => includes.push(i));
-      state._assessoriaPlano = plano;
+      var contasExtraF   = Math.max(0, (state.contasAssessoria || 2) - CONFIG.assessoria.contasInclusas);
+    var custoContasExF = contasExtraF * CONFIG.assessoria.adicionalPorConta;
+    var assMonthlyF    = plano.price + custoContasExF;
+    totalPrice += custoContasExF; // plano.price already added above
+    var assBd = [];
+    assBd.push({ label: 'Mensalidade base (' + CONFIG.assessoria.contasInclusas + ' contas inclusas)', value: plano.price });
+    if (custoContasExF > 0)
+      assBd.push({ label: contasExtraF + ' conta(s) adicional(is) × R$ 1.000/mês', value: custoContasExF });
+    if (CONFIG.assessoria.setup)
+      assBd.push({ label: 'Setup único (Assessoria)', value: CONFIG.assessoria.setup });
+    cards.push({ label: 'Assessoria de Marketplace', name: plano.name + ' de contrato · ' + (state.contasAssessoria || 2) + ' conta(s)', price: assMonthlyF, color: 'var(--blue)', breakdown: assBd });
+    CONFIG.assessoria.includes.forEach(i => includes.push(i));
+    state._assessoriaPlano = plano;
     }
   }
 
@@ -2249,6 +2454,18 @@ function buildResult() {
     discount = Math.round(totalPrice * CONFIG.descontoAmbos / 100);
     totalPrice -= discount;
   }
+
+  // Calcular total de setup separado da mensalidade
+  var setupItems = [];
+  if (['catalogacao','ambos','full'].includes(state.service) && CONFIG.catalogacao.setup)
+    setupItems.push({ label: 'Setup Backoffice/Catalogação', value: CONFIG.catalogacao.setup });
+  if (['sac','ambos','full'].includes(state.service) && CONFIG.sac.setup)
+    setupItems.push({ label: 'Setup SAC Operacional', value: CONFIG.sac.setup });
+  if (['assessoria','full'].includes(state.service) && CONFIG.assessoria.setup)
+    setupItems.push({ label: 'Setup Assessoria', value: CONFIG.assessoria.setup });
+  if (['pontual'].includes(state.service) && CONFIG.pontual && CONFIG.pontual.setup)
+    setupItems.push({ label: 'Setup Catalogação Pontual', value: CONFIG.pontual.setup || 0 });
+  var setupTotal = setupItems.reduce(function(s,i){ return s + i.value; }, 0);
 
   // Cards individuais
   const cardsEl = $('result-cards');
@@ -2261,7 +2478,12 @@ function buildResult() {
       : '';
     const breakdownHtml = (c.breakdown && c.breakdown.length)
       ? '<div class="result-card-breakdown">' +
-        c.breakdown.map(b => `<div class="result-card-breakdown-item">${b.label}: <span>${fmt(b.value)}</span></div>`).join('') +
+        c.breakdown.map(b => {
+          if (b.value === null || b.value === undefined) {
+            return `<div class="result-card-breakdown-item" style="color:var(--orange);font-style:italic">${b.label}</div>`;
+          }
+          return `<div class="result-card-breakdown-item">${b.label}: <span>${fmt(b.value)}</span></div>`;
+        }).join('') +
         '</div>'
       : '';
     cardsEl.innerHTML += `
@@ -2285,14 +2507,36 @@ function buildResult() {
   const discountBadge = discount > 0
     ? `<div class="result-discount-badge">Desconto de ${fmt(discount)} aplicado 🎉</div>`
     : '';
-  totalWrap.innerHTML = `
-    <div class="result-total-card">
-      <div class="result-total-label">${state.service === 'pontual' ? 'Estimativa do projeto pontual' : state.service === 'full' ? 'Pacote Full — investimento mensal' : 'Investimento total estimado'}</div>
-      <div class="result-total-amount">${fmt(totalPrice)}</div>
-      <div class="result-total-sub">${state.service === 'pontual' ? 'estimativa · sujeito a confirmação pela equipe' : '/mês · contrato sem fidelidade mínima obrigatória'}</div>
-      ${discountBadge}
-    </div>
-  `;
+  totalWrap.innerHTML = (function() {
+    var isPontual2 = state.service === 'pontual';
+    var isFull2    = state.service === 'full';
+    var totalLabel = isPontual2 ? 'Estimativa do projeto' : isFull2 ? 'Pacote Full \u2014 mensalidade' : 'Investimento mensal estimado';
+    var totalSub   = isPontual2 ? 'estimativa \u00fanica \u00b7 sujeito a confirma\u00e7\u00e3o'
+                   : (state.service === 'assessoria' && state.planoAssessoria) ? state.planoAssessoria.name + ' de contrato'
+                   : '/m\u00eas \u00b7 sem fidelidade m\u00ednima obrigat\u00f3ria';
+    var setupRows = setupItems.map(function(si){
+      return '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">' +
+        '<span style="font-size:12px;color:var(--muted)">' + si.label + '</span>' +
+        '<span style="font-size:13px;font-weight:700;color:var(--text)">' + fmt(si.value) + '</span>' +
+        '</div>';
+    }).join('');
+    var setupBox = setupItems.length ? (
+      '<div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.12)">' +
+      '<div style="font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">\u26a1 Setup inicial \u2014 cobrado uma \u00fanica vez</div>' +
+      setupRows +
+      '<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center">' +
+      '<span style="font-size:12px;color:var(--muted)">1\u00ba m\u00eas total (mensalidade + setup)</span>' +
+      '<span style="font-size:20px;font-family:var(--font-head);font-weight:800;color:var(--teal)">' + fmt(totalPrice + setupTotal) + '</span>' +
+      '</div></div>'
+    ) : '';
+    return '<div class="result-total-card">' +
+      '<div class="result-total-label">' + totalLabel + '</div>' +
+      '<div class="result-total-amount">' + fmt(totalPrice) + '</div>' +
+      '<div class="result-total-sub">' + totalSub + '</div>' +
+      (discount > 0 ? '<div class="result-discount-badge">Desconto de ' + fmt(discount) + ' aplicado \uD83C\uDF89</div>' : '') +
+      setupBox +
+      '</div>';
+  })();
 
   // Includes
   const incList = $('result-includes-list');
@@ -2371,6 +2615,56 @@ function buildResult() {
     }
   }
 
+  // ─ Descritivo de assessoria (assessoria standalone e full) ─
+  var assDetailWrap = document.getElementById('result-assessoria-detail');
+  if (assDetailWrap) {
+    if (state.service === 'assessoria' || state.service === 'full') {
+      var pilares = [
+        {
+          icon: '📊',
+          title: 'Monitoramento da Operação',
+          items: [
+            'Acompanhamento dos principais indicadores da conta.',
+            'Identificação de riscos e oportunidades.',
+            'Monitoramento de reputação e saúde operacional.'
+          ]
+        },
+        {
+          icon: '🔍',
+          title: 'Inteligência de Marketplace',
+          items: [
+            'Revisão de indicadores.',
+            'Análise de desempenho dos canais.',
+            'Identificação de tendências e oportunidades.',
+            'Recomendações para melhoria operacional.'
+          ]
+        },
+        {
+          icon: '📋',
+          title: 'Boas Práticas e Governança',
+          items: [
+            'Orientações sobre marketplaces e Anymarket.',
+            'Direcionamentos para melhorias em catálogo, operação e processos.',
+            'Apoio na interpretação de regras e políticas dos canais.'
+          ]
+        }
+      ];
+      var pilaresHtml = pilares.map(function(p) {
+        return '<div class="assessoria-pilar">' +
+          '<div class="assessoria-pilar-title">' + p.icon + ' ' + p.title + '</div>' +
+          '<ul>' + p.items.map(function(i){ return '<li>' + i + '</li>'; }).join('') + '</ul>' +
+          '</div>';
+      }).join('');
+      assDetailWrap.innerHTML =
+        '<div class="assessoria-detail">' +
+          '<div class="assessoria-detail-title">O que está incluso na Assessoria de Marketplace</div>' +
+          '<div class="assessoria-pilares">' + pilaresHtml + '</div>' +
+        '</div>';
+    } else {
+      assDetailWrap.innerHTML = '';
+    }
+  }
+
   // Parcelamento (para pontual com total >= minimoParcelamento)
   const parcBanner = $('result-parcelamento');
   if (parcBanner) {
@@ -2401,6 +2695,7 @@ function buildResult() {
   // Banner Anymarket (aparece em todos os resultados)
   const amBanner = $('result-anymarket-banner');
   if (amBanner) {
+    if (state.service !== 'pontual') { amBanner.innerHTML = ''; } else {
     const amWaMsg = encodeURIComponent('Olá! Vi na calculadora da Marca Seleta sobre condições especiais para implantação do Anymarket. Gostaria de saber mais!');
     const amWaUrl = `https://api.whatsapp.com/send?phone=${CONFIG.whatsapp}&text=${amWaMsg}`;
     amBanner.innerHTML = `
@@ -2412,6 +2707,7 @@ function buildResult() {
         </div>
         <a href="${amWaUrl}" class="anymarket-banner-cta" target="_blank">Saiba mais →</a>
       </div>`;
+    }
   }
 
   // WhatsApp message
@@ -2527,10 +2823,12 @@ function restart() {
   ['preview-standard','preview-kit'].forEach(id => { const el = $(id); if (el) el.innerHTML = '—'; });
   const sumEl = $('pontual-summary'); if (sumEl) sumEl.style.display = 'none';
   state.pontualTotal = 0; state.pontualConfig = null;
-  state.planoAssessoria = null; state.planoFull = null;
+  state.planoAssessoria = null; state.planoFull = null; state.contasAssessoria = 2;
   state.sacState = { preVendas: { selected: false, volume: 0 }, chatPos: { selected: false, volume: 0 } };
   // Limpar planos e SAC buildados
   ['plano-list-container','plano-list-full'].forEach(id => { const el = $(id); if (el) el.innerHTML = ''; });
+  document.querySelectorAll('.contas-assessoria-input').forEach(function(inp){ inp.value = 2; });
+  document.querySelectorAll('.contas-extra-preview').forEach(function(el){ el.textContent = ''; });
   document.querySelectorAll('.sac-panel-slot').forEach(el => {
     el.innerHTML = ''; delete el.dataset.sacBuilt;
   });
@@ -2567,6 +2865,7 @@ function showVolStep() {
   } else if (state.service === 'full') {
     $('vol-full').classList.remove('hidden');
     buildPlanosAssessoria('plano-list-full', 'planoFull');
+    updateContasAssessoria(state.contasAssessoria || 2);
     buildSacPanelIn($('vol-full').querySelector('.sac-panel-slot'));
     t.textContent = 'Configure o Pacote Full';
     s.textContent = 'Escolha seu plano de Assessoria, o volume de Catalogação e os serviços de SAC.';
@@ -2670,16 +2969,34 @@ function calcSacTotal() {
 
 function sacDescription() {
   var s = state.sacState;
+  var p = CONFIG.sac;
   var parts = [];
-  if (s.preVendas.selected) {
-    var vol1 = s.preVendas.volume || CONFIG.sac.preVendas.max;
-    parts.push('Pré-vendas (' + vol1 + ' msg/mês)');
-  }
-  if (s.chatPos.selected) {
-    var vol2 = s.chatPos.volume || CONFIG.sac.chatPos.max;
-    parts.push('Chat/Pós-vendas (' + vol2 + ' msg/mês)');
-  }
-  return parts.join(' + ') || 'SAC Operacional';
+  if (s.preVendas.selected) parts.push('Pré-vendas: até ' + p.preVendas.max + ' msg/mês');
+  if (s.chatPos.selected)   parts.push('Chat/Pós-vendas: até ' + p.chatPos.max + ' msg/mês');
+  return parts.join(' · ') || 'SAC Operacional';
+}
+
+// ─── Contas adicionais de assessoria ───
+function updateContasAssessoria(val) {
+  var v = Math.max(1, parseInt(val) || 2);
+  state.contasAssessoria = v;
+  // Sync all contas inputs
+  document.querySelectorAll('.contas-assessoria-input').forEach(function(inp) {
+    if (parseInt(inp.value) !== v) inp.value = v;
+  });
+  // Update previews (sem mostrar preço)
+  var cfg = CONFIG.assessoria;
+  var extra = Math.max(0, v - cfg.contasInclusas);
+  document.querySelectorAll('.contas-extra-preview').forEach(function(el) {
+    if (extra > 0) {
+      el.textContent = extra + ' conta(s) adicional(is) — custo calculado na simulação';
+      el.style.color = 'var(--warn)';
+    } else {
+      el.textContent = '✓ Incluso no plano base (até 2 contas)';
+      el.style.color = 'var(--success)';
+    }
+  });
+  checkNextEnabled();
 }
 
 // ─── Build planos assessoria (genérico: containerId + stateKey) ───
@@ -2692,7 +3009,7 @@ function buildPlanosAssessoria(containerId, stateKey) {
     var div = document.createElement('div');
     div.className = 'plano-card';
     if (plano.popular) div.innerHTML += '<div class="pop-badge">&#x2B50; Mais contratado</div>';
-    div.innerHTML += '<div class="plano-top"><div class="plano-left"><div class="plano-radio"></div><div class="plano-name">' + plano.name + '</div></div><div class="plano-contrato">&#x1F4C5; ' + plano.contrato + '</div></div><div class="plano-desc">' + plano.desc + '</div><div class="plano-includes">' + plano.tags.map(function(t){ return '<span class="plano-tag">' + t + '</span>'; }).join('') + '</div>';
+    div.innerHTML += '<div class="plano-top"><div class="plano-left"><div class="plano-radio"></div><div style="display:flex;align-items:center;gap:10px"><div class="plano-name">' + plano.name + ' de contrato</div><span class="plano-contrato" style="font-size:10px">&#x1F4C5; ' + plano.contrato + '</span></div></div></div><div class="plano-desc">' + plano.desc + '</div><div class="plano-includes">' + plano.tags.map(function(t){ return '<span class="plano-tag">' + t + '</span>'; }).join('') + '</div>';
     (function(p, key, cont) {
       div.onclick = function() {
         cont.querySelectorAll('.plano-card').forEach(function(c){ c.classList.remove('selected'); });
