@@ -640,6 +640,10 @@ td{padding:10px 14px;font-size:13px;vertical-align:middle}
         <option value="inativo">Inativo</option>
       </select>
     </div>
+    <div class="form-group" style="display: flex; align-items: center; gap: 8px; margin-top: 12px; margin-bottom: 12px;">
+      <input type="checkbox" id="um-is-gestor" style="width: 16px; height: 16px; cursor: pointer;">
+      <label for="um-is-gestor" class="form-label" style="margin-bottom: 0; cursor: pointer; text-transform: none; font-size: 11px; color: var(--white); font-weight: 500; letter-spacing: 0;">Administrador / Gestor (Acesso ao Painel Admin)</label>
+    </div>
 
     <!-- Seção exclusiva para Indicador -->
     <div id="indicador-section" style="display:none">
@@ -757,6 +761,7 @@ function saveUsers(u) {
         codigo: item.codigo,
         comissao: item.comissao || 0,
         pontos: item.pontos || 0,
+        isGestor: item.isGestor || false,
         createdAt: item.createdAt
       };
     });
@@ -1166,6 +1171,7 @@ function openUserModal(userId) {
   document.getElementById('um-codigo').value   = u?.codigo   || '';
   document.getElementById('um-comissao').value = u?.comissao || '';
   document.getElementById('um-pontos').value   = u?.pontos   || '';
+  document.getElementById('um-is-gestor').checked = u?.isGestor || false;
 
   onTipoChange();
   updateLinkPreview();
@@ -1234,6 +1240,7 @@ function saveUser() {
     email:     document.getElementById('um-email').value.trim(),
     telefone:  document.getElementById('um-telefone').value.trim(),
     status:    document.getElementById('um-status').value,
+    isGestor:  document.getElementById('um-is-gestor').checked,
     createdAt: editingUserId ? (users.find(u=>u.id===editingUserId)?.createdAt || new Date().toISOString()) : new Date().toISOString(),
     ...(tipo === 'indicador' ? {
       codigo:   code,
@@ -1365,8 +1372,25 @@ document.addEventListener('keydown', e => {
 async function checkAuthAndLoad() {
   const { data: { session } } = await supabase.auth.getSession();
   if (session) {
-    document.getElementById('login-overlay').style.display = 'none';
-    await loadSupabaseData();
+    const email = session.user.email;
+    const isIgor = email.toLowerCase() === 'igor.costa@db1.com.br';
+    
+    // Buscar perfil na tabela team_members
+    const { data: profile } = await supabase
+      .from('team_members')
+      .select('*')
+      .eq('email', email)
+      .maybeSingle();
+      
+    const isGestor = isIgor || (profile && (profile.isGestor === true || profile.tipo === 'responsavel'));
+    
+    if (isGestor) {
+      document.getElementById('login-overlay').style.display = 'none';
+      await loadSupabaseData();
+    } else {
+      alert('Acesso negado: Apenas gestores podem acessar a área administrativa. Você será redirecionado para o CRM.');
+      window.location.href = 'crm-marcaseleta.html';
+    }
   } else {
     document.getElementById('login-overlay').style.display = 'flex';
   }

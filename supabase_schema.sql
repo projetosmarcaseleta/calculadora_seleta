@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS team_members (
   codigo TEXT UNIQUE,
   comissao NUMERIC,
   pontos INTEGER,
+  "isGestor" BOOLEAN DEFAULT FALSE,
   "createdAt" TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -103,13 +104,13 @@ CREATE POLICY "Allow auth delete ref_clicks" ON ref_clicks FOR DELETE TO authent
 -- 4. INSERIR DADOS DE DEMONSTRAÇÃO (SEED DATA)
 
 -- Membros do Time / Usuários
-INSERT INTO team_members (id, nome, tipo, email, phone, telefone, status, codigo, comissao, pontos, "createdAt") VALUES
-('t1', 'Marcos Lima', 'bdr', 'marcos@marcaseleta.com', '(44) 99100-0001', '(44) 99100-0001', 'ativo', NULL, NULL, NULL, NOW() - INTERVAL '90 days'),
-('t2', 'Fernanda Costa', 'closer', 'fernanda@marcaseleta.com', '(44) 99100-0002', '(44) 99100-0002', 'ativo', NULL, NULL, NULL, NOW() - INTERVAL '90 days'),
-('t3', 'Lucas Melo', 'responsavel', 'lucas@marcaseleta.com', '(44) 99100-0003', '(44) 99100-0003', 'ativo', NULL, NULL, NULL, NOW() - INTERVAL '90 days'),
-('t4', 'Patricia Alves', 'indicador', 'patricia@parceiro.com', '(44) 99100-0004', '(44) 99100-0004', 'ativo', 'PAT2025', 5, 10, NOW() - INTERVAL '60 days'),
-('t5', 'Rafael Torres', 'indicador', 'rafael@parceiro.com', '(44) 99100-0005', '(44) 99100-0005', 'ativo', 'RAF2025', 5, 10, NOW() - INTERVAL '45 days'),
-('u3', 'Lucas Mantovani', 'indicador', 'lucas@parceiro.com', '(44) 99146-5252', '(44) 99146-5252', 'ativo', 'LUCAS2025', 8, 10, NOW() - INTERVAL '30 days')
+INSERT INTO team_members (id, nome, tipo, email, phone, telefone, status, codigo, comissao, pontos, "isGestor", "createdAt") VALUES
+('t1', 'Marcos Lima', 'bdr', 'marcos@marcaseleta.com', '(44) 99100-0001', '(44) 99100-0001', 'ativo', NULL, NULL, NULL, FALSE, NOW() - INTERVAL '90 days'),
+('t2', 'Fernanda Costa', 'closer', 'fernanda@marcaseleta.com', '(44) 99100-0002', '(44) 99100-0002', 'ativo', NULL, NULL, NULL, FALSE, NOW() - INTERVAL '90 days'),
+('t3', 'Lucas Melo', 'responsavel', 'lucas@marcaseleta.com', '(44) 99100-0003', '(44) 99100-0003', 'ativo', NULL, NULL, NULL, TRUE, NOW() - INTERVAL '90 days'),
+('t4', 'Patricia Alves', 'indicador', 'patricia@parceiro.com', '(44) 99100-0004', '(44) 99100-0004', 'ativo', 'PAT2025', 5, 10, FALSE, NOW() - INTERVAL '60 days'),
+('t5', 'Rafael Torres', 'indicador', 'rafael@parceiro.com', '(44) 99100-0005', '(44) 99100-0005', 'ativo', 'RAF2025', 5, 10, FALSE, NOW() - INTERVAL '45 days'),
+('u3', 'Lucas Mantovani', 'indicador', 'lucas@parceiro.com', '(44) 99146-5252', '(44) 99146-5252', 'ativo', 'LUCAS2025', 8, 10, FALSE, NOW() - INTERVAL '30 days')
 ON CONFLICT (id) DO NOTHING;
 
 -- Configuração inicial
