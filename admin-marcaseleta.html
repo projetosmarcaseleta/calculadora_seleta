@@ -1365,10 +1365,10 @@ document.addEventListener('keydown', e => {
 async function checkAuthAndLoad() {
   const { data: { session } } = await supabase.auth.getSession();
   if (session) {
-    document.getElementById('login-overlay').classList.add('hidden');
+    document.getElementById('login-overlay').style.display = 'none';
     await loadSupabaseData();
   } else {
-    document.getElementById('login-overlay').classList.remove('hidden');
+    document.getElementById('login-overlay').style.display = 'flex';
   }
 }
 
@@ -1455,7 +1455,7 @@ async function handleLogin() {
   if (error) {
     alert('Erro ao fazer login: ' + error.message);
   } else {
-    document.getElementById('login-overlay').classList.add('hidden');
+    document.getElementById('login-overlay').style.display = 'none';
     await loadSupabaseData();
   }
 }
