@@ -712,7 +712,7 @@ const TIPO_LABEL = { bdr:'BDR / SDR', closer:'Closer', indicador:'Indicador' };
 // ── SUPABASE / STORAGE ──────────────────────────────────────────
 const supabaseUrl = 'https://mygdxrenhrfpaxpmytsi.supabase.co';
 const supabaseKey = 'sb_publishable_p-b9glhdiA0QZZbATvD6ZQ_9OeO-qlm';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+var supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 // Local cache variables
 var _users = [];

@@ -605,7 +605,7 @@ const STATUS_COLORS = { novo:'var(--blue)',contatado:'var(--teal)',proposta:'var
 // ─── SUPABASE / STORAGE ──────────────────────────────────────────
 const supabaseUrl = 'https://mygdxrenhrfpaxpmytsi.supabase.co';
 const supabaseKey = 'sb_publishable_p-b9glhdiA0QZZbATvD6ZQ_9OeO-qlm';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+var supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 // Local cache to keep synchronous functions working
 var _leads = [];
