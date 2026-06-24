@@ -6,6 +6,7 @@
 <title>Calculadora de Serviços — Marca Seleta</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 /* ═══════════════════════════════════════════════
@@ -1931,6 +1932,10 @@ footer a { color: var(--blue); text-decoration: none; }
 </div><!-- /page -->
 
 <script>
+const supabaseUrl = 'https://mygdxrenhrfpaxpmytsi.supabase.co';
+const supabaseKey = 'sb_publishable_p-b9glhdiA0QZZbATvD6ZQ_9OeO-qlm';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
 /* ═══════════════════════════════════════════════════════════════
    ✏️  CONFIGURAÇÃO DE PREÇOS — EDITE AQUI COM FACILIDADE
    
@@ -2783,7 +2788,16 @@ function sendToWebhook(data) {
     var leads = JSON.parse(localStorage.getItem('ms_crm_leads') || '[]');
     leads.unshift(lead);
     localStorage.setItem('ms_crm_leads', JSON.stringify(leads));
-  } catch(e) { console.warn('localStorage indisponível:', e); }
+
+    // Enviar para o Supabase
+    supabase.from('leads').insert([lead]).then(function(res) {
+      if (res.error) {
+        console.error('Erro ao enviar lead para Supabase:', res.error);
+      } else {
+        console.log('Lead enviado com sucesso para Supabase!');
+      }
+    });
+  } catch(e) { console.warn('Falha ao processar envio do lead:', e); }
 
   /* ✏️ WEBHOOK externo (Make/Zapier/RD Station) — descomente e configure:
   fetch('https://hook.make.com/seu-webhook', {
@@ -3159,11 +3173,29 @@ function calcPontual() {
   var params = new URLSearchParams(window.location.search);
   var ref = params.get('ref');
   if (ref) {
-    sessionStorage.setItem('ms_ref_code', ref.toUpperCase());
-    // Marca o link rastreado como usado
-    var refsUsed = JSON.parse(localStorage.getItem('ms_ref_clicks') || '{}');
-    refsUsed[ref.toUpperCase()] = (refsUsed[ref.toUpperCase()] || 0) + 1;
-    localStorage.setItem('ms_ref_clicks', JSON.stringify(refsUsed));
+    var refCode = ref.toUpperCase();
+    sessionStorage.setItem('ms_ref_code', refCode);
+    
+    // Fallback localStorage
+    try {
+      var refsUsed = JSON.parse(localStorage.getItem('ms_ref_clicks') || '{}');
+      refsUsed[refCode] = (refsUsed[refCode] || 0) + 1;
+      localStorage.setItem('ms_ref_clicks', JSON.stringify(refsUsed));
+    } catch(e) {}
+
+    // Incrementa cliques no Supabase
+    supabase.from('ref_clicks').select('clicks').eq('refCode', refCode).then(function(res) {
+      if (res.data && res.data.length > 0) {
+        var newClicks = (res.data[0].clicks || 0) + 1;
+        supabase.from('ref_clicks').update({ clicks: newClicks }).eq('refCode', refCode).then(function(upRes) {
+          if (upRes.error) console.error('Erro ao atualizar cliques no Supabase:', upRes.error);
+        });
+      } else {
+        supabase.from('ref_clicks').insert([{ refCode: refCode, clicks: 1 }]).then(function(insRes) {
+          if (insRes.error) console.error('Erro ao inserir cliques no Supabase:', insRes.error);
+        });
+      }
+    });
   }
 })();
 

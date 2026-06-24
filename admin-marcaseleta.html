@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin — Marca Seleta</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
   --navy:#010D3D; --dark:#0C0E16; --card:#0A1635; --card2:#0d1b3e;
@@ -253,6 +254,31 @@ td{padding:10px 14px;font-size:13px;vertical-align:middle}
 </head>
 <body>
 
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay" class="overlay hidden" style="background: rgba(6, 9, 22, 0.95); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; position: fixed; inset: 0;">
+  <div class="modal" style="width: 100%; max-width: 380px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); background: #0A1635; border-radius: 16px; padding: 28px 24px;">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <div style="font-family: var(--font-h); font-size: 20px; font-weight: 800; color: var(--white); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
+        <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--blue), var(--blue2)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px;">✦</div>
+        marca<span style="color: var(--blue);">seleta</span>
+      </div>
+      <div style="font-size: 11px; color: var(--muted); font-family: var(--font-h); text-transform: uppercase; letter-spacing: 0.05em;">CRM Admin</div>
+    </div>
+    
+    <div>
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label class="form-label" style="font-size: 10px; margin-bottom: 6px; display: block; color: var(--muted); font-weight: 700; text-transform: uppercase;">E-mail</label>
+        <input type="email" id="login-email" class="form-input" placeholder="seuemail@empresa.com" style="width: 100%;" required>
+      </div>
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label class="form-label" style="font-size: 10px; margin-bottom: 6px; display: block; color: var(--muted); font-weight: 700; text-transform: uppercase;">Senha</label>
+        <input type="password" id="login-password" class="form-input" placeholder="••••••••" style="width: 100%;" required>
+      </div>
+      <button class="btn btn-primary" id="btn-do-login" onclick="handleLogin()" style="width: 100%; justify-content: center; padding: 10px; font-size: 12px; border-radius: 8px;">Entrar</button>
+    </div>
+  </div>
+</div>
+
 <!-- TOPBAR -->
 <div class="topbar">
   <div style="display:flex;align-items:center;gap:14px">
@@ -266,6 +292,7 @@ td{padding:10px 14px;font-size:13px;vertical-align:middle}
   <div class="topbar-links">
     <a class="topbar-link" href="crm-marcaseleta.html">← CRM</a>
     <a class="topbar-link" href="index.html" target="_blank">Calculadora ↗</a>
+    <button class="btn btn-danger btn-sm" onclick="handleLogout()" style="margin-left:10px; padding: 5px 10px;">Sair</button>
   </div>
 </div>
 
@@ -682,25 +709,88 @@ const SVC_LABELS = {
 };
 const TIPO_LABEL = { bdr:'BDR / SDR', closer:'Closer', indicador:'Indicador' };
 
-// ── STORAGE ──────────────────────────────────────────────────
-function getUsers()  { try { return JSON.parse(localStorage.getItem(U_KEY)  || '[]'); } catch { return []; } }
-function getLeads()  { try { return JSON.parse(localStorage.getItem(L_KEY)  || '[]'); } catch { return []; } }
-function getCfg()    {
-  const def = { baseUrl:'', ptsLead:1, ptsFechado:10,
-    com:{ assessoria:5, catalogacao:5, sac:5, ambos:5, full:5, pontual:5 } };
-  try { return { ...def, ...JSON.parse(localStorage.getItem(CFG_KEY) || '{}') }; }
-  catch { return def; }
+// ── SUPABASE / STORAGE ──────────────────────────────────────────
+const supabaseUrl = 'https://mygdxrenhrfpaxpmytsi.supabase.co';
+const supabaseKey = 'sb_publishable_p-b9glhdiA0QZZbATvD6ZQ_9OeO-qlm';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+// Local cache variables
+var _users = [];
+var _leads = [];
+var _services = [];
+var _cfg = {
+  baseUrl:'', ptsLead:1, ptsFechado:10,
+  com:{ assessoria:5, catalogacao:5, sac:5, ambos:5, full:5, pontual:5 }
+};
+var _refClicks = {};
+
+function getUsers()  { return _users; }
+function getLeads()  { return _leads; }
+function getServices() { return _services; }
+function getRefClicks() { return _refClicks; }
+function getCfg()    { return _cfg; }
+
+function saveUsers(u) {
+  var oldUsers = _users;
+  _users = u;
+  try { localStorage.setItem(U_KEY, JSON.stringify(u)); } catch(e) {}
+
+  var currentIds = new Set(u.map(x => x.id));
+  var deletedIds = oldUsers.filter(x => !currentIds.has(x.id)).map(x => x.id);
+
+  if (deletedIds.length > 0) {
+    supabase.from('team_members').delete().in('id', deletedIds).then(function(res) {
+      if (res.error) console.error('Erro ao deletar usuário no Supabase:', res.error);
+    });
+  }
+
+  if (u.length > 0) {
+    var formatted = u.map(function(item) {
+      return {
+        id: item.id,
+        nome: item.nome,
+        tipo: item.tipo,
+        email: item.email,
+        phone: item.telefone || item.phone,
+        telefone: item.telefone || item.phone,
+        status: item.status,
+        codigo: item.codigo,
+        comissao: item.comissao || 0,
+        pontos: item.pontos || 0,
+        createdAt: item.createdAt
+      };
+    });
+    supabase.from('team_members').upsert(formatted).then(function(res) {
+      if (res.error) console.error('Erro ao salvar usuários no Supabase:', res.error);
+    });
+  }
 }
-function saveUsers(u) { localStorage.setItem(U_KEY, JSON.stringify(u)); }
-function getRefClicks() { try { return JSON.parse(localStorage.getItem(REF_KEY) || '{}'); } catch { return {}; } }
+
+function saveServices(s) {
+  var oldServices = _services;
+  _services = s;
+  const SVC_KEY = 'ms_crm_services';
+  try { localStorage.setItem(SVC_KEY, JSON.stringify(s)); } catch(e) {}
+
+  var currentIds = new Set(s.map(x => x.id));
+  var deletedIds = oldServices.filter(x => !currentIds.has(x.id)).map(x => x.id);
+
+  if (deletedIds.length > 0) {
+    supabase.from('services').delete().in('id', deletedIds).then(function(res) {
+      if (res.error) console.error('Erro ao deletar serviço no Supabase:', res.error);
+    });
+  }
+
+  if (s.length > 0) {
+    supabase.from('services').upsert(s).then(function(res) {
+      if (res.error) console.error('Erro ao salvar serviços no Supabase:', res.error);
+    });
+  }
+}
+
 function fmtR(v) { return 'R$ ' + (v||0).toLocaleString('pt-BR',{minimumFractionDigits:0}); }
 function fmtDate(iso) { return iso ? new Date(iso).toLocaleDateString('pt-BR') : '—'; }
 function sanitize(s) { return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-// ── SERVICE STORAGE ──────────────────────────────────────────
-const SVC_KEY = 'ms_crm_services';
-function getServices()  { try{return JSON.parse(localStorage.getItem(SVC_KEY)||'[]');}catch{return[];} }
-function saveServices(s){ localStorage.setItem(SVC_KEY,JSON.stringify(s)); }
 
 // ── SERVICE RENDER ────────────────────────────────────────────
 function renderServices() {
@@ -1204,7 +1294,14 @@ function saveCfg(showMsg) {
       pontual:    parseFloat(document.getElementById('cfg-com-pontual').value)    || 5,
     }
   };
-  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+  _cfg = cfg;
+  try { localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); } catch(e) {}
+  
+  // Salvar no Supabase
+  supabase.from('config').upsert([{ key: 'ms_admin_cfg', value: cfg }]).then(function(res) {
+    if (res.error) console.error('Erro ao salvar config no Supabase:', res.error);
+  });
+
   updateCfgPreview();
   if (showMsg) showToast('Configurações salvas!');
 }
@@ -1264,42 +1361,112 @@ document.addEventListener('keydown', e => {
   if ((e.ctrlKey||e.metaKey) && e.key === 'n') { e.preventDefault(); openUserModal(); }
 });
 
-// ── DEMO DATA ──────────────────────────────────────────────────
-function loadDemoIfEmpty() {
-  if (getUsers().length > 0) return;
-  const demo = [
-    { id:'u1', nome:'Marcos Lima', tipo:'bdr', email:'marcos@empresa.com',
-      telefone:'(44) 99146-0001', status:'ativo', createdAt: new Date(Date.now()-30*86400000).toISOString() },
-    { id:'u2', nome:'Fernanda Costa', tipo:'closer', email:'fernanda@empresa.com',
-      telefone:'(44) 99146-0002', status:'ativo', createdAt: new Date(Date.now()-25*86400000).toISOString() },
-    { id:'u3', nome:'Lucas Mantovani', tipo:'indicador', email:'lucas@parceiro.com',
-      telefone:'(44) 99146-5252', status:'ativo', codigo:'LUCAS2025',
-      comissao:8, pontos:10, createdAt: new Date(Date.now()-20*86400000).toISOString() },
-    { id:'u4', nome:'Patrícia Nunes', tipo:'indicador', email:'patricia@parceiro.com',
-      telefone:'(44) 99146-0004', status:'ativo', codigo:'PAT2025',
-      comissao:5, pontos:10, createdAt: new Date(Date.now()-15*86400000).toISOString() },
-    { id:'u5', nome:'Rafael Torres', tipo:'indicador', email:'rafael@parceiro.com',
-      telefone:'(44) 99146-0005', status:'ativo', codigo:'RAF2025',
-      comissao:5, pontos:10, createdAt: new Date(Date.now()-10*86400000).toISOString() },
-  ];
-  saveUsers(demo);
-
-  // Seed some ref clicks
-  const clicks = { LUCAS2025: 34, PAT2025: 18, RAF2025: 7 };
-  localStorage.setItem(REF_KEY, JSON.stringify(clicks));
+// ─── AUTH & INITIALIZATION ───────────────────────────────────────
+async function checkAuthAndLoad() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    document.getElementById('login-overlay').classList.add('hidden');
+    await loadSupabaseData();
+  } else {
+    document.getElementById('login-overlay').classList.remove('hidden');
+  }
 }
 
-// ── INIT ───────────────────────────────────────────────────────
-loadDemoIfEmpty();
-loadCfg();
-renderUsers();
-renderServices();
+async function loadSupabaseData() {
+  // Users (team_members)
+  const usersRes = await supabase.from('team_members').select('*');
+  if (usersRes.error) {
+    console.error('Erro ao buscar usuários:', usersRes.error);
+  } else {
+    _users = (usersRes.data || []).map(m => ({
+      ...m,
+      telefone: m.telefone || m.phone,
+      phone: m.phone || m.telefone
+    }));
+    try { localStorage.setItem(U_KEY, JSON.stringify(_users)); } catch(e) {}
+  }
 
-// Set default date filters to last 30 days
-const today = new Date().toISOString().slice(0,10);
-const ago30 = new Date(Date.now()-30*86400000).toISOString().slice(0,10);
-document.getElementById('r-from').value = ago30;
-document.getElementById('r-to').value   = today;
+  // Leads
+  const leadsRes = await supabase.from('leads').select('*');
+  if (!leadsRes.error) {
+    _leads = leadsRes.data || [];
+    try { localStorage.setItem(L_KEY, JSON.stringify(_leads)); } catch(e) {}
+  }
+
+  // Services
+  const servicesRes = await supabase.from('services').select('*');
+  if (!servicesRes.error) {
+    _services = servicesRes.data || [];
+    const SVC_KEY = 'ms_crm_services';
+    try { localStorage.setItem(SVC_KEY, JSON.stringify(_services)); } catch(e) {}
+  }
+
+  // Config
+  const configRes = await supabase.from('config').select('*').eq('key', 'ms_admin_cfg');
+  if (!configRes.error && configRes.data && configRes.data.length > 0) {
+    _cfg = configRes.data[0].value || _cfg;
+    try { localStorage.setItem(CFG_KEY, JSON.stringify(_cfg)); } catch(e) {}
+  }
+
+  // Ref clicks
+  const clicksRes = await supabase.from('ref_clicks').select('*');
+  if (!clicksRes.error) {
+    _refClicks = {};
+    (clicksRes.data || []).forEach(c => {
+      _refClicks[c.refCode] = c.clicks || 0;
+    });
+    try { localStorage.setItem(REF_KEY, JSON.stringify(_refClicks)); } catch(e) {}
+  }
+
+  // Render UI
+  loadCfg();
+  renderUsers();
+  renderServices();
+
+  // Set default date filters to last 30 days
+  const today = new Date().toISOString().slice(0,10);
+  const ago30 = new Date(Date.now()-30*86400000).toISOString().slice(0,10);
+  document.getElementById('r-from').value = ago30;
+  document.getElementById('r-to').value   = today;
+  
+  if (document.getElementById('tab-ranking').classList.contains('active')) {
+    renderRanking();
+  }
+}
+
+async function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const btn = document.getElementById('btn-do-login');
+  
+  if (!email || !password) {
+    alert('Por favor, preencha o e-mail e a senha.');
+    return;
+  }
+  
+  btn.disabled = true;
+  btn.textContent = 'Entrando...';
+  
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  
+  btn.disabled = false;
+  btn.textContent = 'Entrar';
+  
+  if (error) {
+    alert('Erro ao fazer login: ' + error.message);
+  } else {
+    document.getElementById('login-overlay').classList.add('hidden');
+    await loadSupabaseData();
+  }
+}
+
+async function handleLogout() {
+  await supabase.auth.signOut();
+  window.location.reload();
+}
+
+// Start app
+checkAuthAndLoad();
 </script>
 </body>
 </html>

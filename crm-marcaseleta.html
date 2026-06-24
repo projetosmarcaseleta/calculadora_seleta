@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CRM — Marca Seleta</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --navy:#010D3D;--dark:#0C0E16;--card:#0A1635;--card2:#0d1b3e;
@@ -244,6 +245,31 @@ td{padding:8px 12px;font-size:11px;vertical-align:middle}
 </head>
 <body>
 
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay" class="overlay hidden" style="background: rgba(6, 9, 22, 0.95); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; position: fixed; inset: 0;">
+  <div class="modal" style="width: 100%; max-width: 380px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); background: #0A1635; border-radius: 16px; padding: 28px 24px;">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <div style="font-family: var(--font-h); font-size: 20px; font-weight: 800; color: var(--white); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
+        <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--blue), var(--blue2)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px;">✦</div>
+        marca<span style="color: var(--blue);">seleta</span>
+      </div>
+      <div style="font-size: 11px; color: var(--muted); font-family: var(--font-h); text-transform: uppercase; letter-spacing: 0.05em;">CRM Comercial</div>
+    </div>
+    
+    <div>
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label class="form-label" style="font-size: 10px; margin-bottom: 6px; display: block; color: var(--muted); font-weight: 700; text-transform: uppercase;">E-mail</label>
+        <input type="email" id="login-email" class="form-input" placeholder="seuemail@empresa.com" style="width: 100%;" required>
+      </div>
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label class="form-label" style="font-size: 10px; margin-bottom: 6px; display: block; color: var(--muted); font-weight: 700; text-transform: uppercase;">Senha</label>
+        <input type="password" id="login-password" class="form-input" placeholder="••••••••" style="width: 100%;" required>
+      </div>
+      <button class="btn btn-primary" id="btn-do-login" onclick="handleLogin()" style="width: 100%; justify-content: center; padding: 10px; font-size: 12px; border-radius: 8px;">Entrar</button>
+    </div>
+  </div>
+</div>
+
 <!-- TOPBAR -->
 <div class="topbar">
   <div style="display:flex;align-items:center;gap:12px">
@@ -256,6 +282,7 @@ td{padding:8px 12px;font-size:11px;vertical-align:middle}
     <button class="btn btn-ghost btn-sm" onclick="exportCSV()">⬇ CSV</button>
     <button class="btn btn-ghost btn-sm" onclick="importJSON()">⬆ Importar</button>
     <button class="btn btn-primary btn-sm" onclick="openLeadModal()">＋ Novo Lead</button>
+    <button class="btn btn-danger btn-sm" onclick="handleLogout()">Sair</button>
   </div>
 </div>
 
@@ -575,11 +602,74 @@ const TIPO_LABEL = { bdr:'BDR / SDR',closer:'Closer',responsavel:'Responsável',
 const COLORS = ['var(--blue)','var(--pink)','var(--teal)','var(--orange)','var(--purple)','var(--warn)'];
 const STATUS_COLORS = { novo:'var(--blue)',contatado:'var(--teal)',proposta:'var(--warn)',negociando:'var(--pink)',fechado:'var(--success)',perdido:'#6B7280' };
 
-// ─── STORAGE ─────────────────────────────────────────────────────
-function getLeads()  { try{return JSON.parse(localStorage.getItem(L_KEY)||'[]');}catch{return[];} }
-function saveLeads(l){ localStorage.setItem(L_KEY,JSON.stringify(l)); }
-function getTeam()   { try{return JSON.parse(localStorage.getItem(T_KEY)||'[]');}catch{return[];} }
-function saveTeam(t) { localStorage.setItem(T_KEY,JSON.stringify(t)); }
+// ─── SUPABASE / STORAGE ──────────────────────────────────────────
+const supabaseUrl = 'https://mygdxrenhrfpaxpmytsi.supabase.co';
+const supabaseKey = 'sb_publishable_p-b9glhdiA0QZZbATvD6ZQ_9OeO-qlm';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+// Local cache to keep synchronous functions working
+var _leads = [];
+var _team = [];
+
+function getLeads()  { return _leads; }
+function getTeam()   { return _team; }
+
+function saveLeads(l) {
+  var oldLeads = _leads;
+  _leads = l;
+  try { localStorage.setItem(L_KEY, JSON.stringify(l)); } catch(e) {}
+
+  var currentIds = new Set(l.map(x => x.id));
+  var deletedIds = oldLeads.filter(x => !currentIds.has(x.id)).map(x => x.id);
+
+  if (deletedIds.length > 0) {
+    supabase.from('leads').delete().in('id', deletedIds).then(function(res) {
+      if (res.error) console.error('Erro ao deletar lead(s) no Supabase:', res.error);
+    });
+  }
+
+  if (l.length > 0) {
+    supabase.from('leads').upsert(l).then(function(res) {
+      if (res.error) console.error('Erro ao salvar leads no Supabase:', res.error);
+    });
+  }
+}
+
+function saveTeam(t) {
+  var oldTeam = _team;
+  _team = t;
+  try { localStorage.setItem(T_KEY, JSON.stringify(t)); } catch(e) {}
+
+  var currentIds = new Set(t.map(x => x.id));
+  var deletedIds = oldTeam.filter(x => !currentIds.has(x.id)).map(x => x.id);
+
+  if (deletedIds.length > 0) {
+    supabase.from('team_members').delete().in('id', deletedIds).then(function(res) {
+      if (res.error) console.error('Erro ao deletar membro no Supabase:', res.error);
+    });
+  }
+
+  if (t.length > 0) {
+    var formattedTeam = t.map(function(m) {
+      return {
+        id: m.id,
+        nome: m.nome,
+        tipo: m.tipo,
+        email: m.email,
+        phone: m.phone || m.telefone,
+        telefone: m.phone || m.telefone,
+        status: m.status,
+        codigo: m.codigo,
+        comissao: m.comissao || 0,
+        pontos: m.pontos || 0,
+        createdAt: m.createdAt
+      };
+    });
+    supabase.from('team_members').upsert(formattedTeam).then(function(res) {
+      if (res.error) console.error('Erro ao salvar time no Supabase:', res.error);
+    });
+  }
+}
 
 function fmt(v){ return 'R$'+(v||0).toLocaleString('pt-BR',{minimumFractionDigits:0}); }
 function fmtD(iso){ return iso?new Date(iso).toLocaleDateString('pt-BR'):'—'; }
@@ -1112,37 +1202,115 @@ function migrateLeads(){
   if(changed) saveLeads(leads);
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────
-loadDemo();
-migrateLeads(); // ensure all leads have new fields (backward compat)
-
-// ─── REAL-TIME: listen for new leads from calculator ─────────────
-var _lastLeadCount = getLeads().length;
-
-function checkForNewLeads() {
-  var current = getLeads();
-  if (current.length !== _lastLeadCount) {
-    _lastLeadCount = current.length;
-    renderLeads();
+// ─── AUTH & INITIALIZATION ───────────────────────────────────────
+async function checkAuthAndLoad() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    document.getElementById('login-overlay').classList.add('hidden');
+    await loadSupabaseData();
+  } else {
+    document.getElementById('login-overlay').classList.remove('hidden');
   }
 }
 
+async function loadSupabaseData() {
+  // Leads
+  const leadsRes = await supabase.from('leads').select('*');
+  if (leadsRes.error) {
+    console.error('Erro ao buscar leads:', leadsRes.error);
+  } else {
+    _leads = leadsRes.data || [];
+    try { localStorage.setItem(L_KEY, JSON.stringify(_leads)); } catch(e) {}
+  }
 
+  // Time
+  const teamRes = await supabase.from('team_members').select('*');
+  if (teamRes.error) {
+    console.error('Erro ao buscar time:', teamRes.error);
+  } else {
+    _team = (teamRes.data || []).map(m => ({
+      ...m,
+      phone: m.phone || m.telefone,
+      telefone: m.telefone || m.phone
+    }));
+    try { localStorage.setItem(T_KEY, JSON.stringify(_team)); } catch(e) {}
+  }
+  
+  // Custom Services
+  const servicesRes = await supabase.from('services').select('*');
+  if (!servicesRes.error) {
+    try { localStorage.setItem('ms_crm_services', JSON.stringify(servicesRes.data || [])); } catch(e) {}
+  }
 
-// Listen for storage events (same-origin, different tab)
-window.addEventListener('storage', function(e) {
-  if (e.key === 'ms_crm_leads') { checkForNewLeads(false); }
-});
+  _lastLeadCount = _leads.length;
 
-// Polling fallback every 3 seconds (for same-tab file:// usage)
-setInterval(function() { checkForNewLeads(true); }, 3000);
-// Set default date filter (last 30 days)
-const today=new Date().toISOString().slice(0,10);
-const ago30=new Date(Date.now()-30*86400000).toISOString().slice(0,10);
-document.getElementById('dash-from').value=ago30;
-document.getElementById('dash-to').value=today;
-populateRespSelects();
-renderLeads();
+  // Render UI
+  const today=new Date().toISOString().slice(0,10);
+  const ago30=new Date(Date.now()-30*86400000).toISOString().slice(0,10);
+  document.getElementById('dash-from').value=ago30;
+  document.getElementById('dash-to').value=today;
+  
+  populateRespSelects();
+  updateStats(_leads);
+  renderLeads();
+}
+
+async function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const btn = document.getElementById('btn-do-login');
+  
+  if (!email || !password) {
+    alert('Por favor, preencha o e-mail e a senha.');
+    return;
+  }
+  
+  btn.disabled = true;
+  btn.textContent = 'Entrando...';
+  
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  
+  btn.disabled = false;
+  btn.textContent = 'Entrar';
+  
+  if (error) {
+    alert('Erro ao fazer login: ' + error.message);
+  } else {
+    document.getElementById('login-overlay').classList.add('hidden');
+    await loadSupabaseData();
+  }
+}
+
+async function handleLogout() {
+  await supabase.auth.signOut();
+  window.location.reload();
+}
+
+// ─── REAL-TIME: listen for new leads from calculator ─────────────
+var _lastLeadCount = 0;
+
+async function checkForNewLeads() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return;
+  
+  const res = await supabase.from('leads').select('id');
+  if (res.data && res.data.length !== _lastLeadCount) {
+    _lastLeadCount = res.data.length;
+    const leadsRes = await supabase.from('leads').select('*');
+    if (!leadsRes.error) {
+      _leads = leadsRes.data || [];
+      try { localStorage.setItem(L_KEY, JSON.stringify(_leads)); } catch(e) {}
+      renderLeads();
+      updateStats(_leads);
+    }
+  }
+}
+
+// Polling fallback every 3 seconds
+setInterval(checkForNewLeads, 3000);
+
+// Start app
+checkAuthAndLoad();
 </script>
 </body>
 </html>
