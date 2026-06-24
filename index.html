@@ -1510,8 +1510,8 @@ footer a { color: var(--blue); text-decoration: none; }
 
               <div class="svc-card" data-svc="assessoria" onclick="selectService(this)">
                 <span class="svc-icon">🎯</span>
-                <div class="svc-name">Assessoria de Marketplace</div>
-                <div class="svc-desc">Acompanhamento especializado recorrente com foco em gestão, indicadores, reputação e uso eficiente do Anymarket.</div>
+                <div class="svc-name">Assessoria Marketplace</div>
+                <div class="svc-desc">Acompanhamento especializado com foco em gestão, indicadores, reputação e performance em marketplaces.</div>
                 <span class="svc-tag" style="background:var(--blue)">Acompanhamento Recorrente</span>
               </div>
 
@@ -1551,7 +1551,7 @@ footer a { color: var(--blue); text-decoration: none; }
             <!-- Volume para FULL (Assessoria + Catalogação + SAC) -->
             <div id="vol-full" class="hidden">
               <div>
-                <div class="section-divider" style="--divider-color:var(--blue)">Assessoria de Marketplace — escolha seu plano</div>
+                <div class="section-divider" style="--divider-color:var(--blue)">Assessoria Marketplace — escolha seu plano</div>
                 <div id="plano-list-full" class="plano-list"></div>
                 <div class="contas-assessoria-box" style="margin-top:14px">
                   <div class="contas-info-note">
@@ -1561,8 +1561,9 @@ footer a { color: var(--blue); text-decoration: none; }
                     <div class="pontual-field">
                       <label class="pontual-label">Quantas contas você precisa de assessoria?</label>
                       <input class="pontual-input contas-assessoria-input" id="contas-input-full"
-                        type="number" min="1" max="20" value="2"
-                        oninput="updateContasAssessoria(this.value)">
+                        type="number" placeholder="Mínimo 2"
+                        oninput="updateContasAssessoria(this.value, false)"
+                        onblur="enforceContasMin(this)">
                     </div>
                     <div class="pontual-field" style="justify-content:flex-end">
                       <div class="contas-extra-preview" id="contas-preview-full"></div>
@@ -1650,7 +1651,7 @@ footer a { color: var(--blue); text-decoration: none; }
               </div>
             </div>
 
-            <!-- Painel Assessoria de Marketplace -->
+            <!-- Painel Assessoria Marketplace -->
             <div id="vol-assessoria" class="hidden">
               <div class="plano-list" id="plano-list-container"></div>
               <div class="contas-assessoria-box">
@@ -1661,8 +1662,9 @@ footer a { color: var(--blue); text-decoration: none; }
                   <div class="pontual-field">
                     <label class="pontual-label">Quantas contas você precisa de assessoria?</label>
                     <input class="pontual-input contas-assessoria-input" id="contas-input-asses"
-                      type="number" min="1" max="20" value="2"
-                      oninput="updateContasAssessoria(this.value)">
+                      type="number" placeholder="Mínimo 2"
+                      oninput="updateContasAssessoria(this.value, false)"
+                      onblur="enforceContasMin(this)">
                   </div>
                   <div class="pontual-field" style="justify-content:flex-end">
                     <div class="contas-extra-preview" id="contas-preview-asses"></div>
@@ -1791,7 +1793,7 @@ footer a { color: var(--blue); text-decoration: none; }
   <!-- CONSULTORIA DEDICADA & GESTÃO DE ADS -->
   <section class="am-section">
     <div class="container">
-      <div class="am-card" style="flex-direction:column; align-items:stretch; gap:20px; align-content:start;">
+      <div class="am-card" style="flex-direction:column; align-items:stretch; gap:20px; justify-content:flex-start;">
 
         <!-- Header -->
         <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:20px;">
@@ -1802,7 +1804,7 @@ footer a { color: var(--blue); text-decoration: none; }
               Acompanhamento estratégico intensivo com gestão ativa de anúncios, inteligência competitiva e suporte especializado em Anymarket — para operações que precisam de alto nível de performance e dedicação.
             </div>
           </div>
-          <a href="https://api.whatsapp.com/send?phone=5544991465252&text=Ol%C3%A1%21+Tenho+interesse+na+Consultoria+Dedicada+%26+Gest%C3%A3o+de+Ads+da+Marca+Seleta.+Gostaria+de+receber+um+or%C3%A7amento."
+          <a href="https://api.whatsapp.com/send?phone=554491442095&text=Ol%C3%A1%21+Tenho+interesse+na+Consultoria+Dedicada+%26+Gest%C3%A3o+de+Ads+da+Marca+Seleta.+Gostaria+de+receber+um+or%C3%A7amento."
              class="btn-am" target="_blank" style="align-self:center; white-space:nowrap;">
             Solicitar orçamento →
           </a>
@@ -1814,12 +1816,12 @@ footer a { color: var(--blue); text-decoration: none; }
           <!-- Pilar 1 -->
           <div style="background:rgba(0,117,255,.05); border:1px solid rgba(0,117,255,.18); border-radius:10px; padding:16px 18px;">
             <div style="font-size:13px; font-weight:700; color:var(--white); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-              <span style="font-size:16px;">🎯</span> Gestão Estratégica da Operação
+              <span style="font-size:16px;">🎯</span> Gestão Estratégica
             </div>
             <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px;">
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--blue);font-weight:700;">›</span>Reunião semanal de acompanhamento.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--blue);font-weight:700;">›</span>Reuniões semanais.</li>
               <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--blue);font-weight:700;">›</span>Plano de ação contínuo.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--blue);font-weight:700;">›</span>Priorização das iniciativas de maior impacto.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--blue);font-weight:700;">›</span>Priorização das iniciativas.</li>
               <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--blue);font-weight:700;">›</span>Análise de indicadores estratégicos.</li>
             </ul>
           </div>
@@ -1833,7 +1835,7 @@ footer a { color: var(--blue); text-decoration: none; }
               <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Planejamento de campanhas.</li>
               <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Otimização contínua.</li>
               <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Controle de orçamento.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Acompanhamento de ROAS, ACOS e conversão.</li>
+              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Análise ROAS, ACOS e conversão.</li>
               <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Recomendações de expansão.</li>
             </ul>
           </div>
@@ -1867,7 +1869,7 @@ footer a { color: var(--blue); text-decoration: none; }
           <!-- Pilar 5 -->
           <div style="background:rgba(139,92,246,.05); border:1px solid rgba(139,92,246,.18); border-radius:10px; padding:16px 18px;">
             <div style="font-size:13px; font-weight:700; color:var(--white); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-              <span style="font-size:16px;">⚙️</span> Apoio Especializado em Anymarket
+              <span style="font-size:16px;">⚙️</span> Apoio ao Anymarket
             </div>
             <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px;">
               <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:#8B5CF6;font-weight:700;">›</span>Boas práticas.</li>
@@ -1884,7 +1886,7 @@ footer a { color: var(--blue); text-decoration: none; }
           <div style="font-size:12px; color:var(--muted); max-width:600px; line-height:1.6;">
             💡 Este é um serviço premium com <strong style="color:var(--white)">escopo e valor personalizado</strong> conforme a complexidade da operação. Fale com nosso time para receber uma proposta sob medida.
           </div>
-          <a href="https://api.whatsapp.com/send?phone=5544991465252&text=Ol%C3%A1%21+Tenho+interesse+na+Consultoria+Dedicada+%26+Gest%C3%A3o+de+Ads+da+Marca+Seleta.+Gostaria+de+receber+um+or%C3%A7amento."
+          <a href="https://api.whatsapp.com/send?phone=554491442095&text=Ol%C3%A1%21+Tenho+interesse+na+Consultoria+Dedicada+%26+Gest%C3%A3o+de+Ads+da+Marca+Seleta.+Gostaria+de+receber+um+or%C3%A7amento."
              class="btn-am" target="_blank">
             Solicitar orçamento →
           </a>
@@ -2096,10 +2098,10 @@ const CONFIG = {
 
   /* ─── WHATSAPP ─── */
   /* Coloque o número completo com DDI, ex: 5511999999999 */
-  whatsapp: "5544991465252",
+  whatsapp: "554491442095",
 
   /* ─── LINK PARA ORÇAMENTO DE ACCOUNT MANAGEMENT ─── */
-  accountManagementLink: "https://api.whatsapp.com/send?phone=5544991465252&text=Ol%C3%A1%2C%20tenho%20interesse%20no%20servi%C3%A7o%20de%20Account%20Management%20da%20Marca%20Seleta!"
+  accountManagementLink: "https://api.whatsapp.com/send?phone=554491442095&text=Ol%C3%A1%2C%20tenho%20interesse%20no%20servi%C3%A7o%20de%20Account%20Management%20da%20Marca%20Seleta!"
 
 };
 /* ═══════════════════════════════════════════════════════════════
@@ -2318,7 +2320,17 @@ function submitLead() {
   state.leadTicketMedio = ticket;
 
   // Aqui você pode integrar com Webhook/CRM/Make/Zapier:
-  sendToWebhook({ name, email, phone, empresa, skus, ticket, service: state.service, volCat: state.volCat, volSac: state.volSac, pontualTotal: state.pontualTotal, pontualConfig: state.pontualConfig });
+  sendToWebhook({
+    name, email, phone, empresa, skus, ticket,
+    service:          state.service,
+    volCat:           state.volCat,
+    sacState:         state.sacState,
+    pontualTotal:     state.pontualTotal,
+    pontualConfig:    state.pontualConfig,
+    planoAssessoria:  state.planoAssessoria,
+    planoFull:        state.planoFull,
+    contasAssessoria: state.contasAssessoria || 2
+  });
 
   buildResult();
   goStep(4);
@@ -2333,7 +2345,7 @@ function buildResult() {
   const cards = [];
   const includes = [];
 
-  // ─ Assessoria de Marketplace ─
+  // ─ Assessoria Marketplace ─
   if (state.service === 'assessoria') {
     var plano = state.planoAssessoria;
     var contasExtra   = Math.max(0, (state.contasAssessoria || 2) - CONFIG.assessoria.contasInclusas);
@@ -2346,7 +2358,7 @@ function buildResult() {
       assBd.push({ label: contasExtra + ' conta(s) adicional(is) × R$ 1.000/mês', value: custoContasEx });
     if (CONFIG.assessoria.setup)
       assBd.push({ label: 'Setup único (Assessoria)', value: CONFIG.assessoria.setup });
-    cards.push({ label: 'Assessoria de Marketplace', name: plano.name + ' de contrato · ' + (state.contasAssessoria || 2) + ' conta(s)', price: assMonthly, color: 'var(--blue)', breakdown: assBd });
+    cards.push({ label: 'Assessoria Marketplace', name: plano.name + ' de contrato · ' + (state.contasAssessoria || 2) + ' conta(s)', price: assMonthly, color: 'var(--blue)', breakdown: assBd });
     CONFIG.assessoria.includes.forEach(i => includes.push(i));
     state._assessoriaPlano = plano;
   }
@@ -2418,10 +2430,8 @@ function buildResult() {
     var sacBd = [];
     var ss = state.sacState;
     var sp = CONFIG.sac;
-    if (ss.preVendas.selected) sacBd.push({ label: 'Pré-vendas: até ' + sp.preVendas.max + ' msg — R$ ' + fmt(sp.preVendas.base) + '/mês', value: sp.preVendas.base });
-    if (ss.chatPos.selected)   sacBd.push({ label: 'Chat/Pós-vendas: até ' + sp.chatPos.max + ' msg — R$ ' + fmt(sp.chatPos.base) + '/mês', value: sp.chatPos.base });
-    if ((ss.preVendas.selected || ss.chatPos.selected))
-      sacBd.push({ label: '↳ Excedente: R$ 1,00/mensagem adicional', value: null });
+    if (ss.preVendas.selected) sacBd.push({ label: 'Pré-vendas: até ' + sp.preVendas.max + ' msg/mês · excedente R$ 1,00/msg', value: sp.preVendas.base });
+    if (ss.chatPos.selected)   sacBd.push({ label: 'Chat/Pós-vendas: até ' + sp.chatPos.max + ' msg/mês · excedente R$ 1,00/msg', value: sp.chatPos.base });
     if (CONFIG.sac.setup) sacBd.push({ label: 'Setup único (SAC)', value: CONFIG.sac.setup });
     cards.push({ label: 'SAC Operacional', name: sacDesc, price: sacTotal, color: 'var(--orange)', breakdown: sacBd });
     CONFIG.sac.includes.forEach(i => includes.push(i));
@@ -2442,7 +2452,7 @@ function buildResult() {
       assBd.push({ label: contasExtraF + ' conta(s) adicional(is) × R$ 1.000/mês', value: custoContasExF });
     if (CONFIG.assessoria.setup)
       assBd.push({ label: 'Setup único (Assessoria)', value: CONFIG.assessoria.setup });
-    cards.push({ label: 'Assessoria de Marketplace', name: plano.name + ' de contrato · ' + (state.contasAssessoria || 2) + ' conta(s)', price: assMonthlyF, color: 'var(--blue)', breakdown: assBd });
+    cards.push({ label: 'Assessoria Marketplace', name: plano.name + ' de contrato · ' + (state.contasAssessoria || 2) + ' conta(s)', price: assMonthlyF, color: 'var(--blue)', breakdown: assBd });
     CONFIG.assessoria.includes.forEach(i => includes.push(i));
     state._assessoriaPlano = plano;
     }
@@ -2513,7 +2523,7 @@ function buildResult() {
     var totalLabel = isPontual2 ? 'Estimativa do projeto' : isFull2 ? 'Pacote Full \u2014 mensalidade' : 'Investimento mensal estimado';
     var totalSub   = isPontual2 ? 'estimativa \u00fanica \u00b7 sujeito a confirma\u00e7\u00e3o'
                    : (state.service === 'assessoria' && state.planoAssessoria) ? state.planoAssessoria.name + ' de contrato'
-                   : '/m\u00eas \u00b7 sem fidelidade m\u00ednima obrigat\u00f3ria';
+                   : '/m\u00eas';
     var setupRows = setupItems.map(function(si){
       return '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">' +
         '<span style="font-size:12px;color:var(--muted)">' + si.label + '</span>' +
@@ -2657,7 +2667,7 @@ function buildResult() {
       }).join('');
       assDetailWrap.innerHTML =
         '<div class="assessoria-detail">' +
-          '<div class="assessoria-detail-title">O que está incluso na Assessoria de Marketplace</div>' +
+          '<div class="assessoria-detail-title">O que está incluso na Assessoria Marketplace</div>' +
           '<div class="assessoria-pilares">' + pilaresHtml + '</div>' +
         '</div>';
     } else {
@@ -2733,7 +2743,7 @@ function buildWhatsappMsg(name, total, cards) {
   if (isFull) {
     lines.push('Tenho interesse no Pacote Full (Assessoria + Catalogação + SAC). Gostaria de receber uma proposta completa!');
   } else if (isAssessoria) {
-    lines.push('Tenho interesse na Assessoria de Marketplace. Gostaria de entender melhor como funciona e dar início à parceria!');
+    lines.push('Tenho interesse na Assessoria Marketplace. Gostaria de entender melhor como funciona e dar início à parceria!');
   } else if (isPontual) {
     lines.push('Gostaria de confirmar o orçamento e iniciar o projeto de catalogação!');
   } else {
@@ -2747,24 +2757,28 @@ function sendToWebhook(data) {
   // Salvar lead no localStorage para o CRM
   try {
     var lead = {
-      id:        'lead_' + Date.now(),
-      refCode:   sessionStorage.getItem('ms_ref_code') || null,
-      name:      data.name,
-      email:     data.email,
-      phone:     data.phone || '',
-      empresa:   data.empresa || '',
-      skus:      data.skus    || '',
-      ticket:    data.ticket  || '',
-      service:   data.service,
-      serviceLabel: getServiceLabel(data.service),
-      plan:      getPlanLabel(data),
-      value:     state.pontualTotal || calcTotalForLead(data),
-      status:    'novo',
-      createdAt: new Date().toISOString(),
-      notes:     [],
-      sacState:  data.sacState || null,
-      volCat:    data.volCat   || null,
-      pontual:   data.pontualConfig || null
+      id:             'lead_' + Date.now(),
+      refCode:        sessionStorage.getItem('ms_ref_code') || null,
+      name:           data.name,
+      email:          data.email,
+      phone:          data.phone || '',
+      empresa:        data.empresa || '',
+      skus:           data.skus    || '',
+      ticket:         data.ticket  || '',
+      service:        data.service,
+      serviceLabel:   getServiceLabel(data.service),
+      plan:           getPlanLabel(data),
+      value:          calcTotalForLead(data),
+      setupValue:     calcSetupForLead(data),
+      status:         'novo',
+      createdAt:      new Date().toISOString(),
+      notes:          [],
+      sacState:       data.sacState           || null,
+      volCat:         data.volCat             || null,
+      pontualConfig:  data.pontualConfig      || null,
+      planoAssessoria:data.planoAssessoria    || null,
+      planoFull:      data.planoFull          || null,
+      contasAssessoria: data.contasAssessoria || 2
     };
     var leads = JSON.parse(localStorage.getItem('ms_crm_leads') || '[]');
     leads.unshift(lead);
@@ -2782,7 +2796,7 @@ function sendToWebhook(data) {
 function getServiceLabel(svc) {
   var labels = { catalogacao:'Backoffice/Catalogação', sac:'SAC Operacional',
     ambos:'Pacote Operação', full:'Pacote Full', pontual:'Catalogação Pontual',
-    assessoria:'Assessoria de Marketplace' };
+    assessoria:'Assessoria Marketplace' };
   return labels[svc] || svc;
 }
 
@@ -2795,11 +2809,25 @@ function getPlanLabel(data) {
 
 function calcTotalForLead(data) {
   var t = 0;
-  if (state.planoAssessoria) t += state.planoAssessoria.price;
-  if (state.planoFull)       t += state.planoFull.price;
-  if (state.volCat)          t += state.volCat.price;
-  t += calcSacTotal();
-  return t || state.pontualTotal || 0;
+  var svc = data.service;
+  if (data.planoAssessoria) t += data.planoAssessoria.price;
+  if (data.planoFull)       t += data.planoFull.price;
+  if (data.volCat)          t += data.volCat.price;
+  if (['sac','ambos','full'].includes(svc)) t += calcSacTotal();
+  if (svc === 'assessoria' || svc === 'full') {
+    var ex = Math.max(0, ((data.contasAssessoria||2) - (CONFIG.assessoria.contasInclusas||2)));
+    t += ex * (CONFIG.assessoria.adicionalPorConta || 0);
+  }
+  return t || data.pontualTotal || state.pontualTotal || 0;
+}
+
+function calcSetupForLead(data) {
+  var setup = 0;
+  var svc = data.service;
+  if (['catalogacao','ambos','full'].includes(svc)) setup += CONFIG.catalogacao.setup || 0;
+  if (['sac','ambos','full'].includes(svc))         setup += CONFIG.sac.setup        || 0;
+  if (['assessoria','full'].includes(svc))          setup += CONFIG.assessoria.setup  || 0;
+  return setup;
 }
 
 // ─── Restart ───
@@ -2877,7 +2905,7 @@ function showVolStep() {
     $('vol-assessoria').classList.remove('hidden');
     buildPlanosAssessoria();
     t.textContent = 'Escolha o plano ideal para sua operação';
-    s.textContent = 'Selecione o plano de Assessoria de Marketplace. O investimento será exibido após você informar seus dados.';
+    s.textContent = 'Selecione o plano de Assessoria Marketplace. O investimento será exibido após você informar seus dados.';
   }
 }
 
@@ -2977,13 +3005,21 @@ function sacDescription() {
 }
 
 // ─── Contas adicionais de assessoria ───
-function updateContasAssessoria(val) {
-  var v = Math.max(1, parseInt(val) || 2);
-  state.contasAssessoria = v;
-  // Sync all contas inputs
-  document.querySelectorAll('.contas-assessoria-input').forEach(function(inp) {
-    if (parseInt(inp.value) !== v) inp.value = v;
-  });
+function enforceContasMin(inp) {
+  var v = parseInt(inp.value);
+  if (!v || v < 2) { inp.value = 2; updateContasAssessoria(2, true); }
+}
+
+function updateContasAssessoria(val, sync) {
+  var raw = parseInt(val);
+  var v = (raw && raw >= 2) ? raw : (raw === undefined || val === '' ? state.contasAssessoria : 2);
+  state.contasAssessoria = (v >= 2 ? v : 2);
+  // Sync all inputs only when explicitly requested (onblur)
+  if (sync) {
+    document.querySelectorAll('.contas-assessoria-input').forEach(function(inp) {
+      if (parseInt(inp.value) !== state.contasAssessoria) inp.value = state.contasAssessoria;
+    });
+  }
   // Update previews (sem mostrar preço)
   var cfg = CONFIG.assessoria;
   var extra = Math.max(0, v - cfg.contasInclusas);
