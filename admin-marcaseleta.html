@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Marca Seleta</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#010D3D; --dark:#0C0E16; --card:#0A1635; --card2:#0d1b3e;
+  --blue:#0075FF; --blue2:#1D83FF; --pink:#FF27AD; --orange:#FE4C00;
+  --teal:#4AC8CB; --text:#E9F4FD; --muted:#7B9CC4; --white:#FFFFFF;
+  --success:#22C55E; --warn:#F59E0B; --danger:#EF4444; --purple:#8B5CF6;
+  --gold:#F59E0B; --silver:#9CA3AF; --bronze:#B45309;
+  --font-h:'Sora',sans-serif; --font-b:'DM Sans',sans-serif;
+  --r:10px; --r-sm:6px;
+  --t-bdr:rgba(0,117,255,.18); --t-closer:rgba(255,39,173,.18);
+  --t-ind:rgba(245,158,11,.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--dark);color:var(--text);font-family:var(--font-b);display:flex;flex-direction:column}
+button{cursor:pointer;border:none;outline:none}
+input,textarea,select{outline:none;font-family:var(--font-b)}
+a{color:var(--blue);text-decoration:none}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--navy);border-bottom:1px solid rgba(255,255,255,.07);
+  padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.logo{font-family:var(--font-h);font-size:16px;font-weight:700;color:var(--white);display:flex;align-items:center;gap:8px}
+.logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--blue),var(--blue2));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px}
+.logo span{color:var(--blue)}
+.admin-badge{background:rgba(139,92,246,.15);color:var(--purple);border:1px solid rgba(139,92,246,.3);
+  font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:.05em;text-transform:uppercase}
+.topbar-links{display:flex;gap:8px}
+.topbar-link{font-size:12px;color:var(--muted);padding:6px 12px;border-radius:var(--r-sm);transition:all .2s}
+.topbar-link:hover{color:var(--white);background:rgba(255,255,255,.06)}
+
+/* ── TABS ── */
+.tabs-bar{background:var(--card);border-bottom:1px solid rgba(255,255,255,.07);
+  padding:0 24px;display:flex;gap:0;flex-shrink:0}
+.tab{font-family:var(--font-h);font-size:12px;font-weight:600;padding:14px 20px;
+  color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;
+  display:flex;align-items:center;gap:8px;white-space:nowrap}
+.tab:hover{color:var(--white)}
+.tab.active{color:var(--white);border-bottom-color:var(--blue)}
+.tab-count{background:rgba(255,255,255,.08);font-size:10px;font-weight:700;
+  padding:2px 7px;border-radius:100px;color:var(--muted)}
+.tab.active .tab-count{background:rgba(0,117,255,.2);color:var(--blue)}
+
+/* ── MAIN ── */
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.tab-content{display:none;flex:1;overflow-y:auto;flex-direction:column}
+.tab-content.active{display:flex}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r-sm);
+  font-family:var(--font-h);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;border:none}
+.btn-sm{padding:6px 12px;font-size:11px}
+.btn-xs{padding:4px 10px;font-size:10px}
+.btn-primary{background:var(--blue);color:var(--white)}
+.btn-primary:hover{background:var(--blue2);transform:translateY(-1px)}
+.btn-ghost{background:rgba(255,255,255,.06);color:var(--text);border:1px solid rgba(255,255,255,.1)}
+.btn-ghost:hover{background:rgba(255,255,255,.1)}
+.btn-danger{background:rgba(239,68,68,.12);color:var(--danger);border:1px solid rgba(239,68,68,.25)}
+.btn-danger:hover{background:rgba(239,68,68,.22)}
+.btn-success{background:rgba(34,197,94,.12);color:var(--success);border:1px solid rgba(34,197,94,.25)}
+.btn-purple{background:rgba(139,92,246,.15);color:var(--purple);border:1px solid rgba(139,92,246,.3)}
+.btn-warn{background:rgba(245,158,11,.12);color:var(--warn);border:1px solid rgba(245,158,11,.3)}
+.btn-copy{background:rgba(74,200,203,.12);color:var(--teal);border:1px solid rgba(74,200,203,.3)}
+.btn-copy:hover{background:rgba(74,200,203,.22)}
+
+/* ── STATS ROW ── */
+.stats-row{display:flex;gap:8px;flex-wrap:wrap;padding:16px 24px;flex-shrink:0;
+  border-bottom:1px solid rgba(255,255,255,.06)}
+.stat-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);
+  padding:14px 18px;display:flex;align-items:center;gap:14px;min-width:160px}
+.stat-icon{font-size:22px}
+.stat-num{font-family:var(--font-h);font-size:22px;font-weight:800}
+.stat-lbl{font-size:11px;color:var(--muted)}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;padding:12px 24px;
+  border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.filter-input{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);
+  border-radius:var(--r-sm);padding:8px 14px;color:var(--white);font-size:13px;transition:border-color .2s}
+.filter-input:focus{border-color:var(--blue)}
+.filter-input::placeholder{color:var(--muted)}
+.filter-search{flex:1;min-width:200px}
+.filter-select{-webkit-appearance:none;appearance:none;
+  background-color:rgba(10,22,53,.95);color:var(--white);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234AC8CB' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:36px!important}
+.filter-select option{background:#0A1635;color:var(--white)}
+.filter-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+
+/* ── TABLE ── */
+.table-wrap{flex:1;overflow:auto;padding:0 24px 24px}
+table{width:100%;border-collapse:collapse;min-width:700px}
+thead th{background:rgba(255,255,255,.03);padding:10px 14px;font-size:10px;font-weight:700;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:left;
+  border-bottom:1px solid rgba(255,255,255,.07);white-space:nowrap}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s}
+tbody tr:hover{background:rgba(255,255,255,.025)}
+td{padding:10px 14px;font-size:13px;vertical-align:middle}
+.td-name{font-weight:600;color:var(--white)}
+.td-sub{font-size:11px;color:var(--muted)}
+.td-actions{display:flex;gap:6px;flex-wrap:wrap}
+.table-empty{text-align:center;padding:48px;color:var(--muted)}
+.color-swatch{width:24px;height:24px;border-radius:50%;cursor:pointer;transition:transform .2s;border:2px solid transparent}
+.color-swatch:hover{transform:scale(1.2)}
+.color-swatch.selected{border-color:var(--white);transform:scale(1.1)}
+.svc-description{font-size:11px;color:var(--muted);max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.table-empty-icon{font-size:32px;margin-bottom:10px}
+
+/* ── TIPO BADGES ── */
+.tipo-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;
+  padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.t-bdr     {background:rgba(0,117,255,.15);  color:var(--blue)}
+.t-closer  {background:rgba(255,39,173,.15); color:var(--pink)}
+.t-indicador{background:rgba(245,158,11,.15);color:var(--warn)}
+.status-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;
+  padding:3px 9px;border-radius:100px;text-transform:uppercase}
+.s-ativo  {background:rgba(34,197,94,.12);  color:var(--success)}
+.s-inativo{background:rgba(107,114,128,.12);color:#9CA3AF}
+
+/* ── LINK CELL ── */
+.link-cell{display:flex;align-items:center;gap:6px;max-width:280px}
+.link-url{font-size:11px;color:var(--teal);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.copy-icon{flex-shrink:0;padding:3px 8px;font-size:10px}
+
+/* ── RANKING ── */
+.ranking-wrap{padding:24px;display:grid;gap:16px}
+.ranking-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ranking-title{font-family:var(--font-h);font-size:18px;font-weight:800;color:var(--white)}
+.ranking-sub{font-size:12px;color:var(--muted)}
+.ranking-table-wrap{overflow:auto}
+.ranking-table{width:100%;border-collapse:collapse;min-width:750px}
+.ranking-table th{background:rgba(255,255,255,.04);padding:10px 16px;font-size:10px;font-weight:700;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid rgba(255,255,255,.07)}
+.ranking-table td{padding:12px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
+.ranking-table tbody tr:hover{background:rgba(255,255,255,.025)}
+
+/* Top 3 highlight */
+.rank-1 td:first-child{background:linear-gradient(90deg,rgba(245,158,11,.12),transparent)}
+.rank-2 td:first-child{background:linear-gradient(90deg,rgba(156,163,175,.08),transparent)}
+.rank-3 td:first-child{background:linear-gradient(90deg,rgba(180,83,9,.08),transparent)}
+
+.rank-pos{width:40px;font-family:var(--font-h);font-size:18px;font-weight:800;text-align:center}
+.rank-pos.p1{color:var(--gold)}
+.rank-pos.p2{color:var(--silver)}
+.rank-pos.p3{color:var(--bronze)}
+.rank-pos.other{color:var(--muted);font-size:14px}
+
+.avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-h);font-size:13px;font-weight:700;flex-shrink:0}
+.rank-user{display:flex;align-items:center;gap:10px}
+.rank-name{font-weight:600;color:var(--white)}
+.rank-code{font-size:10px;color:var(--muted);font-family:monospace}
+
+.pts-badge{background:rgba(245,158,11,.12);color:var(--warn);border:1px solid rgba(245,158,11,.25);
+  font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px}
+.val-positive{color:var(--success);font-family:var(--font-h);font-weight:700}
+.val-blue{color:var(--blue);font-family:var(--font-h);font-weight:700}
+
+/* Trend indicators */
+.trend-up{color:var(--success);font-size:11px}
+.trend-dn{color:var(--danger);font-size:11px}
+
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;
+  display:flex;align-items:center;justify-content:center;padding:20px}
+.overlay.hidden{display:none}
+.modal{background:var(--card);border:1px solid rgba(255,255,255,.1);border-radius:14px;
+  width:100%;max-width:560px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-lg{max-width:700px}
+.modal-header{padding:18px 22px;border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-title{font-family:var(--font-h);font-size:15px;font-weight:700;color:var(--white)}
+.modal-close{background:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px;transition:color .2s}
+.modal-close:hover{color:var(--white)}
+.modal-body{padding:22px;overflow-y:auto;flex:1}
+.modal-footer{padding:14px 22px;border-top:1px solid rgba(255,255,255,.07);
+  display:flex;justify-content:flex-end;gap:10px}
+
+/* ── FORM ── */
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:11px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.form-label .req{color:var(--danger)}
+.form-input{width:100%;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);
+  border-radius:var(--r-sm);padding:10px 14px;color:var(--white);font-size:13px;transition:border-color .2s}
+.form-input:focus{border-color:var(--blue)}
+.form-input::placeholder{color:var(--muted)}
+.form-select{-webkit-appearance:none;appearance:none;background-color:#0A1635!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234AC8CB' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:38px!important}
+.form-select option{background:#0A1635;color:var(--white)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-divider{border:none;border-top:1px solid rgba(255,255,255,.07);margin:16px 0}
+.form-section{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.07em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.form-section::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.07)}
+
+/* ── LINK BOX ── */
+.link-box{background:rgba(74,200,203,.06);border:1.5px solid rgba(74,200,203,.25);
+  border-radius:var(--r-sm);padding:14px;margin-top:8px}
+.link-box-label{font-size:10px;font-weight:700;color:var(--teal);text-transform:uppercase;
+  letter-spacing:.06em;margin-bottom:6px}
+.link-box-url{font-size:12px;color:var(--text);font-family:monospace;word-break:break-all;margin-bottom:10px}
+.link-box-stats{display:flex;gap:14px;flex-wrap:wrap}
+.link-stat{font-size:11px;color:var(--muted)}
+.link-stat span{color:var(--teal);font-weight:700}
+
+/* ── COMISSAO BOX ── */
+.comissao-box{background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2);
+  border-radius:var(--r-sm);padding:14px;margin-top:12px}
+.comissao-title{font-size:11px;font-weight:700;color:var(--warn);text-transform:uppercase;
+  letter-spacing:.05em;margin-bottom:10px}
+.comissao-row{display:flex;align-items:center;justify-content:space-between;
+  font-size:12px;color:var(--muted);padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.comissao-row:last-child{border:none}
+.comissao-row span{color:var(--warn);font-weight:700}
+
+/* ── SETTINGS ── */
+.settings-wrap{padding:24px;display:flex;flex-direction:column;gap:20px}
+.settings-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);padding:20px 22px}
+.settings-card-title{font-family:var(--font-h);font-size:14px;font-weight:700;color:var(--white);
+  margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.settings-card-sub{font-size:12px;color:var(--muted);margin-bottom:18px}
+.settings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.settings-field{display:flex;flex-direction:column;gap:5px}
+.settings-field label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.settings-input{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);
+  border-radius:var(--r-sm);padding:9px 13px;color:var(--white);font-size:13px;transition:border-color .2s}
+.settings-input:focus{border-color:var(--blue)}
+
+/* ── DETAIL PANEL ── */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.detail-field{padding:10px 12px;background:rgba(255,255,255,.03);border-radius:var(--r-sm)}
+.detail-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.detail-val{font-size:13px;color:var(--white);font-weight:500}
+.detail-val.big{font-size:20px;font-family:var(--font-h);font-weight:800;color:var(--warn)}
+
+/* ── MINI CHART (bar) ── */
+.mini-bars{display:flex;gap:2px;align-items:flex-end;height:28px}
+.mini-bar{background:var(--blue);border-radius:2px 2px 0 0;min-width:6px;opacity:.7;transition:opacity .2s}
+.mini-bar:hover{opacity:1}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="logo">
+      <div class="logo-icon">✦</div>
+      marca<span>seleta</span>
+    </div>
+    <div style="width:1px;height:20px;background:rgba(255,255,255,.1)"></div>
+    <span class="admin-badge">⚙ Admin</span>
+  </div>
+  <div class="topbar-links">
+    <a class="topbar-link" href="crm-marcaseleta.html">← CRM</a>
+    <a class="topbar-link" href="index.html" target="_blank">Calculadora ↗</a>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <div class="tab active" onclick="switchTab('usuarios')">
+    👥 Usuários <span class="tab-count" id="tc-usuarios">0</span>
+  </div>
+  <div class="tab" onclick="switchTab('ranking')">
+    🏆 Ranking de Indicadores <span class="tab-count" id="tc-indicadores">0</span>
+  </div>
+  <div class="tab" onclick="switchTab('servicos')">🗂 Serviços <span class="tab-count" id="tc-servicos">0</span></div>
+  <div class="tab" onclick="switchTab('config')">
+    ⚙ Configurações
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ══════════════════════════════════════════════
+     TAB: USUÁRIOS
+══════════════════════════════════════════════ -->
+<div id="tab-usuarios" class="tab-content active">
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <div><div class="stat-num" id="s-total" style="color:var(--white)">0</div><div class="stat-lbl">Total</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📞</div>
+      <div><div class="stat-num" id="s-bdr" style="color:var(--blue)">0</div><div class="stat-lbl">BDR / SDR</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🎯</div>
+      <div><div class="stat-num" id="s-closer" style="color:var(--pink)">0</div><div class="stat-lbl">Closers</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⭐</div>
+      <div><div class="stat-num" id="s-ind" style="color:var(--warn)">0</div><div class="stat-lbl">Indicadores</div></div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <input class="filter-input filter-search" id="u-search" placeholder="🔍  Buscar por nome ou e-mail..." oninput="renderUsers()">
+    <select class="filter-input filter-select" id="u-tipo" onchange="renderUsers()">
+      <option value="">Todos os tipos</option>
+      <option value="bdr">BDR / SDR</option>
+      <option value="closer">Closer</option>
+      <option value="indicador">Indicador</option>
+    </select>
+    <select class="filter-input filter-select" id="u-status" onchange="renderUsers()">
+      <option value="">Todos os status</option>
+      <option value="ativo">Ativo</option>
+      <option value="inativo">Inativo</option>
+    </select>
+    <div class="filter-actions">
+      <button class="btn btn-primary btn-sm" onclick="openUserModal()">＋ Novo Usuário</button>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Nome</th>
+        <th>Tipo</th>
+        <th>Contato</th>
+        <th>Link Rastreado</th>
+        <th>Comissão</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr></thead>
+      <tbody id="users-tbody"></tbody>
+    </table>
+    <div id="users-empty" class="table-empty hidden">
+      <div class="table-empty-icon">👤</div>
+      <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:6px">Nenhum usuário cadastrado</div>
+      <div>Clique em "Novo Usuário" para começar.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB: RANKING
+══════════════════════════════════════════════ -->
+<div id="tab-ranking" class="tab-content">
+
+  <div class="filter-bar">
+    <input class="filter-input" type="date" id="r-from" oninput="renderRanking()" style="color:var(--white)">
+    <input class="filter-input" type="date" id="r-to" oninput="renderRanking()" style="color:var(--white)">
+    <select class="filter-input filter-select" id="r-service" onchange="renderRanking()">
+      <option value="">Todos os serviços</option>
+      <option value="assessoria">Assessoria de Marketplace</option>
+      <option value="catalogacao">Backoffice/Catalogação</option>
+      <option value="sac">SAC Operacional</option>
+      <option value="ambos">Pacote Operação</option>
+      <option value="full">Pacote Full</option>
+      <option value="pontual">Catalogação Pontual</option>
+    </select>
+    <select class="filter-input filter-select" id="r-status" onchange="renderRanking()">
+      <option value="">Todos os status</option>
+      <option value="novo">Novo</option>
+      <option value="contatado">Contatado</option>
+      <option value="proposta">Proposta</option>
+      <option value="negociando">Negociando</option>
+      <option value="fechado">Fechado</option>
+      <option value="perdido">Perdido</option>
+    </select>
+    <div class="filter-actions">
+      <button class="btn btn-ghost btn-sm" onclick="exportRankingCSV()">⬇ Exportar CSV</button>
+    </div>
+  </div>
+
+  <div style="overflow:auto;flex:1;padding:0 24px 24px">
+    <div id="ranking-empty" class="table-empty hidden">
+      <div class="table-empty-icon">🏆</div>
+      <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:6px">Sem dados de indicação</div>
+      <div>Cadastre Indicadores e eles aparecerão aqui quando trouxerem leads.</div>
+    </div>
+    <table class="ranking-table" id="ranking-table">
+      <thead><tr>
+        <th style="text-align:center">#</th>
+        <th>Indicador</th>
+        <th style="text-align:center">Cliques</th>
+        <th style="text-align:center">Leads</th>
+        <th style="text-align:center">Fechados</th>
+        <th>Valor Fechado</th>
+        <th>Valor Pipeline</th>
+        <th>Pontos</th>
+        <th>Comissão Est.</th>
+        <th>Ações</th>
+      </tr></thead>
+      <tbody id="ranking-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB: SERVIÇOS PERSONALIZADOS
+══════════════════════════════════════════════ -->
+<div id="tab-servicos" class="tab-content">
+  <div class="stats-row" style="padding:12px 24px">
+    <div class="stat-card"><div class="stat-icon">🗂️</div><div><div class="stat-num" id="ss-total" style="color:var(--white)">0</div><div class="stat-lbl">Serviços ativos</div></div></div>
+    <div class="stat-card"><div class="stat-icon">💰</div><div><div class="stat-num" id="ss-recorrente" style="color:var(--blue)">0</div><div class="stat-lbl">Recorrentes</div></div></div>
+    <div class="stat-card"><div class="stat-icon">📦</div><div><div class="stat-num" id="ss-pontual" style="color:var(--pink)">0</div><div class="stat-lbl">Pontuais</div></div></div>
+  </div>
+  <div class="filter-bar">
+    <input class="filter-input filter-search" id="svc-search" placeholder="🔍  Buscar serviço..." oninput="renderServices()">
+    <select class="filter-input filter-select" id="svc-tipo-filter" onchange="renderServices()">
+      <option value="">Todos os tipos</option>
+      <option value="recorrente">Recorrente (mensal)</option>
+      <option value="pontual">Pontual (único)</option>
+      <option value="personalizado">Personalizado</option>
+    </select>
+    <div class="filter-actions">
+      <button class="btn btn-primary btn-sm" onclick="openServiceModal()">＋ Novo Serviço</button>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Nome do Serviço</th>
+        <th>Tipo</th>
+        <th>Valor</th>
+        <th>Prazo / Duração</th>
+        <th>Descrição</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr></thead>
+      <tbody id="services-tbody"></tbody>
+    </table>
+    <div id="services-empty" class="table-empty hidden">
+      <div class="table-empty-icon">🗂️</div>
+      <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px">Nenhum serviço personalizado</div>
+      <div>Crie serviços específicos para clientes com necessidades fora do padrão.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB: CONFIGURAÇÕES
+══════════════════════════════════════════════ -->
+<div id="tab-config" class="tab-content">
+  <div class="settings-wrap">
+
+    <div class="settings-card">
+      <div class="settings-card-title">🔗 URL Base da Calculadora</div>
+      <div class="settings-card-sub">Endereço onde a calculadora está hospedada. Usado para gerar os links rastreados dos Indicadores.</div>
+      <div class="settings-field">
+        <label>URL Base</label>
+        <input class="settings-input" id="cfg-base-url" placeholder="https://calculadora.marcaseleta.shop"
+          value="" oninput="saveCfg()">
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--muted)">
+        Exemplo de link gerado: <code style="color:var(--teal)" id="cfg-url-preview">https://seusite.com/calculadora?ref=CODIGO</code>
+      </div>
+    </div>
+
+    <div class="settings-card">
+      <div class="settings-card-title">⭐ Pontos por Indicação</div>
+      <div class="settings-card-sub">Pontuação concedida ao Indicador para cada evento.</div>
+      <div class="settings-grid">
+        <div class="settings-field">
+          <label>Lead gerado</label>
+          <input class="settings-input" id="cfg-pts-lead" type="number" min="0" oninput="saveCfg()">
+        </div>
+        <div class="settings-field">
+          <label>Negócio fechado</label>
+          <input class="settings-input" id="cfg-pts-fechado" type="number" min="0" oninput="saveCfg()">
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-card">
+      <div class="settings-card-title">💰 Comissão por Serviço (%)</div>
+      <div class="settings-card-sub">Percentual do valor do negócio pago ao Indicador quando fechado.</div>
+      <div class="settings-grid">
+        <div class="settings-field"><label>Assessoria de Marketplace</label>
+          <input class="settings-input" id="cfg-com-assessoria" type="number" step="0.1" oninput="saveCfg()"></div>
+        <div class="settings-field"><label>Backoffice/Catalogação</label>
+          <input class="settings-input" id="cfg-com-catalogacao" type="number" step="0.1" oninput="saveCfg()"></div>
+        <div class="settings-field"><label>SAC Operacional</label>
+          <input class="settings-input" id="cfg-com-sac" type="number" step="0.1" oninput="saveCfg()"></div>
+        <div class="settings-field"><label>Pacote Operação</label>
+          <input class="settings-input" id="cfg-com-ambos" type="number" step="0.1" oninput="saveCfg()"></div>
+        <div class="settings-field"><label>Pacote Full</label>
+          <input class="settings-input" id="cfg-com-full" type="number" step="0.1" oninput="saveCfg()"></div>
+        <div class="settings-field"><label>Catalogação Pontual</label>
+          <input class="settings-input" id="cfg-com-pontual" type="number" step="0.1" oninput="saveCfg()"></div>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end">
+      <button class="btn btn-primary" onclick="saveCfg(true)">💾 Salvar Configurações</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- ══════════════════════════════════════════════
+     MODAL: SERVIÇO PERSONALIZADO
+══════════════════════════════════════════════ -->
+<div class="overlay hidden" id="service-modal-overlay" onclick="closeServiceModal(event)">
+<div class="modal" onclick="event.stopPropagation()" style="max-width:580px">
+  <div class="modal-header">
+    <div class="modal-title" id="service-modal-title">Novo Serviço Personalizado</div>
+    <button class="panel-close" onclick="closeServiceModal()">✕</button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="form-label">Nome do serviço <span class="req">*</span></label>
+      <input class="form-input" id="sm-nome" placeholder="Ex: Consultoria de SEO, Gestão de Estoque...">
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Tipo <span class="req">*</span></label>
+        <select class="form-input form-select" id="sm-tipo">
+          <option value="recorrente">Recorrente (mensal)</option>
+          <option value="pontual">Pontual (único)</option>
+          <option value="personalizado">Personalizado / Sob consulta</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-input form-select" id="sm-status">
+          <option value="ativo">Ativo</option>
+          <option value="inativo">Inativo</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Valor (R$)</label>
+        <input class="form-input" id="sm-valor" type="number" min="0" step="100" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Prazo / Duração</label>
+        <input class="form-input" id="sm-prazo" placeholder="Ex: 3 meses, 6 meses, Sob consulta">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Descrição / Detalhes</label>
+      <textarea class="form-input" id="sm-descricao" style="resize:vertical;min-height:80px"
+        placeholder="O que está incluso, critérios de entrega, observações comerciais..."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Cor de destaque</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px" id="sm-color-picker">
+        <div class="color-swatch" data-color="var(--blue)"   style="background:var(--blue)"  onclick="selectColor(this)"></div>
+        <div class="color-swatch" data-color="var(--pink)"   style="background:var(--pink)"  onclick="selectColor(this)"></div>
+        <div class="color-swatch" data-color="var(--teal)"   style="background:var(--teal)"  onclick="selectColor(this)"></div>
+        <div class="color-swatch" data-color="var(--orange)" style="background:var(--orange)" onclick="selectColor(this)"></div>
+        <div class="color-swatch" data-color="var(--warn)"   style="background:var(--warn)"  onclick="selectColor(this)"></div>
+        <div class="color-swatch" data-color="var(--purple)" style="background:var(--purple)" onclick="selectColor(this)"></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-ghost" onclick="closeServiceModal()">Cancelar</button>
+    <button class="btn btn-primary" onclick="saveService()">Salvar Serviço</button>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MODAL: NOVO / EDITAR USUÁRIO
+══════════════════════════════════════════════ -->
+<div class="overlay hidden" id="user-modal-overlay" onclick="closeUserModal(event)">
+<div class="modal" onclick="event.stopPropagation()">
+  <div class="modal-header">
+    <div class="modal-title" id="user-modal-title">Novo Usuário</div>
+    <button class="modal-close" onclick="closeUserModal()">✕</button>
+  </div>
+  <div class="modal-body">
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Nome <span class="req">*</span></label>
+        <input class="form-input" id="um-nome" placeholder="Nome completo">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tipo <span class="req">*</span></label>
+        <select class="form-input form-select" id="um-tipo" onchange="onTipoChange()">
+          <option value="">Selecione</option>
+          <option value="bdr">BDR / SDR</option>
+          <option value="closer">Closer</option>
+          <option value="indicador">Indicador</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <input class="form-input" id="um-email" type="email" placeholder="email@empresa.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Telefone / WhatsApp</label>
+        <input class="form-input" id="um-telefone" placeholder="(44) 9 9999-9999">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Status</label>
+      <select class="form-input form-select" id="um-status">
+        <option value="ativo">Ativo</option>
+        <option value="inativo">Inativo</option>
+      </select>
+    </div>
+
+    <!-- Seção exclusiva para Indicador -->
+    <div id="indicador-section" style="display:none">
+      <hr class="form-divider">
+      <div class="form-section">Configuração do Indicador</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Código único <span class="req">*</span></label>
+          <div style="display:flex;gap:8px">
+            <input class="form-input" id="um-codigo" placeholder="Ex: JOAO2025" style="flex:1;text-transform:uppercase"
+              oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,''); updateLinkPreview()">
+            <button class="btn btn-ghost btn-sm" onclick="gerarCodigo()">🔀 Gerar</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Comissão padrão (%)</label>
+          <input class="form-input" id="um-comissao" type="number" step="0.1" min="0" max="100" placeholder="5.0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Pontos por indicação fechada</label>
+        <input class="form-input" id="um-pontos" type="number" min="0" placeholder="10">
+      </div>
+
+      <!-- Link preview -->
+      <div class="link-box" id="link-preview-box" style="display:none">
+        <div class="link-box-label">🔗 Link rastreado</div>
+        <div class="link-box-url" id="um-link-url">—</div>
+        <button class="btn btn-copy btn-xs" onclick="copyLink()">📋 Copiar link</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-ghost" onclick="closeUserModal()">Cancelar</button>
+    <button class="btn btn-primary" onclick="saveUser()">Salvar</button>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MODAL: DETALHE INDICADOR
+══════════════════════════════════════════════ -->
+<div class="overlay hidden" id="detail-modal-overlay" onclick="closeDetailModal(event)">
+<div class="modal modal-lg" onclick="event.stopPropagation()">
+  <div class="modal-header">
+    <div class="modal-title" id="detail-modal-title">Detalhe do Indicador</div>
+    <button class="modal-close" onclick="closeDetailModal()">✕</button>
+  </div>
+  <div class="modal-body" id="detail-modal-body">
+    <!-- populated via JS -->
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-ghost" onclick="closeDetailModal()">Fechar</button>
+  </div>
+</div>
+</div>
+
+<script>
+const U_KEY   = 'ms_crm_users';
+const L_KEY   = 'ms_crm_leads';
+const CFG_KEY = 'ms_admin_cfg';
+const REF_KEY = 'ms_ref_clicks';
+
+const SVC_LABELS = {
+  assessoria:'Assessoria', catalogacao:'Catalogação',
+  sac:'SAC', ambos:'Pcte Operação', full:'Pacote Full', pontual:'Pontual'
+};
+const TIPO_LABEL = { bdr:'BDR / SDR', closer:'Closer', indicador:'Indicador' };
+
+// ── STORAGE ──────────────────────────────────────────────────
+function getUsers()  { try { return JSON.parse(localStorage.getItem(U_KEY)  || '[]'); } catch { return []; } }
+function getLeads()  { try { return JSON.parse(localStorage.getItem(L_KEY)  || '[]'); } catch { return []; } }
+function getCfg()    {
+  const def = { baseUrl:'', ptsLead:1, ptsFechado:10,
+    com:{ assessoria:5, catalogacao:5, sac:5, ambos:5, full:5, pontual:5 } };
+  try { return { ...def, ...JSON.parse(localStorage.getItem(CFG_KEY) || '{}') }; }
+  catch { return def; }
+}
+function saveUsers(u) { localStorage.setItem(U_KEY, JSON.stringify(u)); }
+function getRefClicks() { try { return JSON.parse(localStorage.getItem(REF_KEY) || '{}'); } catch { return {}; } }
+function fmtR(v) { return 'R$ ' + (v||0).toLocaleString('pt-BR',{minimumFractionDigits:0}); }
+function fmtDate(iso) { return iso ? new Date(iso).toLocaleDateString('pt-BR') : '—'; }
+function sanitize(s) { return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── SERVICE STORAGE ──────────────────────────────────────────
+const SVC_KEY = 'ms_crm_services';
+function getServices()  { try{return JSON.parse(localStorage.getItem(SVC_KEY)||'[]');}catch{return[];} }
+function saveServices(s){ localStorage.setItem(SVC_KEY,JSON.stringify(s)); }
+
+// ── SERVICE RENDER ────────────────────────────────────────────
+function renderServices() {
+  const search = document.getElementById('svc-search').value.toLowerCase();
+  const tipo   = document.getElementById('svc-tipo-filter').value;
+  let svcs = getServices();
+  if (search) svcs = svcs.filter(s=>(s.nome||'').toLowerCase().includes(search)||(s.descricao||'').toLowerCase().includes(search));
+  if (tipo)   svcs = svcs.filter(s=>s.tipo===tipo);
+
+  const TIPO_LABELS = { recorrente:'Recorrente', pontual:'Pontual', personalizado:'Personalizado' };
+  const tbody = document.getElementById('services-tbody');
+  tbody.innerHTML = '';
+  document.getElementById('services-empty').classList.toggle('hidden',svcs.length>0);
+  document.querySelector('#tab-servicos table').style.display = svcs.length?'':'none';
+
+  svcs.forEach(svc => {
+    const color = svc.color || 'var(--blue)';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0"></div>
+          <div style="font-weight:600;color:var(--white)">${sanitize(svc.nome)}</div>
+        </div>
+      </td>
+      <td><span class="tipo-badge" style="background:${color}22;color:${color};border:1px solid ${color}44">${TIPO_LABELS[svc.tipo]||svc.tipo}</span></td>
+      <td style="color:var(--blue);font-weight:700">${svc.valor?fmt(svc.valor):'Sob consulta'}</td>
+      <td style="color:var(--muted)">${sanitize(svc.prazo||'—')}</td>
+      <td><div class="svc-description" title="${sanitize(svc.descricao||'')}">${sanitize(svc.descricao||'—')}</div></td>
+      <td><span class="status-badge ${svc.status==='ativo'?'s-ativo':'s-inativo'}">${svc.status==='ativo'?'● Ativo':'○ Inativo'}</span></td>
+      <td>
+        <div class="td-actions">
+          <button class="btn btn-ghost btn-xs" onclick="openServiceModal('${svc.id}')">✏</button>
+          <button class="btn btn-danger btn-xs" onclick="deleteService('${svc.id}')">✕</button>
+        </div>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+
+  const total = getServices();
+  document.getElementById('ss-total').textContent = total.filter(s=>s.status==='ativo').length;
+  document.getElementById('ss-recorrente').textContent = total.filter(s=>s.tipo==='recorrente').length;
+  document.getElementById('ss-pontual').textContent = total.filter(s=>s.tipo==='pontual').length;
+  document.getElementById('tc-servicos').textContent = total.length;
+}
+
+function fmt(v){ return 'R$ '+(v||0).toLocaleString('pt-BR',{minimumFractionDigits:0}); }
+
+// ── SERVICE MODAL ─────────────────────────────────────────────
+let editingSvcId = null;
+let selectedColor = 'var(--blue)';
+
+function selectColor(el) {
+  document.querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedColor = el.dataset.color;
+}
+
+function openServiceModal(id) {
+  editingSvcId = id||null;
+  const svcs = getServices();
+  const s = id ? svcs.find(x=>x.id===id) : null;
+  document.getElementById('service-modal-title').textContent = s ? 'Editar Serviço' : 'Novo Serviço Personalizado';
+  document.getElementById('sm-nome').value       = s?.nome       || '';
+  document.getElementById('sm-tipo').value       = s?.tipo       || 'recorrente';
+  document.getElementById('sm-status').value     = s?.status     || 'ativo';
+  document.getElementById('sm-valor').value      = s?.valor      || '';
+  document.getElementById('sm-prazo').value      = s?.prazo      || '';
+  document.getElementById('sm-descricao').value  = s?.descricao  || '';
+  selectedColor = s?.color || 'var(--blue)';
+  document.querySelectorAll('.color-swatch').forEach(sw=>{
+    sw.classList.toggle('selected', sw.dataset.color===selectedColor);
+  });
+  document.getElementById('service-modal-overlay').classList.remove('hidden');
+  document.getElementById('sm-nome').focus();
+}
+
+function closeServiceModal(e) {
+  if(e&&e.target!==document.getElementById('service-modal-overlay'))return;
+  document.getElementById('service-modal-overlay').classList.add('hidden');
+}
+
+function saveService() {
+  const nome = document.getElementById('sm-nome').value.trim();
+  if (!nome) { document.getElementById('sm-nome').focus(); showToast('Informe o nome do serviço.','error'); return; }
+  const svcs = getServices();
+  const svc = {
+    id:         editingSvcId || 'svc_'+Date.now(),
+    nome,
+    tipo:       document.getElementById('sm-tipo').value,
+    status:     document.getElementById('sm-status').value,
+    valor:      parseFloat(document.getElementById('sm-valor').value)||0,
+    prazo:      document.getElementById('sm-prazo').value.trim(),
+    descricao:  document.getElementById('sm-descricao').value.trim(),
+    color:      selectedColor,
+    createdAt:  editingSvcId ? (svcs.find(s=>s.id===editingSvcId)?.createdAt||new Date().toISOString()) : new Date().toISOString()
+  };
+  if (editingSvcId) { const idx=svcs.findIndex(s=>s.id===editingSvcId); svcs[idx]=svc; }
+  else svcs.unshift(svc);
+  saveServices(svcs);
+  closeServiceModal();
+  renderServices();
+  showToast(editingSvcId?'Serviço atualizado!':'Serviço criado!');
+  editingSvcId=null;
+}
+
+function deleteService(id) {
+  const s = getServices().find(x=>x.id===id);
+  if (!s||!confirm('Excluir serviço "'+s.nome+'"?')) return;
+  saveServices(getServices().filter(x=>x.id!==id));
+  renderServices();
+}
+
+// ── TABS ─────────────────────────────────────────────────────
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['usuarios','ranking','servicos','config'][i]===id));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if (id === 'ranking')  renderRanking();
+  if (id === 'config')   loadCfg();
+  if (id === 'servicos') renderServices();
+}
+
+// ── STATS ─────────────────────────────────────────────────────
+function updateStats() {
+  const users = getUsers();
+  document.getElementById('s-total').textContent  = users.length;
+  document.getElementById('s-bdr').textContent    = users.filter(u=>u.tipo==='bdr').length;
+  document.getElementById('s-closer').textContent = users.filter(u=>u.tipo==='closer').length;
+  document.getElementById('s-ind').textContent    = users.filter(u=>u.tipo==='indicador').length;
+  document.getElementById('tc-usuarios').textContent   = users.length;
+  document.getElementById('tc-indicadores').textContent = users.filter(u=>u.tipo==='indicador').length;
+}
+
+// ── RENDER USERS ──────────────────────────────────────────────
+function renderUsers() {
+  const users = getUsers();
+  const search = document.getElementById('u-search').value.toLowerCase();
+  const tipo   = document.getElementById('u-tipo').value;
+  const status = document.getElementById('u-status').value;
+  const cfg    = getCfg();
+  const clicks = getRefClicks();
+
+  let list = users;
+  if (search) list = list.filter(u => (u.nome||'').toLowerCase().includes(search) || (u.email||'').toLowerCase().includes(search));
+  if (tipo)   list = list.filter(u => u.tipo === tipo);
+  if (status) list = list.filter(u => u.status === status);
+
+  const tbody = document.getElementById('users-tbody');
+  tbody.innerHTML = '';
+  document.getElementById('users-empty').classList.toggle('hidden', list.length > 0);
+  document.querySelector('#tab-usuarios table').style.display = list.length ? '' : 'none';
+
+  list.forEach(u => {
+    const tr = document.createElement('tr');
+    const isInd = u.tipo === 'indicador';
+    const baseUrl = cfg.baseUrl || window.location.origin + '/';
+    const link = isInd ? baseUrl + '?ref=' + (u.codigo||'') : '';
+    const clks = isInd ? (clicks[u.codigo] || 0) : '';
+
+    tr.innerHTML = `
+      <td>
+        <div class="td-name">${sanitize(u.nome)}</div>
+        <div class="td-sub">${fmtDate(u.createdAt)}</div>
+      </td>
+      <td><span class="tipo-badge t-${u.tipo}">${TIPO_LABEL[u.tipo]||u.tipo}</span></td>
+      <td>
+        <div>${sanitize(u.email||'—')}</div>
+        <div class="td-sub">${sanitize(u.telefone||'')}</div>
+      </td>
+      <td>${isInd ? `
+        <div class="link-cell">
+          <span class="link-url" title="${link}">${link||'—'}</span>
+          ${link ? `<button class="btn btn-copy copy-icon btn-xs" onclick="navigator.clipboard.writeText('${link}').then(()=>showToast('Link copiado!'))">📋</button>` : ''}
+        </div>
+        <div class="td-sub" style="margin-top:3px">${clks} clique${clks!==1?'s':''}</div>
+      ` : '<span style="color:var(--muted);font-size:12px">N/A</span>'}</td>
+      <td>${isInd ? `<span style="color:var(--warn);font-weight:700">${u.comissao||0}%</span>` : '—'}</td>
+      <td><span class="status-badge s-${u.status}">${u.status==='ativo'?'● Ativo':'○ Inativo'}</span></td>
+      <td>
+        <div class="td-actions">
+          ${isInd ? `<button class="btn btn-warn btn-xs" onclick="openDetail('${u.id}')">📊</button>` : ''}
+          <button class="btn btn-ghost btn-xs" onclick="editUser('${u.id}')">✏</button>
+          <button class="btn btn-danger btn-xs" onclick="deleteUser('${u.id}')">✕</button>
+        </div>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+  updateStats();
+}
+
+// ── RENDER RANKING ─────────────────────────────────────────────
+function renderRanking() {
+  const users  = getUsers().filter(u => u.tipo === 'indicador' && u.status === 'ativo');
+  const leads  = getLeads();
+  const clicks = getRefClicks();
+  const cfg    = getCfg();
+
+  const fromVal   = document.getElementById('r-from').value;
+  const toVal     = document.getElementById('r-to').value;
+  const svcFilter = document.getElementById('r-service').value;
+  const stFilter  = document.getElementById('r-status').value;
+
+  const ranking = users.map(u => {
+    var myLeads = leads.filter(l => l.refCode === u.codigo);
+
+    // Apply filters
+    if (fromVal) myLeads = myLeads.filter(l => l.createdAt >= fromVal);
+    if (toVal)   myLeads = myLeads.filter(l => l.createdAt <= toVal + 'T23:59:59');
+    if (svcFilter) myLeads = myLeads.filter(l => l.service === svcFilter);
+    if (stFilter)  myLeads = myLeads.filter(l => l.status === stFilter);
+
+    var fechados  = myLeads.filter(l => l.status === 'fechado');
+    var pipeline  = myLeads.filter(l => !['fechado','perdido'].includes(l.status));
+    var valFechado = fechados.reduce((s,l)=>s+(l.value||0),0);
+    var valPipe   = pipeline.reduce((s,l)=>s+(l.value||0),0);
+    var comPct    = parseFloat(u.comissao) || parseFloat(cfg.com?.[u.tipo]) || 0;
+    var comissao  = valFechado * comPct / 100;
+    var ptLead    = parseInt(cfg.ptsLead)    || 1;
+    var ptFech    = parseInt(cfg.ptsFechado) || 10;
+    var pontos    = myLeads.length * ptLead + fechados.length * ptFech;
+
+    return { u, myLeads, fechados, pipeline, valFechado, valPipe, comissao, pontos,
+             cliques: clicks[u.codigo] || 0 };
+  }).sort((a,b) => b.fechados.length - a.fechados.length || b.pontos - a.pontos);
+
+  const tbody = document.getElementById('ranking-tbody');
+  tbody.innerHTML = '';
+  document.getElementById('ranking-empty').classList.toggle('hidden', ranking.length > 0);
+  document.getElementById('ranking-table').style.display = ranking.length ? '' : 'none';
+
+  ranking.forEach((r, i) => {
+    const pos = i + 1;
+    const posClass = pos===1?'p1':pos===2?'p2':pos===3?'p3':'other';
+    const posLabel = pos===1?'🥇':pos===2?'🥈':pos===3?'🥉':'#'+pos;
+    const initials = (r.u.nome||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+    const colors   = ['var(--blue)','var(--pink)','var(--teal)','var(--orange)','var(--purple)'];
+    const avatarColor = colors[pos % colors.length];
+
+    const tr = document.createElement('tr');
+    tr.className = pos<=3?`rank-${pos}`:'';
+    tr.innerHTML = `
+      <td><div class="rank-pos ${posClass}">${posLabel}</div></td>
+      <td>
+        <div class="rank-user">
+          <div class="avatar" style="background:${avatarColor}22;color:${avatarColor};border:1.5px solid ${avatarColor}40">${initials}</div>
+          <div>
+            <div class="rank-name">${sanitize(r.u.nome)}</div>
+            <div class="rank-code">REF: ${r.u.codigo||'—'}</div>
+          </div>
+        </div>
+      </td>
+      <td style="text-align:center;color:var(--muted)">${r.cliques}</td>
+      <td style="text-align:center"><span style="font-weight:700;color:var(--white)">${r.myLeads.length}</span></td>
+      <td style="text-align:center"><span style="font-weight:800;color:var(--success)">${r.fechados.length}</span></td>
+      <td><span class="val-positive">${fmtR(r.valFechado)}</span></td>
+      <td><span class="val-blue">${fmtR(r.valPipe)}</span></td>
+      <td><span class="pts-badge">⭐ ${r.pontos} pts</span></td>
+      <td><span style="color:var(--warn);font-weight:700">${fmtR(r.comissao)}</span></td>
+      <td><button class="btn btn-purple btn-xs" onclick="openDetail('${r.u.id}')">Ver detalhes</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ── DETAIL MODAL ───────────────────────────────────────────────
+function openDetail(userId) {
+  const users = getUsers();
+  const leads = getLeads();
+  const cfg   = getCfg();
+  const u     = users.find(x => x.id === userId);
+  if (!u) return;
+
+  const clicks   = getRefClicks();
+  const myLeads  = leads.filter(l => l.refCode === u.codigo);
+  const fechados = myLeads.filter(l => l.status === 'fechado');
+  const pipeline = myLeads.filter(l => !['fechado','perdido'].includes(l.status));
+  const valFechado = fechados.reduce((s,l)=>s+(l.value||0),0);
+  const valPipe    = pipeline.reduce((s,l)=>s+(l.value||0),0);
+  const comPct     = parseFloat(u.comissao) || 0;
+  const comissao   = valFechado * comPct / 100;
+  const ptLead     = parseInt(cfg.ptsLead)    || 1;
+  const ptFech     = parseInt(cfg.ptsFechado) || 10;
+  const pontos     = myLeads.length * ptLead + fechados.length * ptFech;
+  const baseUrl    = cfg.baseUrl || window.location.origin + '/';
+  const link       = baseUrl + '?ref=' + (u.codigo||'');
+  const cliques    = clicks[u.codigo] || 0;
+
+  // Service breakdown
+  const svcCount = {};
+  myLeads.forEach(l => { svcCount[l.service] = (svcCount[l.service]||0)+1; });
+
+  document.getElementById('detail-modal-title').textContent = '📊 ' + u.nome;
+
+  const body = document.getElementById('detail-modal-body');
+  body.innerHTML = `
+    <div class="detail-grid" style="margin-bottom:16px">
+      <div class="detail-field"><div class="detail-label">Total de Leads</div><div class="detail-val big">${myLeads.length}</div></div>
+      <div class="detail-field"><div class="detail-label">Negócios Fechados</div><div class="detail-val" style="font-size:20px;font-family:var(--font-h);font-weight:800;color:var(--success)">${fechados.length}</div></div>
+      <div class="detail-field"><div class="detail-label">Valor Fechado</div><div class="detail-val" style="font-size:18px;font-family:var(--font-h);font-weight:800;color:var(--blue)">${fmtR(valFechado)}</div></div>
+      <div class="detail-field"><div class="detail-label">Comissão Estimada</div><div class="detail-val" style="font-size:18px;font-family:var(--font-h);font-weight:800;color:var(--warn)">${fmtR(comissao)}</div></div>
+      <div class="detail-field"><div class="detail-label">Pontos Acumulados</div><div class="detail-val" style="font-size:18px;font-family:var(--font-h);font-weight:800;color:var(--warn)">⭐ ${pontos}</div></div>
+      <div class="detail-field"><div class="detail-label">Cliques no Link</div><div class="detail-val" style="font-size:18px;font-family:var(--font-h);font-weight:800;color:var(--teal)">${cliques}</div></div>
+    </div>
+
+    <div style="margin-bottom:16px">
+      <div class="form-section">Link Rastreado</div>
+      <div class="link-box">
+        <div class="link-box-label">🔗 Link do Indicador</div>
+        <div class="link-box-url">${link}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-copy btn-xs" onclick="navigator.clipboard.writeText('${link}').then(()=>showToast('Link copiado!'))">📋 Copiar</button>
+          <a href="${link}" target="_blank" class="btn btn-ghost btn-xs">↗ Abrir</a>
+        </div>
+      </div>
+    </div>
+
+    ${Object.keys(svcCount).length ? `
+      <div style="margin-bottom:16px">
+        <div class="form-section">Leads por Serviço</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          ${Object.entries(svcCount).map(([svc,cnt])=>`
+            <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:8px 14px;text-align:center">
+              <div style="font-size:16px;font-weight:800;color:var(--blue)">${cnt}</div>
+              <div style="font-size:10px;color:var(--muted)">${SVC_LABELS[svc]||svc}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>` : ''}
+
+    ${myLeads.length ? `
+      <div>
+        <div class="form-section">Últimas Indicações</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead><tr>
+            ${['Nome','Serviço','Valor','Status','Data'].map(h=>`<th style="text-align:left;padding:6px 8px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.07);font-size:10px;text-transform:uppercase">${h}</th>`).join('')}
+          </tr></thead>
+          <tbody>
+            ${myLeads.slice(0,10).map(l=>`<tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+              <td style="padding:7px 8px;color:var(--white)">${sanitize(l.name)}</td>
+              <td style="padding:7px 8px;color:var(--muted)">${SVC_LABELS[l.service]||l.service||'—'}</td>
+              <td style="padding:7px 8px;font-weight:700;color:var(--blue)">${fmtR(l.value)}</td>
+              <td style="padding:7px 8px"><span class="status-badge s-${l.status}" style="font-size:9px">${l.status}</span></td>
+              <td style="padding:7px 8px;color:var(--muted)">${fmtDate(l.createdAt)}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>` : `<div style="text-align:center;padding:24px;color:var(--muted)">Nenhuma indicação registrada ainda.</div>`}
+  `;
+
+  document.getElementById('detail-modal-overlay').classList.remove('hidden');
+}
+
+function closeDetailModal(e) {
+  if (e && e.target !== document.getElementById('detail-modal-overlay')) return;
+  document.getElementById('detail-modal-overlay').classList.add('hidden');
+}
+
+// ── USER MODAL ─────────────────────────────────────────────────
+let editingUserId = null;
+
+function openUserModal(userId) {
+  editingUserId = userId || null;
+  const users = getUsers();
+  const u = userId ? users.find(x => x.id === userId) : null;
+
+  document.getElementById('user-modal-title').textContent = u ? 'Editar Usuário' : 'Novo Usuário';
+  document.getElementById('um-nome').value     = u?.nome     || '';
+  document.getElementById('um-email').value    = u?.email    || '';
+  document.getElementById('um-telefone').value = u?.telefone || '';
+  document.getElementById('um-tipo').value     = u?.tipo     || '';
+  document.getElementById('um-status').value   = u?.status   || 'ativo';
+  document.getElementById('um-codigo').value   = u?.codigo   || '';
+  document.getElementById('um-comissao').value = u?.comissao || '';
+  document.getElementById('um-pontos').value   = u?.pontos   || '';
+
+  onTipoChange();
+  updateLinkPreview();
+  document.getElementById('user-modal-overlay').classList.remove('hidden');
+  document.getElementById('um-nome').focus();
+}
+
+function editUser(id)   { openUserModal(id); }
+
+function closeUserModal(e) {
+  if (e && e.target !== document.getElementById('user-modal-overlay')) return;
+  document.getElementById('user-modal-overlay').classList.add('hidden');
+}
+
+function onTipoChange() {
+  const tipo = document.getElementById('um-tipo').value;
+  document.getElementById('indicador-section').style.display = tipo === 'indicador' ? '' : 'none';
+}
+
+function gerarCodigo() {
+  const nome  = document.getElementById('um-nome').value.trim();
+  const base  = nome ? nome.split(' ')[0].toUpperCase().replace(/[^A-Z]/g,'') : 'IND';
+  const code  = base + Math.random().toString(36).slice(2,6).toUpperCase();
+  document.getElementById('um-codigo').value = code;
+  updateLinkPreview();
+}
+
+function updateLinkPreview() {
+  const code = document.getElementById('um-codigo').value.trim();
+  const box  = document.getElementById('link-preview-box');
+  const urlEl = document.getElementById('um-link-url');
+  if (!code) { box.style.display = 'none'; return; }
+  const cfg  = getCfg();
+  const base = cfg.baseUrl || window.location.origin + '/';
+  const link = base + '?ref=' + code;
+  urlEl.textContent = link;
+  box.style.display = '';
+}
+
+function copyLink() {
+  const link = document.getElementById('um-link-url').textContent;
+  navigator.clipboard.writeText(link).then(() => showToast('Link copiado!'));
+}
+
+function saveUser() {
+  const nome  = document.getElementById('um-nome').value.trim();
+  const tipo  = document.getElementById('um-tipo').value;
+  if (!nome)  { document.getElementById('um-nome').focus(); showToast('Informe o nome.','error'); return; }
+  if (!tipo)  { document.getElementById('um-tipo').focus(); showToast('Selecione o tipo.','error'); return; }
+  if (tipo === 'indicador' && !document.getElementById('um-codigo').value.trim()) {
+    document.getElementById('um-codigo').focus(); showToast('Gere ou informe o código.','error'); return;
+  }
+
+  const users = getUsers();
+
+  // Check duplicate codigo
+  const code = document.getElementById('um-codigo').value.trim().toUpperCase();
+  if (tipo === 'indicador' && code) {
+    const dup = users.find(u => u.codigo === code && u.id !== editingUserId);
+    if (dup) { showToast('Código já existe: ' + dup.nome, 'error'); return; }
+  }
+
+  const user = {
+    id:        editingUserId || 'user_' + Date.now(),
+    nome, tipo,
+    email:     document.getElementById('um-email').value.trim(),
+    telefone:  document.getElementById('um-telefone').value.trim(),
+    status:    document.getElementById('um-status').value,
+    createdAt: editingUserId ? (users.find(u=>u.id===editingUserId)?.createdAt || new Date().toISOString()) : new Date().toISOString(),
+    ...(tipo === 'indicador' ? {
+      codigo:   code,
+      comissao: parseFloat(document.getElementById('um-comissao').value) || 0,
+      pontos:   parseInt(document.getElementById('um-pontos').value)    || 10,
+    } : {})
+  };
+
+  if (editingUserId) {
+    const idx = users.findIndex(u => u.id === editingUserId);
+    users[idx] = user;
+  } else {
+    users.unshift(user);
+  }
+
+  saveUsers(users);
+  closeUserModal();
+  renderUsers();
+  showToast(editingUserId ? 'Usuário atualizado!' : 'Usuário criado!');
+  editingUserId = null;
+}
+
+function deleteUser(id) {
+  const users = getUsers();
+  const u = users.find(x => x.id === id);
+  if (!u) return;
+  if (!confirm(`Excluir "${u.nome}"?`)) return;
+  saveUsers(users.filter(x => x.id !== id));
+  renderUsers();
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────
+function loadCfg() {
+  const cfg = getCfg();
+  document.getElementById('cfg-base-url').value       = cfg.baseUrl || '';
+  document.getElementById('cfg-pts-lead').value       = cfg.ptsLead || 1;
+  document.getElementById('cfg-pts-fechado').value    = cfg.ptsFechado || 10;
+  document.getElementById('cfg-com-assessoria').value = cfg.com?.assessoria || 5;
+  document.getElementById('cfg-com-catalogacao').value= cfg.com?.catalogacao || 5;
+  document.getElementById('cfg-com-sac').value        = cfg.com?.sac || 5;
+  document.getElementById('cfg-com-ambos').value      = cfg.com?.ambos || 5;
+  document.getElementById('cfg-com-full').value       = cfg.com?.full || 5;
+  document.getElementById('cfg-com-pontual').value    = cfg.com?.pontual || 5;
+  updateCfgPreview();
+}
+
+function saveCfg(showMsg) {
+  const cfg = {
+    baseUrl:    document.getElementById('cfg-base-url').value.trim(),
+    ptsLead:    parseInt(document.getElementById('cfg-pts-lead').value)    || 1,
+    ptsFechado: parseInt(document.getElementById('cfg-pts-fechado').value) || 10,
+    com: {
+      assessoria: parseFloat(document.getElementById('cfg-com-assessoria').value) || 5,
+      catalogacao:parseFloat(document.getElementById('cfg-com-catalogacao').value) || 5,
+      sac:        parseFloat(document.getElementById('cfg-com-sac').value)        || 5,
+      ambos:      parseFloat(document.getElementById('cfg-com-ambos').value)      || 5,
+      full:       parseFloat(document.getElementById('cfg-com-full').value)       || 5,
+      pontual:    parseFloat(document.getElementById('cfg-com-pontual').value)    || 5,
+    }
+  };
+  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+  updateCfgPreview();
+  if (showMsg) showToast('Configurações salvas!');
+}
+
+function updateCfgPreview() {
+  const cfg = getCfg();
+  const base = cfg.baseUrl || window.location.origin + '/';
+  document.getElementById('cfg-url-preview').textContent = base + '?ref=CODIGO';
+}
+
+// ── EXPORT RANKING ─────────────────────────────────────────────
+function exportRankingCSV() {
+  const rows = [];
+  const hds  = ['Posição','Nome','Código','Cliques','Leads','Fechados','Valor Fechado','Comissão','Pontos'];
+  rows.push(hds.join(','));
+  const users = getUsers().filter(u => u.tipo === 'indicador');
+  const leads = getLeads();
+  const clicks = getRefClicks();
+  const cfg   = getCfg();
+
+  users.forEach((u, i) => {
+    const myLeads  = leads.filter(l => l.refCode === u.codigo);
+    const fechados = myLeads.filter(l => l.status === 'fechado');
+    const valFechado = fechados.reduce((s,l)=>s+(l.value||0),0);
+    const comPct   = parseFloat(u.comissao) || 0;
+    const comissao = valFechado * comPct / 100;
+    const pontos   = myLeads.length * (parseInt(cfg.ptsLead)||1) + fechados.length * (parseInt(cfg.ptsFechado)||10);
+    rows.push([i+1, u.nome, u.codigo||'', clicks[u.codigo]||0,
+      myLeads.length, fechados.length, valFechado, comissao.toFixed(2), pontos
+    ].map(v=>`"${v}"`).join(','));
+  });
+
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(rows.join('\n'));
+  a.download = 'ranking-indicadores-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+
+// ── TOAST ─────────────────────────────────────────────────────
+function showToast(msg, type) {
+  const t = document.createElement('div');
+  t.style.cssText = `position:fixed;bottom:24px;right:24px;z-index:9999;
+    background:${type==='error'?'var(--danger)':'var(--success)'};color:white;
+    padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;
+    box-shadow:0 4px 20px rgba(0,0,0,.4);animation:fadeIn .3s`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+// ── KEYBOARD ──────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('user-modal-overlay').classList.add('hidden');
+    document.getElementById('detail-modal-overlay').classList.add('hidden');
+  }
+  if ((e.ctrlKey||e.metaKey) && e.key === 'n') { e.preventDefault(); openUserModal(); }
+});
+
+// ── DEMO DATA ──────────────────────────────────────────────────
+function loadDemoIfEmpty() {
+  if (getUsers().length > 0) return;
+  const demo = [
+    { id:'u1', nome:'Marcos Lima', tipo:'bdr', email:'marcos@empresa.com',
+      telefone:'(44) 99146-0001', status:'ativo', createdAt: new Date(Date.now()-30*86400000).toISOString() },
+    { id:'u2', nome:'Fernanda Costa', tipo:'closer', email:'fernanda@empresa.com',
+      telefone:'(44) 99146-0002', status:'ativo', createdAt: new Date(Date.now()-25*86400000).toISOString() },
+    { id:'u3', nome:'Lucas Mantovani', tipo:'indicador', email:'lucas@parceiro.com',
+      telefone:'(44) 99146-5252', status:'ativo', codigo:'LUCAS2025',
+      comissao:8, pontos:10, createdAt: new Date(Date.now()-20*86400000).toISOString() },
+    { id:'u4', nome:'Patrícia Nunes', tipo:'indicador', email:'patricia@parceiro.com',
+      telefone:'(44) 99146-0004', status:'ativo', codigo:'PAT2025',
+      comissao:5, pontos:10, createdAt: new Date(Date.now()-15*86400000).toISOString() },
+    { id:'u5', nome:'Rafael Torres', tipo:'indicador', email:'rafael@parceiro.com',
+      telefone:'(44) 99146-0005', status:'ativo', codigo:'RAF2025',
+      comissao:5, pontos:10, createdAt: new Date(Date.now()-10*86400000).toISOString() },
+  ];
+  saveUsers(demo);
+
+  // Seed some ref clicks
+  const clicks = { LUCAS2025: 34, PAT2025: 18, RAF2025: 7 };
+  localStorage.setItem(REF_KEY, JSON.stringify(clicks));
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+loadDemoIfEmpty();
+loadCfg();
+renderUsers();
+renderServices();
+
+// Set default date filters to last 30 days
+const today = new Date().toISOString().slice(0,10);
+const ago30 = new Date(Date.now()-30*86400000).toISOString().slice(0,10);
+document.getElementById('r-from').value = ago30;
+document.getElementById('r-to').value   = today;
+</script>
+</body>
+</html>
