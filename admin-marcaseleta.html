@@ -633,6 +633,10 @@ td{padding:10px 14px;font-size:13px;vertical-align:middle}
         <input class="form-input" id="um-telefone" placeholder="(44) 9 9999-9999">
       </div>
     </div>
+    <div class="form-group" id="um-password-group" style="margin-bottom: 11px;">
+      <label class="form-label">Senha de Acesso (mín. 6 caracteres)</label>
+      <input class="form-input" id="um-password" type="password" placeholder="Defina a senha inicial">
+    </div>
     <div class="form-group">
       <label class="form-label">Status</label>
       <select class="form-input form-select" id="um-status">
@@ -1173,6 +1177,13 @@ function openUserModal(userId) {
   document.getElementById('um-pontos').value   = u?.pontos   || '';
   document.getElementById('um-is-gestor').checked = u?.isGestor || false;
 
+  if (userId) {
+    document.getElementById('um-password-group').style.display = 'none';
+  } else {
+    document.getElementById('um-password-group').style.display = '';
+    document.getElementById('um-password').value = '';
+  }
+
   onTipoChange();
   updateLinkPreview();
   document.getElementById('user-modal-overlay').classList.remove('hidden');
@@ -1254,6 +1265,33 @@ function saveUser() {
     users[idx] = user;
   } else {
     users.unshift(user);
+  }
+
+  const emailVal = document.getElementById('um-email').value.trim();
+  const passwordVal = document.getElementById('um-password').value;
+  const isNew = !editingUserId;
+  const needsAuth = (tipo === 'bdr' || tipo === 'closer' || document.getElementById('um-is-gestor').checked);
+
+  if (isNew && needsAuth && emailVal) {
+    if (passwordVal.length < 6) {
+      document.getElementById('um-password').focus();
+      showToast('Defina uma senha de acesso de no mínimo 6 caracteres.', 'error');
+      return;
+    }
+
+    // Criar conta no Supabase Auth de forma independente
+    const signupClient = window.supabase.createClient(supabaseUrl, supabaseKey, {
+      auth: { persistSession: false }
+    });
+
+    signupClient.auth.signUp({ email: emailVal, password: passwordVal }).then(function(res) {
+      if (res.error) {
+        console.error('Erro ao criar login no Supabase:', res.error);
+        showToast('Erro ao criar login: ' + res.error.message, 'error');
+      } else {
+        showToast('Login de acesso criado com sucesso!');
+      }
+    });
   }
 
   saveUsers(users);
