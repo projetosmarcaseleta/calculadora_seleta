@@ -444,6 +444,14 @@ td{padding:8px 12px;font-size:11px;vertical-align:middle}
           </div>
         </div>
         <div class="panel-section">
+          <div class="panel-section-title">Valores</div>
+          <div class="detail-grid">
+            <div class="detail-field"><div class="detail-label">Valor mensal</div><div class="detail-val" style="color:var(--blue);font-weight:700" id="p-value">—</div></div>
+            <div class="detail-field"><div class="detail-label">Setup</div><div class="detail-val" style="color:var(--orange);font-weight:700" id="p-setup">—</div></div>
+            <div class="detail-field" style="grid-column:1/-1"><div class="detail-label">Plano</div><div class="detail-val" id="p-plan">—</div></div>
+          </div>
+        </div>
+        <div class="panel-section">
           <div class="panel-section-title">Simulação</div>
           <div id="p-svc-detail"></div>
           <div id="p-total-detail"></div>
@@ -750,22 +758,24 @@ td{padding:8px 12px;font-size:11px;vertical-align:middle}
     }
 
     // ─── PANEL ───────────────────────────────────────────────────────
+    function _set(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; }
     function openPanel(id){
       currentLeadId=id;
       const lead=getLeads().find(l=>l.id===id);
       if(!lead)return;
       document.getElementById('side-panel').classList.remove('hidden');
-      document.getElementById('panel-lead-name').textContent=lead.name||lead.empresa||'—';
-      document.getElementById('p-name').textContent   =lead.name   ||'—';
-      document.getElementById('p-email').textContent  =lead.email  ||'—';
-      document.getElementById('p-phone').textContent  =lead.phone  ||'—';
-      document.getElementById('p-empresa').textContent=lead.empresa||'—';
-      document.getElementById('p-skus').textContent   =lead.skus   ||'—';
-      document.getElementById('p-value').textContent  =fmt(lead.value);
-      document.getElementById('p-setup').textContent  =lead.setupValue?fmt(lead.setupValue):'—';
-      document.getElementById('p-plan').textContent   =lead.plan   ||'—';
-      document.getElementById('p-ticket').textContent =lead.ticket? (TICK[lead.ticket]||lead.ticket):'—';
-      document.getElementById('panel-resp-select').value = lead.responsavel||'';
+      _set('panel-lead-name', lead.name||lead.empresa||'—');
+      _set('p-name',    lead.name   ||'—');
+      _set('p-email',   lead.email  ||'—');
+      _set('p-phone',   lead.phone  ||'—');
+      _set('p-date',    lead.createdAt ? new Date(lead.createdAt).toLocaleDateString('pt-BR') : '—');
+      _set('p-empresa', lead.empresa||'—');
+      _set('p-skus',    lead.skus   ||'—');
+      _set('p-value',   fmt(lead.value));
+      _set('p-setup',   lead.setupValue?fmt(lead.setupValue):'—');
+      _set('p-plan',    lead.plan   ||'—');
+      _set('p-ticket',  lead.ticket? (TICK[lead.ticket]||lead.ticket):'—');
+      var respSel=document.getElementById('panel-resp-select'); if(respSel) respSel.value=lead.responsavel||'';
 
       // Update WhatsApp & Email buttons
       const waNum=(lead.phone||'').replace(/\D/g,'');
