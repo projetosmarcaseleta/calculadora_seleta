@@ -766,6 +766,13 @@ td{padding:8px 12px;font-size:11px;vertical-align:middle}
       document.getElementById('p-plan').textContent   =lead.plan   ||'—';
       document.getElementById('p-ticket').textContent =lead.ticket? (TICK[lead.ticket]||lead.ticket):'—';
       document.getElementById('panel-resp-select').value = lead.responsavel||'';
+
+      // Update WhatsApp & Email buttons
+      const waNum=(lead.phone||'').replace(/\D/g,'');
+      const waBtn=document.getElementById('panel-wa-btn');
+      if(waBtn){waBtn.href=waNum?'https://wa.me/55'+waNum:'#';waBtn.style.opacity=waNum?'1':'0.4';waBtn.style.pointerEvents=waNum?'auto':'none';}
+      const emBtn=document.getElementById('panel-email-btn');
+      if(emBtn){emBtn.href=lead.email?'mailto:'+lead.email:'#';emBtn.style.opacity=lead.email?'1':'0.4';emBtn.style.pointerEvents=lead.email?'auto':'none';}
       
       const st=lead.status||'novo';
       document.querySelectorAll('.pip-btn').forEach(b=>b.classList.toggle('active',b.dataset.s===st));
@@ -872,25 +879,38 @@ td{padding:8px 12px;font-size:11px;vertical-align:middle}
 
     function renderTeam(){
       const list=getTeam().filter(m=>!teamFilter||m.tipo===teamFilter);
-      const tbody=document.getElementById('team-tbody'); tbody.innerHTML='';
-      document.getElementById('team-empty').classList.toggle('hidden',list.length>0);
-      document.getElementById('team-table').style.display=list.length?'':'none';
-      list.forEach(m=>{
+      const grid=document.getElementById('team-grid');
+      if(!grid)return;
+      if(!list.length){
+        grid.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)"><div style="font-size:28px;margin-bottom:10px">👥</div><div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">Nenhum membro encontrado</div><div style="font-size:11px">Cadastre novos membros para começar.</div></div>';
+        return;
+      }
+      const COLORS=['var(--blue)','var(--pink)','var(--teal)','var(--orange)','var(--purple)','var(--warn)'];
+      grid.innerHTML=list.map(function(m,i){
         const isInd=m.tipo==='indicador';
         const stClass=m.status==='ativo'?'s-ativo':'s-inativo';
-        const tr=document.createElement('tr');
-        tr.innerHTML=`
-          <td><div style="font-weight:600;color:var(--white)">${san(m.nome)}</div><div class="td-sub">${fmtD(m.createdAt)}</div></td>
-          <td><span class="tipo-badge t-${m.tipo}">${TIPO_LABEL[m.tipo]||m.tipo}</span></td>
-          <td><div>${san(m.email||'—')}</div><div class="td-sub">${san(m.phone||'—')}</div></td>
-          <td style="font-size:11px">${isInd?`${m.codigo||'—'} (${m.comissao||0}% comissão)`:'—'}</td>
-          <td><span class="status-badge ${stClass}">${m.status==='ativo'?'● Ativo':'○ Inativo'}</span></td>
-          <td><div class="td-actions">
-            <button class="btn btn-ghost btn-sm" onclick="openTeamModal('${m.id}')">✏</button>
+        const initials=(m.nome||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+        const color=COLORS[i%COLORS.length];
+        return `<div style="background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:36px;height:36px;border-radius:50%;background:${color}22;color:${color};border:1.5px solid ${color}44;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">${initials}</div>
+            <div>
+              <div style="font-weight:600;color:var(--white);font-size:13px">${san(m.nome)}</div>
+              <div style="font-size:10px;color:var(--muted)">${san(m.email||'—')}</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+            <span class="tipo-badge t-${m.tipo}" style="font-size:9px">${TIPO_LABEL[m.tipo]||m.tipo}</span>
+            <span class="status-badge ${stClass}" style="font-size:9px">${m.status==='ativo'?'● Ativo':'○ Inativo'}</span>
+          </div>
+          ${isInd?`<div style="font-size:10px;color:var(--muted)">Código: <span style="color:var(--warn);font-weight:600">${m.codigo||'—'}</span> · Comissão: <span style="color:var(--warn);font-weight:600">${m.comissao||0}%</span></div>`:''}
+          <div style="font-size:10px;color:var(--muted)">Tel: ${san(m.phone||m.telefone||'—')}</div>
+          <div style="display:flex;gap:6px;margin-top:auto">
+            <button class="btn btn-ghost btn-sm" onclick="openTeamModal('${m.id}')" style="flex:1;justify-content:center">✏ Editar</button>
             <button class="btn btn-danger btn-sm" onclick="deleteTeamMember('${m.id}')">✕</button>
-          </div></td>`;
-        tbody.appendChild(tr);
-      });
+          </div>
+        </div>`;
+      }).join('');
     }
 
     let editingTeamId=null;
@@ -1084,11 +1104,11 @@ td{padding:8px 12px;font-size:11px;vertical-align:middle}
 
     // ─── TABS ────────────────────────────────────────────────────────
     function switchTab(id){
-      document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active', ['leads','dash','team'][i]===id));
+      document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active', ['dashboard','leads','time'][i]===id));
       document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
       document.getElementById('tab-'+id).classList.add('active');
-      if(id==='dash') renderDashboard();
-      if(id==='team') renderTeam();
+      if(id==='dashboard') renderDashboard();
+      if(id==='time') renderTeam();
       if(id==='leads') { renderLeads(); }
     }
 
@@ -1190,6 +1210,7 @@ td{padding:8px 12px;font-size:11px;vertical-align:middle}
       populateRespSelects();
       updateStats(_leads);
       renderLeads();
+      renderDashboard();
     }
 
     async function handleLogin() {
