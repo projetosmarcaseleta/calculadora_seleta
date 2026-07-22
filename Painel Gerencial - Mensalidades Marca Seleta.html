@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>marcaseleta — Painel Gerencial de Mensalidades</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --brand-blue:#4A63C4; --brand-blue-dark:#1B2559; --brand-ink:#14161B;
+    --cinza-bloq:#e5e5e5; --amarelo:#FFF6B0;
+    --azul-input:#0645AD; --texto:#222; --borda:#d7dbe3; --bg:#f4f6fa;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);margin:0;padding:24px;color:var(--texto);}
+  .wrap{max-width:1620px;margin:0 auto;}
+
+  /* topo com marca */
+  .topo-marca{background:var(--brand-blue-dark);color:#fff;padding:16px 20px;border-radius:8px 8px 0 0;display:flex;align-items:center;gap:14px;}
+  .brand-mark{position:relative;width:36px;height:36px;flex:none;}
+  .brand-diamond{position:absolute;inset:5px;background:var(--brand-blue);border-radius:8px;transform:rotate(45deg);box-shadow:0 0 0 2px rgba(255,255,255,.15) inset;}
+  .brand-gear{position:absolute;top:-6px;right:-6px;font-size:16px;line-height:1;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4));}
+  .brand-textos{display:flex;flex-direction:column;line-height:1.15;}
+  .brand-word{font-size:19px;font-weight:800;letter-spacing:-0.3px;color:#fff;}
+  .brand-subtitulo{font-size:12.5px;color:#c7d0f0;font-weight:500;}
+
+  .subtitle{background:#fff;padding:10px 20px;font-size:13px;color:#555;border-left:1px solid var(--borda);border-right:1px solid var(--borda);}
+  .toolbar{background:#fff;padding:12px 20px;border-left:1px solid var(--borda);border-right:1px solid var(--borda);display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .toolbar input[type=text]{padding:7px 10px;border:1px solid var(--borda);border-radius:6px;font-size:13px;min-width:220px;}
+  .toolbar select{padding:7px 10px;border:1px solid var(--borda);border-radius:6px;font-size:13px;}
+  button{cursor:pointer;border:none;border-radius:6px;padding:8px 14px;font-size:13px;font-weight:600;}
+  .btn-primary{background:var(--brand-blue);color:#fff;}
+  .btn-secondary{background:#eef1f6;color:#333;border:1px solid var(--borda);}
+  .btn-secondary.active{background:var(--brand-blue);color:#fff;border-color:var(--brand-blue);}
+  .btn-danger{background:#fee2e2;color:#991b1b;padding:4px 9px;font-size:13px;border-radius:6px;}
+  .btn-danger:hover{background:#fecaca;}
+  .so-edicao{display:none;}
+  body.modo-edicao-ativo .so-edicao{display:inline-flex;}
+  .aviso-edicao{display:none;background:#FFF6B0;color:#6b5900;padding:8px 20px;font-size:12.5px;border-left:1px solid var(--borda);border-right:1px solid var(--borda);}
+  body.modo-edicao-ativo .aviso-edicao{display:block;}
+
+  .table-container{overflow-x:auto;border:1px solid var(--borda);background:#fff;border-radius:0 0 8px 8px;}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:1200px;}
+  thead th{background:var(--brand-blue);color:#fff;padding:10px 8px;text-align:left;position:sticky;top:0;z-index:2;font-size:12px;user-select:none;}
+  th.sortable{cursor:pointer;white-space:nowrap;}
+  th.sortable:hover{background:#5b74d1;}
+  th.sortable .arrow{font-size:10px;opacity:.6;margin-left:4px;}
+  th.sortable.active .arrow{opacity:1;}
+  tbody td{padding:6px 8px;border-bottom:1px solid var(--borda);vertical-align:middle;}
+  tbody tr:hover{background:#f8fafc;}
+  .col-cliente{font-weight:700;min-width:170px;}
+  .col-resp{min-width:110px;}
+  .col-plano{min-width:190px;}
+  .col-regra{min-width:44px;text-align:center;}
+  .col-regra.editando{min-width:220px;text-align:left;}
+  .col-acoes{display:none;text-align:center;min-width:50px;}
+  body.modo-edicao-ativo .col-acoes{display:table-cell;}
+  input.editable, select.editable{width:100%;padding:5px 6px;border:1px solid #b9c7e0;border-radius:4px;color:var(--azul-input);font-weight:600;background:#fbfcff;font-size:12.5px;}
+  input.fixa-input, input.aliq-input, input.base-input{text-align:right;}
+  input.readonly-calc{width:100%;padding:5px 6px;border:1px solid transparent;background:transparent;font-weight:700;color:#000;font-size:12.5px;}
+  input.locked, select.locked{background:var(--cinza-bloq);color:#888;border:1px solid #d0d0d0;font-weight:400;}
+  .num{text-align:right;}
+  .icon-info{cursor:help;margin-left:4px;font-size:11px;color:#8a93a3;}
+  .icon-alerta{cursor:help;margin-right:4px;color:#b7791f;}
+  .regra-icon{cursor:help;font-size:17px;}
+  textarea.regra-input, input.fonte-input{width:100%;padding:5px 6px;border:1px solid #b9c7e0;border-radius:4px;color:var(--azul-input);font-weight:500;background:#fbfcff;font-size:11.5px;font-family:Arial,Helvetica,sans-serif;resize:vertical;}
+  .nome-edit-box{display:flex;flex-direction:column;gap:3px;min-width:190px;}
+  .nome-edit-box input[type=text]{font-weight:700;}
+  .nome-edit-box .fonte-label{font-size:9.5px;color:#888;font-weight:400;margin-top:2px;}
+  .alerta-toggle{font-size:10.5px;display:flex;align-items:center;gap:4px;color:#6b5900;margin-top:2px;}
+  tfoot td{padding:14px 8px;background:var(--brand-blue-dark);color:#fff;font-weight:700;font-size:14px;}
+  .badge-status{padding:3px 8px;border-radius:10px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;}
+  .status-ok{background:#dcfce7;color:#166534;}
+  .status-pendente{background:#fef3c7;color:#92400e;}
+  .status-confirmar{background:#fee2e2;color:#991b1b;}
+  .status-na{background:#e5e7eb;color:#4b5563;}
+  .contador-status{font-size:12.5px;font-weight:700;color:#333;background:#eef1f6;padding:7px 12px;border-radius:6px;border:1px solid var(--borda);}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;padding:14px 20px;font-size:12px;background:#fff;border:1px solid var(--borda);border-top:none;border-radius:0 0 8px 8px;margin-top:-1px;}
+  .legend-item{display:flex;align-items:center;gap:6px;}
+  .swatch{width:14px;height:14px;border-radius:3px;display:inline-block;border:1px solid #ccc;}
+  .footer-note{font-size:11.5px;color:#777;margin-top:10px;padding:0 4px;}
+
+  /* chips (plano contratado) */
+  .chips-box{display:flex;flex-wrap:wrap;gap:4px;min-height:26px;padding:3px 4px;border:1px solid #b9c7e0;border-radius:4px;background:#fbfcff;cursor:pointer;align-items:center;}
+  .chip{background:#dbe6fb;color:#1e3a6e;font-size:11px;font-weight:600;padding:2px 6px;border-radius:10px;display:flex;align-items:center;gap:4px;}
+  .chip .x{cursor:pointer;font-weight:900;color:#5b6b8c;}
+  .chip .x:hover{color:#c0392b;}
+  .chips-box .placeholder{color:#98a2b3;font-size:11px;}
+
+  /* popover */
+  .popover{position:absolute;z-index:50;background:#fff;border:1px solid var(--borda);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.15);padding:10px;min-width:220px;display:none;}
+  .popover.open{display:block;}
+  .popover label{display:flex;align-items:center;gap:6px;font-size:12.5px;padding:4px 2px;cursor:pointer;}
+  .popover input[type=text]{width:100%;padding:5px 7px;border:1px solid var(--borda);border-radius:5px;font-size:12px;margin-top:6px;}
+  .popover .hint{font-size:10.5px;color:#888;margin-top:2px;}
+  .popover hr{border:none;border-top:1px solid var(--borda);margin:8px 0;}
+
+  /* modal (novo tipo) */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:100;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:#fff;border-radius:10px;padding:22px;width:340px;box-shadow:0 12px 32px rgba(0,0,0,.25);}
+  .modal h3{margin:0 0 14px;font-size:15px;}
+  .modal label{display:block;font-size:12px;font-weight:700;margin:10px 0 4px;color:#444;}
+  .modal input[type=text]{width:100%;padding:8px;border:1px solid var(--borda);border-radius:6px;font-size:13px;}
+  .modal .fmt-opt{display:flex;gap:10px;margin-top:4px;}
+  .modal .fmt-opt label{display:flex;align-items:center;gap:6px;font-weight:400;font-size:12.5px;}
+  .modal .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;}
+
+  /* login */
+  .login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,var(--brand-blue-dark),var(--brand-blue));display:flex;align-items:center;justify-content:center;z-index:200;overflow:hidden;}
+  .login-overlay.hidden{display:none;}
+  .login-bg-art{position:absolute;pointer-events:none;opacity:.16;z-index:0;}
+  .login-bg-art.bg-1{top:-40px;right:-40px;width:340px;height:340px;transform:rotate(-8deg);}
+  .login-bg-art.bg-2{bottom:-60px;left:-60px;width:300px;height:300px;transform:rotate(10deg);}
+  .login-card{position:relative;z-index:1;background:#fff;border-radius:12px;padding:32px 28px;width:340px;box-shadow:0 20px 50px rgba(0,0,0,.3);}
+  .login-brand{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:4px;}
+  .login-brand .login-logo-word{font-size:22px;font-weight:800;letter-spacing:-0.3px;color:var(--brand-blue);}
+  .login-card h2{font-size:16px;margin:14px 0 2px;color:var(--brand-blue-dark);text-align:center;}
+  .login-sub{font-size:12px;color:#777;margin:0 0 18px;text-align:center;}
+  .login-card label{display:block;font-size:12px;font-weight:700;color:#444;margin:12px 0 4px;}
+  .login-card input{width:100%;padding:9px 10px;border:1px solid var(--borda);border-radius:6px;font-size:13px;}
+  .login-erro{color:#c0392b;font-size:12px;min-height:16px;margin-top:8px;}
+  #painelApp.oculto{display:none;}
+  .user-bar{background:#fff;padding:8px 20px;border-left:1px solid var(--borda);border-right:1px solid var(--borda);display:flex;align-items:center;gap:10px;font-size:12.5px;color:#555;}
+  .user-bar b{color:var(--brand-blue-dark);}
+  .user-bar button{padding:5px 10px;font-size:12px;}
+
+  /* upload de contrato */
+  .col-contrato{min-width:150px;font-size:11.5px;}
+  .upload-label{display:inline-flex;align-items:center;gap:4px;background:#eef1f6;border:1px solid var(--borda);border-radius:6px;padding:5px 9px;font-size:11.5px;cursor:pointer;color:#333;white-space:nowrap;}
+  .upload-label:hover{background:#e2e7f0;}
+  .contrato-anexo{display:flex;flex-direction:column;gap:3px;}
+  .contrato-link{color:var(--brand-blue);text-decoration:underline;cursor:pointer;word-break:break-all;font-size:11.5px;}
+  .contrato-acoes{display:flex;gap:6px;}
+  .btn-mini{background:none;border:none;cursor:pointer;font-size:12.5px;padding:1px 3px;}
+  .btn-mini:hover{opacity:.7;}
+</style>
+</head>
+<body>
+<div class="login-overlay" id="loginOverlay">
+  <svg class="login-bg-art bg-1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="95" y="25" width="70" height="85" rx="8"/>
+    <path d="M110 25 v-10 a4 4 0 0 1 8 0 v10"/>
+    <path d="M130 25 v-10 a4 4 0 0 1 8 0 v10"/>
+    <path d="M150 25 v-10 a4 4 0 0 1 8 0 v10"/>
+    <path d="M10 40 h15 l12 55 h60 l14 -40 h-78"/>
+    <circle cx="45" cy="120" r="8"/>
+    <circle cx="85" cy="120" r="8"/>
+    <circle cx="165" cy="150" r="20"/>
+    <rect x="15" y="150" width="45" height="20" rx="10" transform="rotate(-25 37 160)"/>
+  </svg>
+  <svg class="login-bg-art bg-2" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="95" y="25" width="70" height="85" rx="8"/>
+    <path d="M110 25 v-10 a4 4 0 0 1 8 0 v10"/>
+    <path d="M130 25 v-10 a4 4 0 0 1 8 0 v10"/>
+    <path d="M150 25 v-10 a4 4 0 0 1 8 0 v10"/>
+    <path d="M10 40 h15 l12 55 h60 l14 -40 h-78"/>
+    <circle cx="45" cy="120" r="8"/>
+    <circle cx="85" cy="120" r="8"/>
+    <circle cx="165" cy="150" r="20"/>
+    <rect x="15" y="150" width="45" height="20" rx="10" transform="rotate(-25 37 160)"/>
+  </svg>
+  <div class="login-card">
+    <div class="login-brand">
+      <svg class="login-logo-icon" width="64" height="64" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <rect x="16" y="38" width="44" height="44" rx="10" fill="#4A63C4" transform="rotate(45 38 60)"/>
+        <g transform="translate(68,28)">
+          <g fill="#4A63C4">
+            <rect x="-4" y="-19" width="8" height="10" rx="2"/>
+            <rect x="-4" y="-19" width="8" height="10" rx="2" transform="rotate(45)"/>
+            <rect x="-4" y="-19" width="8" height="10" rx="2" transform="rotate(90)"/>
+            <rect x="-4" y="-19" width="8" height="10" rx="2" transform="rotate(135)"/>
+            <rect x="-4" y="-19" width="8" height="10" rx="2" transform="rotate(180)"/>
+            <rect x="-4" y="-19" width="8" height="10" rx="2" transform="rotate(225)"/>
+            <rect x="-4" y="-19" width="8" height="10" rx="2" transform="rotate(270)"/>
+            <rect x="-4" y="-19" width="8" height="10" rx="2" transform="rotate(315)"/>
+          </g>
+          <circle r="13" fill="#4A63C4"/>
+          <circle r="5" fill="#ffffff"/>
+        </g>
+      </svg>
+      <span class="login-logo-word">marcaseleta</span>
+    </div>
+    <h2>Painel Gerencial de Mensalidades</h2>
+    <p class="login-sub">Acesso restrito a gestores</p>
+    <label>E-mail</label>
+    <input type="email" id="loginEmail" placeholder="nome@db1.com.br" autocomplete="username">
+    <label>Senha</label>
+    <input type="password" id="loginSenha" placeholder="Senha" autocomplete="current-password">
+    <div class="login-erro" id="loginErro"></div>
+    <button class="btn-primary" id="btnLogin" style="width:100%;margin-top:10px;">Entrar</button>
+  </div>
+</div>
+<div class="wrap oculto" id="painelApp">
+  <div class="topo-marca">
+    <span class="brand-mark">
+      <span class="brand-diamond"></span>
+      <span class="brand-gear">⚙️</span>
+    </span>
+    <div class="brand-textos">
+      <span class="brand-word">marcaseleta</span>
+      <span class="brand-subtitulo">Painel Gerencial de Mensalidades — Controle Financeiro</span>
+    </div>
+  </div>
+  <div class="user-bar">
+    <span id="usuarioLogado"></span>
+    <button class="btn-secondary" id="btnLogout" style="margin-left:auto;">Sair</button>
+  </div>
+  <div class="subtitle">Preencha o campo azul <b>"Base Informada"</b> mensalmente (pedidos, GMV ou mensagens, conforme a regra de cálculo). Todos os campos de variável ficam abertos para edição, mesmo quando o cliente hoje não tem variável — use-os se o contrato mudar. Passe o mouse sobre o ícone 📊 na coluna Regra para ver detalhes. Clique nos cabeçalhos para ordenar.</div>
+  <div class="aviso-edicao">🔓 <b>Modo de Edição ativo</b> — você pode renomear clientes, editar a regra de cálculo, a fonte/observação, marcar alertas e remover clientes do painel.</div>
+  <div class="toolbar">
+    <input type="text" id="busca" placeholder="Buscar cliente...">
+    <select id="filtroResponsavel"><option value="">Todos os responsáveis</option></select>
+    <select id="filtroTipo"><option value="">Todos os tipos de variável</option></select>
+    <select id="filtroStatus">
+      <option value="">Status: todos</option>
+      <option value="ok">✅ Prontos</option>
+      <option value="pendente">⏳ Pendentes</option>
+      <option value="confirmar">❓ A confirmar</option>
+      <option value="na">➖ Não se aplica</option>
+    </select>
+    <button class="btn-secondary" id="btnNovoTipo">+ Novo tipo de variável</button>
+    <button class="btn-secondary so-edicao" id="btnAddCliente">+ Adicionar cliente</button>
+    <button class="btn-secondary" id="btnReset">Restaurar valores originais</button>
+    <button class="btn-secondary" id="btnCsv">Exportar CSV</button>
+    <span class="contador-status" id="contadorStatus">— </span>
+    <button class="btn-secondary" id="btnModoEdicao" style="margin-left:auto;">🔓 Modo de Edição</button>
+  </div>
+  <div class="table-container">
+    <table id="tabela">
+      <thead>
+        <tr>
+          <th class="sortable" data-key="nome">Cliente<span class="arrow">▲▼</span></th>
+          <th class="sortable" data-key="responsavel">Responsável<span class="arrow">▲▼</span></th>
+          <th class="sortable" data-key="plano">Plano Contratado<span class="arrow">▲▼</span></th>
+          <th class="sortable" data-key="fixa">Mensalidade Fixa (R$)<span class="arrow">▲▼</span></th>
+          <th class="sortable" data-key="tipoVar">Tipo de Variável<span class="arrow">▲▼</span></th>
+          <th class="sortable" data-key="aliquota">Alíquota / Valor Unit.<span class="arrow">▲▼</span></th>
+          <th title="Regra de cálculo — passe o mouse sobre o ícone na tabela">Regra</th>
+          <th class="sortable" data-key="base">Base Informada<span class="arrow">▲▼</span></th>
+          <th class="sortable" data-key="variavel">Valor da Variável (R$)<span class="arrow">▲▼</span></th>
+          <th class="sortable" data-key="total">Total a Faturar (R$)<span class="arrow">▲▼</span></th>
+          <th class="sortable" data-key="status">Status<span class="arrow">▲▼</span></th>
+          <th class="col-contrato">Contrato</th>
+          <th class="col-acoes">Ações</th>
+        </tr>
+      </thead>
+      <tbody id="corpoTabela"></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="9" style="text-align:right;">TOTAL A FATURAR NO MÊS</td>
+          <td class="num" id="totalGeral">R$ 0,00</td>
+          <td id="statusGeral" style="font-size:11.5px;"></td>
+          <td></td>
+          <td class="col-acoes"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><span class="swatch" style="background:#fbfcff;border-color:#b9c7e0;"></span> Azul — campo editável</div>
+    <div class="legend-item"><span class="swatch" style="background:#fff;"></span> Preto — cálculo automático</div>
+    <div class="legend-item">📊💬📦🧮➖🚫❓ — regra de cálculo da variável (mouse em cima do ícone)</div>
+    <div class="legend-item"><span class="badge-status status-ok">✅ Pronto</span> mês já calculado</div>
+    <div class="legend-item"><span class="badge-status status-pendente">⏳ Pendente</span> falta preencher a Base Informada</div>
+    <div class="legend-item"><span class="badge-status status-confirmar">❓ A confirmar</span> tipo de variável ainda não definido</div>
+    <div class="legend-item"><span class="badge-status status-na">➖ Não se aplica</span> cliente sem cobrança este mês</div>
+  </div>
+  <div class="footer-note">Protótipo local — os dados são salvos no armazenamento deste navegador (localStorage). Ao migrar para um site com backend, os mesmos campos e fórmulas podem ser reaproveitados diretamente.</div>
+</div>
+
+<!-- popover reutilizável para seleção de plano -->
+<div class="popover" id="planoPopover"></div>
+
+<!-- modal para novo tipo de variável -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>Novo tipo de variável</h3>
+    <label>Nome do tipo</label>
+    <input type="text" id="novoTipoNome" placeholder="ex: R$ por devolução">
+    <label>Como calcular</label>
+    <div class="fmt-opt">
+      <label><input type="radio" name="novoTipoFmt" value="pct" checked> % sobre um valor (ex: GMV)</label>
+      <label><input type="radio" name="novoTipoFmt" value="unit"> R$ fixo por unidade (ex: pedido, mensagem)</label>
+    </div>
+    <div class="actions">
+      <button class="btn-secondary" id="btnCancelarTipo">Cancelar</button>
+      <button class="btn-primary" id="btnSalvarTipo">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<!-- modal para prévia de extração automática do contrato -->
+<div class="modal-overlay" id="modalExtracaoOverlay">
+  <div class="modal">
+    <h3>Valores encontrados no contrato</h3>
+    <div id="extracaoResumo" style="font-size:13px;line-height:1.7;"></div>
+    <div class="login-erro" id="extracaoAviso"></div>
+    <div class="actions">
+      <button class="btn-secondary" id="btnIgnorarExtracao">Só anexar</button>
+      <button class="btn-primary" id="btnAplicarExtracao">Aplicar valores</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script>
+  if(window.pdfjsLib){
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+</script>
+<script>
+const PLANO_PRESETS = ["Consultoria","SAC","Serviço Pontual","Fullcommerce"];
+
+const TIPOS_BASE = [
+  {label:"Sem variável", fmt:"none"},
+  {label:"% sobre GMV", fmt:"pct"},
+  {label:"R$ por pedido", fmt:"unit"},
+  {label:"R$ por mensagem", fmt:"unit"},
+  {label:"R$ por MIA", fmt:"unit"},
+  {label:"Não contratado", fmt:"nao_contratado"},
+  {label:"A confirmar", fmt:"confirmar"}
+];
+const TIPOS_CUSTOM_KEY = "painelMS_tipos_custom_v1";
+
+const CLIENTES = [
+{nome:"ABEX", plano:["Consultoria"], fixa:2000.00, tipoVar:"Sem variável", aliquota:null, regra:"-", fonte:"Planilha interna (Controle Geral / Faturamentos) — contrato oficial não localizado no SharePoint", alerta:false},
+{nome:"AVATRON", plano:["Consultoria"], fixa:2000.00, tipoVar:"% sobre GMV", aliquota:0.01, regra:"1% sobre GMV acima de R$ 167.000,00", fonte:"Planilha interna — contrato oficial não localizado no SharePoint", alerta:false},
+{nome:"CITROPARTS", plano:["Consultoria"], fixa:3000.00, tipoVar:"Sem variável", aliquota:null, regra:"SAC: R$0,79 por mensagem MIA, cobrado à parte (não incluído neste total)", fonte:"Planilha interna — valores divergentes entre fontes internas (R$2.500 vs R$3.000); confirmar contrato", alerta:false},
+{nome:"FIAT", plano:["Fullcommerce","SAC"], fixa:4990.00, tipoVar:"Sem variável", aliquota:null, regra:"-", fonte:"Planilha interna — valores inconsistentes entre relatórios (R$1.200 vs R$4.990); confirmar contrato", alerta:false},
+{nome:"Hannover", plano:["Fullcommerce"], fixa:4300.00, tipoVar:"Sem variável", aliquota:null, regra:"-", fonte:"Planilha interna \"Marca Seleta - Controle Geral\"", alerta:false},
+{nome:"JURKONIS", plano:["Consultoria"], fixa:3000.00, tipoVar:"% sobre GMV", aliquota:0.01, regra:"1% sobre GMV total (regra exata a confirmar com o financeiro)", fonte:"Planilha interna \"Marca Seleta - Controle Geral\"", alerta:false},
+{nome:"MOBILAR", plano:["Consultoria"], fixa:2000.00, tipoVar:"Sem variável", aliquota:null, regra:"-", fonte:"Planilha interna", alerta:false},
+{nome:"OLUAP", plano:["Consultoria"], fixa:2500.00, tipoVar:"% sobre GMV", aliquota:0.01, regra:"1% sobre GMV total (regra exata a confirmar com o financeiro)", fonte:"Planilha interna \"Marca Seleta - Controle Geral\"", alerta:false},
+{nome:"PONTO DO BORRACHEIRO", plano:["Consultoria"], fixa:2000.00, tipoVar:"Sem variável", aliquota:null, regra:"-", fonte:"Planilha interna", alerta:false},
+{nome:"RIO BRANCO", plano:["Fullcommerce"], fixa:3500.00, tipoVar:"% sobre GMV", aliquota:0.005, regra:"0,5% sobre GMV total", fonte:"Planilha interna", alerta:false},
+{nome:"ROSSI BIKES", plano:["SAC","Consultoria"], fixa:4990.00, tipoVar:"R$ por mensagem", aliquota:0.79, regra:"SAC: 1.500 mensagens inclusas; excedente de R$0,79 por mensagem acima de 1.500", fonte:"Planilha interna", alerta:false},
+{nome:"ESMALTEC", plano:["SAC"], fixa:4490.00, tipoVar:"Sem variável", aliquota:null, regra:"-", fonte:"Planilha interna", alerta:false},
+{nome:"BELO BEM", plano:["Fullcommerce"], fixa:1900.00, tipoVar:"Sem variável", aliquota:null, regra:"-", fonte:"Planilha interna", alerta:false},
+{nome:"BENDICASA", plano:["SAC"], fixa:4000.00, tipoVar:"% sobre GMV", aliquota:0.01, regra:"1% sobre GMV (base histórica ago/set/out ≈ R$209 mil)", fonte:"Planilha interna", alerta:false},
+{nome:"CROCS", plano:["Fullcommerce","SAC"], fixa:17159.29, tipoVar:"Sem variável", aliquota:null, regra:"-", fonte:"CONTRATO OFICIAL (assinado 2022) + reajustes IGPM registrados na planilha de faturamento", alerta:false},
+{nome:"DROGARIA NOVA ESPERANÇA", plano:["Fullcommerce"], fixa:3990.00, tipoVar:"% sobre GMV", aliquota:0.005, regra:"0,5% sobre GMV acima da média fev/mar/abr (≈R$207,6 mil)", fonte:"Planilha interna", alerta:false},
+{nome:"EXCLUSIVA", plano:["Fullcommerce"], fixa:3200.00, tipoVar:"% sobre GMV", aliquota:null, regra:"% sobre GMV acima da média dez/jan/fev (≈R$140,6 mil) — percentual não especificado na planilha, confirmar", fonte:"Planilha interna — percentual não especificado, confirmar contrato", alerta:false},
+{nome:"KLS", plano:["Fullcommerce"], fixa:2056.00, tipoVar:"% sobre GMV", aliquota:0.005, regra:"0,5% sobre crescimento (base histórica média jun/jul/ago ≈R$694.276,75)", fonte:"Planilha interna", alerta:false},
+{nome:"MAGALU REBATE", plano:["Consultoria"], fixa:0, tipoVar:"Sem variável", aliquota:null, regra:"Não identificado como seller/cliente com contrato Marca Seleta — pode ser programa de rebate do marketplace", fonte:"Não identificado", alerta:false},
+{nome:"Vighs", plano:["Fullcommerce"], fixa:3490.00, tipoVar:"Sem variável", aliquota:null, regra:"-", fonte:"Planilha interna (registrado como \"Aguia - Vighs\")", alerta:false},
+{nome:"90 MINUTOS", plano:["Fullcommerce"], fixa:6000.00, tipoVar:"Sem variável", aliquota:null, regra:"Contrato não localizado (aparece como \"90 minutos spa\" em planilha interna, sem valor confirmado)", fonte:"Não localizado", alerta:false},
+{nome:"EASYTECH", plano:["Fullcommerce","SAC"], fixa:15000.00, tipoVar:"Sem variável", aliquota:null, regra:"Sem variável sobre vendas. SAC: pacote de 15 mil mensagens incluso; excedente de R$0,69/mensagem acima de 15 mil é cobrado à parte (não incluído neste total)", fonte:"CONTRATO OFICIAL (assinado 2025)", alerta:false},
+{nome:"ZANLINE", plano:["Cadastro"], fixa:2500.00, tipoVar:"Sem variável", aliquota:null, regra:"-", fonte:"Planilha interna", alerta:false},
+{nome:"ACER", plano:["Fullcommerce"], fixa:4000.00, tipoVar:"R$ por pedido", aliquota:3.00, regra:"R$3,00 por pedido, cobrado sobre o crescimento de pedidos (Amazon) frente à média mar/abr/mai de 2024", fonte:"CONTRATO OFICIAL (assinado 2024)", alerta:false},
+{nome:"ARAMIS", plano:["Fullcommerce","SAC"], fixa:4170.00, tipoVar:"% sobre GMV", aliquota:0.015, regra:"1,5% sobre GMV total. ALERTA: 1º Aditivo oficial (assinado 2024) prevê fixo de R$2.000,00 — valor de R$4.170,00 vem de anotação/planilha interna e diverge do contrato assinado. Confirmar com financeiro antes de faturar", fonte:"CONTRATO OFICIAL (1º Aditivo, 2024) + divergência com planilha interna — VER ALERTA", alerta:false},
+{nome:"BOMBAS E CIA (shop e amz)", plano:["Consultoria"], fixa:2500.00, tipoVar:"% sobre GMV", aliquota:0.005, regra:"0,5% sobre GMV combinado Amazon+Shopee, incidindo apenas sobre o valor acima de R$48.000,00 (franquia)", fonte:"CONTRATO OFICIAL (assinado 2025)", alerta:false},
+{nome:"PLANETA NATURAL", plano:["Fullcommerce"], fixa:4000.00, tipoVar:"% sobre GMV", aliquota:0.005, regra:"0,5% sobre GMV total (sem franquia)", fonte:"CONTRATO OFICIAL (assinado 2025)", alerta:false},
+{nome:"TITANIUM PLATINA", plano:["Fullcommerce"], fixa:3990.00, tipoVar:"R$ por pedido", aliquota:1.25, regra:"R$1,25 por pedido (todos os pedidos, sem franquia, exceto cancelados em até 24h)", fonte:"CONTRATO OFICIAL (assinado 2026)", alerta:false},
+{nome:"TUBARÃO CENTER", plano:["Fullcommerce","SAC"], fixa:16370.00, tipoVar:"R$ por mensagem", aliquota:0.49, regra:"Fixo = R$6.500 (Fullcommerce) + R$9.870 (1º Aditivo SAC Meli/Shopee). 2º Aditivo SAC completo (R$5.790) encerrado após as 6 parcelas previstas — removido do fixo. ALERTA: regra original vincula a variável (R$0,49/mensagem acima de 12 mil) à vigência do 2º Aditivo — confirmar se ainda deve ser cobrada agora que o 2º Aditivo encerrou", fonte:"CONTRATO OFICIAL (3 instrumentos: contrato original + 1º e 2º Aditivos) — VER ALERTA", alerta:false},
+{nome:"CASAS BAHIA", plano:["Serviço ANY"], fixa:10500.00, tipoVar:"Sem variável", aliquota:null, regra:"-", fonte:"Planilha interna (carteira clientes Seleta)", alerta:false},
+{nome:"MAGALU", plano:["Serviço ANY"], fixa:10500.00, tipoVar:"Sem variável", aliquota:null, regra:"Não identificado como cliente distinto na carteira — pode se referir ao marketplace Magalu, não a um seller específico. Confirmar", fonte:"Não identificado", alerta:false},
+{nome:"Edeltec", nomeManual:true, plano:["Consultoria"], fixa:2500.00, tipoVar:"Sem variável", aliquota:null, regra:"-", fonte:"", alerta:false}
+];
+
+const RESPONSAVEIS = {
+  "ABEX":"Diego","AVATRON":"Diego","CITROPARTS":"Diego","FIAT":"Diego","Hannover":"Diego",
+  "JURKONIS":"Diego","MOBILAR":"Diego","OLUAP":"Diego","PONTO DO BORRACHEIRO":"Diego",
+  "RIO BRANCO":"Diego","ROSSI BIKES":"Diego","Edeltec":"Diego",
+  "ESMALTEC":"Joana",
+  "BELO BEM":"João","BENDICASA":"João","DROGARIA NOVA ESPERANÇA":"João","EXCLUSIVA":"João",
+  "KLS":"João","MAGALU REBATE":"João","Vighs":"João",
+  "CROCS":"Layza","90 MINUTOS":"Layza","EASYTECH":"Layza","ZANLINE":"Layza","ACER":"Layza",
+  "ARAMIS":"Layza","BOMBAS E CIA (shop e amz)":"Layza","PLANETA NATURAL":"Layza",
+  "TITANIUM PLATINA":"Layza","TUBARÃO CENTER":"Layza",
+  "CASAS BAHIA":"Zanon","MAGALU":"Zanon"
+};
+
+const STORAGE_KEY = "painelMS_v3";
+const EDICAO_KEY = "painelMS_modo_edicao";
+let dados = [];
+let sortState = {key:null, dir:1};
+let popoverIdx = null;
+let modoEdicao = localStorage.getItem(EDICAO_KEY) === '1';
+
+// ---- Supabase Auth (acesso restrito a gestores) ----
+const SUPABASE_URL = 'https://mygdxrenhrfpaxpmytsi.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_p-b9glhdiA0QZZbATvD6ZQ_9OeO-qlm';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+function mostrarApp(email){
+  document.getElementById('loginOverlay').classList.add('hidden');
+  document.getElementById('painelApp').classList.remove('oculto');
+  document.getElementById('usuarioLogado').innerHTML = `Logado como: <b>${email}</b>`;
+}
+function mostrarLogin(){
+  document.getElementById('loginOverlay').classList.remove('hidden');
+  document.getElementById('painelApp').classList.add('oculto');
+  document.getElementById('loginSenha').value = '';
+}
+async function verificarGestor(email){
+  // Mesma lógica do admin: igor é sempre gestor; demais verificam isGestor na tabela
+  if(email.toLowerCase() === 'igor.costa@db1.com.br') return true;
+  const { data: profile } = await supabase
+    .from('team_members')
+    .select('isGestor, tipo')
+    .eq('email', email)
+    .maybeSingle();
+  return profile && (profile.isGestor === true || profile.tipo === 'responsavel');
+}
+async function tentarLogin(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const senha = document.getElementById('loginSenha').value;
+  const erroEl = document.getElementById('loginErro');
+  const btn = document.getElementById('btnLogin');
+  erroEl.textContent = '';
+  if(!email || !senha){
+    erroEl.textContent = 'Preencha o e-mail e a senha.';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Entrando...';
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password: senha });
+  btn.disabled = false;
+  btn.textContent = 'Entrar';
+  if(error){
+    erroEl.textContent = 'E-mail ou senha incorretos.';
+    return;
+  }
+  const isGestor = await verificarGestor(data.user.email);
+  if(!isGestor){
+    await supabase.auth.signOut();
+    erroEl.textContent = 'Acesso negado: apenas gestores podem acessar este painel.';
+    return;
+  }
+  mostrarApp(data.user.email);
+}
+async function inicializarAuth(){
+  const { data: { session } } = await supabase.auth.getSession();
+  if(session){
+    const isGestor = await verificarGestor(session.user.email);
+    if(isGestor){
+      mostrarApp(session.user.email);
+    } else {
+      await supabase.auth.signOut();
+      mostrarLogin();
+      document.getElementById('loginErro').textContent = 'Acesso negado: apenas gestores podem acessar este painel.';
+    }
+  } else {
+    mostrarLogin();
+    document.getElementById('loginEmail').focus();
+  }
+}
+
+function moeda(v){
+  if(v===null||v===undefined||isNaN(v)) v=0;
+  return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+}
+
+function percentual(v){
+  if(v===null||v===undefined||isNaN(v)) v=0;
+  return (v*100).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%';
+}
+
+function parseNumeroBR(str){
+  if(str===null||str===undefined) return null;
+  let s = String(str).replace(/[^\d,.-]/g,'').trim();
+  if(s==='') return null;
+  if(s.includes(',') && s.includes('.')) s = s.replace(/\./g,'').replace(',','.');
+  else if(s.includes(',')) s = s.replace(',','.');
+  const n = parseFloat(s);
+  return isNaN(n) ? null : n;
+}
+
+function tituloCaso(str){
+  return String(str||'').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function nomeExibicao(item){
+  return item.nomeManual ? item.nome : tituloCaso(item.nome);
+}
+
+function escAttr(s){
+  return String(s||'').replace(/"/g,'&quot;');
+}
+
+function iconeRegra(fmt, tipoVar){
+  if(fmt==="pct") return "📊";
+  if(fmt==="nao_contratado") return "🚫";
+  if(fmt==="confirmar") return "❓";
+  if(fmt==="none") return "➖";
+  if(fmt==="unit"){
+    const t = (tipoVar||"").toLowerCase();
+    if(t.includes("mensagem")) return "💬";
+    if(t.includes("pedido")) return "📦";
+    if(t.includes("mia")) return "📨";
+    return "🧮";
+  }
+  return "🧮";
+}
+
+function statusLinha(item, fmt){
+  if(fmt==="nao_contratado") return {label:"Não se aplica", chave:"na", cls:"status-na", icon:"➖", rank:3};
+  if(fmt==="confirmar") return {label:"A confirmar", chave:"confirmar", cls:"status-confirmar", icon:"❓", rank:2};
+  if(fmt==="none") return {label:"Pronto", chave:"ok", cls:"status-ok", icon:"✅", rank:0};
+  const temBase = item.base!==null && item.base!==undefined && item.base!=="";
+  return temBase
+    ? {label:"Pronto", chave:"ok", cls:"status-ok", icon:"✅", rank:0}
+    : {label:"Pendente", chave:"pendente", cls:"status-pendente", icon:"⏳", rank:1};
+}
+
+function getTiposCustom(){
+  try{ return JSON.parse(localStorage.getItem(TIPOS_CUSTOM_KEY)||"[]"); }catch(e){ return []; }
+}
+function getAllTipos(){ return TIPOS_BASE.concat(getTiposCustom()); }
+function tipoFmtFor(label){
+  const found = getAllTipos().find(t=>t.label===label);
+  return found ? found.fmt : "none";
+}
+
+function cargaInicial(){
+  const salvo = localStorage.getItem(STORAGE_KEY);
+  if(salvo){
+    try{ return JSON.parse(salvo); }catch(e){}
+  }
+  return CLIENTES.map(c=>({...c, plano:[...c.plano], base:null, responsavel: RESPONSAVEIS[c.nome] || ""}));
+}
+function salvar(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(dados)); }
+
+function calcularLinha(item){
+  const fmt = tipoFmtFor(item.tipoVar);
+  const aliq = (item.aliquota===null||item.aliquota===undefined) ? 0 : item.aliquota;
+  const base = (item.base===null||item.base===undefined||item.base==="") ? 0 : parseFloat(item.base);
+  const variavel = (fmt==="none"||fmt==="nao_contratado") ? 0 : (aliq*base||0);
+  const total = (item.fixa||0) + variavel;
+  return {variavel, total, fmt};
+}
+
+function popularFiltroTipo(){
+  const sel = document.getElementById('filtroTipo');
+  const atual = sel.value;
+  sel.innerHTML = '<option value="">Todos os tipos de variável</option>' +
+    getAllTipos().map(t=>`<option value="${t.label}">${t.label}</option>`).join('');
+  sel.value = atual;
+}
+
+function popularFiltroResponsavel(){
+  const sel = document.getElementById('filtroResponsavel');
+  const atual = sel.value;
+  const nomes = [...new Set(dados.map(d=>d.responsavel).filter(Boolean))].sort();
+  sel.innerHTML = '<option value="">Todos os responsáveis</option>' +
+    nomes.map(n=>`<option value="${n}">${n}</option>`).join('');
+  sel.value = atual;
+}
+
+function popularListaResponsaveis(){
+  let dl = document.getElementById('listaResponsaveis');
+  if(!dl){
+    dl = document.createElement('datalist');
+    dl.id = 'listaResponsaveis';
+    document.body.appendChild(dl);
+  }
+  const nomes = [...new Set(dados.map(d=>d.responsavel).filter(Boolean))].sort();
+  dl.innerHTML = nomes.map(n=>`<option value="${n}">`).join('');
+}
+
+function comparar(a,b,key){
+  let va,vb;
+  if(key==="plano"){ va=a.plano.join(", ").toLowerCase(); vb=b.plano.join(", ").toLowerCase(); }
+  else if(key==="nome"){ va=nomeExibicao(a).toLowerCase(); vb=nomeExibicao(b).toLowerCase(); }
+  else if(key==="tipoVar"||key==="responsavel"){ va=(a[key]||"").toLowerCase(); vb=(b[key]||"").toLowerCase(); }
+  else if(key==="variavel"||key==="total"){ va=calcularLinha(a)[key]; vb=calcularLinha(b)[key]; }
+  else if(key==="status"){
+    va = statusLinha(a, tipoFmtFor(a.tipoVar)).rank;
+    vb = statusLinha(b, tipoFmtFor(b.tipoVar)).rank;
+  }
+  else { va=a[key]; vb=b[key]; va = (va===null||va===undefined)?-Infinity:va; vb=(vb===null||vb===undefined)?-Infinity:vb; }
+  if(va<vb) return -1;
+  if(va>vb) return 1;
+  return 0;
+}
+
+// ---- Upload e leitura automática de contratos (best-effort, sempre revisar) ----
+let extracaoAtual = null;
+
+function arquivoParaBase64(file){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=> resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function base64ParaBytes(dataUrl){
+  const bstr = atob(dataUrl.split(',')[1]);
+  const bytes = new Uint8Array(bstr.length);
+  for(let i=0;i<bstr.length;i++) bytes[i] = bstr.charCodeAt(i);
+  return bytes;
+}
+
+function estimarUsoStorageMB(){
+  let total = 0;
+  for(let i=0;i<localStorage.length;i++){
+    const k = localStorage.key(i);
+    total += (localStorage.getItem(k)||'').length;
+  }
+  return total / (1024*1024);
+}
+
+async function extrairTextoPdf(dataUrl){
+  const bytes = base64ParaBytes(dataUrl);
+  const pdf = await pdfjsLib.getDocument({data: bytes}).promise;
+  let texto = '';
+  for(let p=1; p<=pdf.numPages; p++){
+    const page = await pdf.getPage(p);
+    const content = await page.getTextContent();
+    texto += content.items.map(it=>it.str).join(' ') + '\n';
+  }
+  return texto;
+}
+
+async function extrairTextoDocx(dataUrl){
+  const bytes = base64ParaBytes(dataUrl);
+  const resultado = await mammoth.extractRawText({arrayBuffer: bytes.buffer});
+  return resultado.value;
+}
+
+async function extrairTextoDoArquivo(nome, tipo, dataUrl){
+  const nomeMin = (nome||'').toLowerCase();
+  try{
+    if(tipo === 'application/pdf' || nomeMin.endsWith('.pdf')){
+      return await extrairTextoPdf(dataUrl);
+    }
+    if(nomeMin.endsWith('.docx')){
+      return await extrairTextoDocx(dataUrl);
+    }
+  }catch(e){
+    console.error('Falha ao extrair texto do contrato', e);
+  }
+  return '';
+}
+
+function extrairValoresDoTexto(texto){
+  const resultado = {fixa:null, tipoVar:null, aliquota:null};
+  if(!texto) return resultado;
+
+  const mFixa = texto.match(/Mensalidade\s+Fixa[^\d]{0,15}(R\$\s*[\d\.,]+)/i);
+  if(mFixa) resultado.fixa = parseNumeroBR(mFixa[1]);
+
+  const mPedido = texto.match(/Valor\s+por\s+pedido[^\d]{0,15}(R\$\s*[\d\.,]+)/i);
+  const mMensagem = texto.match(/Valor\s+por\s+mensagem[^\d]{0,15}(R\$\s*[\d\.,]+)/i);
+  const mPct = texto.match(/(\d{1,2}(?:,\d+)?)\s*%\s*(?:sobre|do)\s*(?:as\s+)?(?:vendas|GMV|faturamento)/i);
+
+  if(mPedido){
+    resultado.tipoVar = "R$ por pedido";
+    resultado.aliquota = parseNumeroBR(mPedido[1]);
+  } else if(mMensagem){
+    resultado.tipoVar = "R$ por mensagem";
+    resultado.aliquota = parseNumeroBR(mMensagem[1]);
+  } else if(mPct){
+    resultado.tipoVar = "% sobre GMV";
+    resultado.aliquota = parseNumeroBR(mPct[1]) / 100;
+  }
+
+  return resultado;
+}
+
+async function processarUploadContrato(idx, file){
+  const dataUrl = await arquivoParaBase64(file);
+  const tamanhoMB = file.size / (1024*1024);
+  if(tamanhoMB > 3 && !confirm(`O arquivo "${file.name}" tem ${tamanhoMB.toFixed(1)}MB. Arquivos grandes ocupam bastante espaço no navegador (o limite típico é de 5 a 10MB no total, somando todos os clientes). Deseja continuar mesmo assim?`)){
+    return;
+  }
+
+  dados[idx].contrato = {nome:file.name, tipo:file.type, dados:dataUrl};
+  salvar();
+  render();
+
+  const usoMB = estimarUsoStorageMB();
+  if(usoMB > 4){
+    alert(`Atenção: o armazenamento deste painel já está usando ${usoMB.toFixed(1)}MB neste navegador. Ele pode recusar salvar novos anexos em breve. Considere remover contratos de clientes que não precisam mais ficar anexados.`);
+  }
+
+  const texto = await extrairTextoDoArquivo(file.name, file.type, dataUrl);
+  const valores = extrairValoresDoTexto(texto);
+  mostrarPreviaExtracao(idx, valores, texto.length>0);
+}
+
+async function reanalisarContrato(idx){
+  const c = dados[idx].contrato;
+  if(!c) return;
+  const texto = await extrairTextoDoArquivo(c.nome, c.tipo, c.dados);
+  const valores = extrairValoresDoTexto(texto);
+  mostrarPreviaExtracao(idx, valores, texto.length>0);
+}
+
+function mostrarPreviaExtracao(idx, valores, textoLido){
+  extracaoAtual = {idx, ...valores};
+  const resumo = document.getElementById('extracaoResumo');
+  const aviso = document.getElementById('extracaoAviso');
+  aviso.textContent = '';
+
+  const linhas = [];
+  linhas.push(`<b>Mensalidade Fixa:</b> ${valores.fixa!==null ? moeda(valores.fixa) : '<i>não encontrada</i>'}`);
+  if(valores.tipoVar){
+    const valorTxt = valores.tipoVar==="% sobre GMV" ? percentual(valores.aliquota) : moeda(valores.aliquota);
+    linhas.push(`<b>Tipo de Variável:</b> ${valores.tipoVar} — ${valorTxt}`);
+  } else {
+    linhas.push(`<b>Tipo de Variável:</b> <i>não encontrado</i>`);
+  }
+  resumo.innerHTML = linhas.join('<br>');
+
+  if(!textoLido){
+    aviso.textContent = 'Não foi possível ler o texto deste arquivo (pode ser um contrato digitalizado por scanner, sem texto selecionável, ou um formato não suportado). O contrato foi anexado — preencha os valores manualmente.';
+  } else if(valores.fixa===null && !valores.tipoVar){
+    aviso.textContent = 'Não conseguimos identificar os valores automaticamente neste contrato (o texto não seguiu o padrão esperado). O contrato foi anexado — confira e preencha os valores manualmente.';
+  } else {
+    aviso.textContent = 'Confira os valores acima com atenção antes de aplicar — a leitura é automática por busca de texto, não substitui a conferência do contrato original.';
+  }
+
+  document.getElementById('modalExtracaoOverlay').classList.add('open');
+}
+
+function removerContrato(idx){
+  if(confirm('Remover o contrato anexado deste cliente? O arquivo será apagado do navegador.')){
+    dados[idx].contrato = null;
+    salvar();
+    render();
+  }
+}
+
+function abrirContrato(idx){
+  const c = dados[idx].contrato;
+  if(!c) return;
+  const win = window.open();
+  if(!win){ alert('Seu navegador bloqueou a abertura do contrato em nova aba. Permita pop-ups para este painel.'); return; }
+  win.document.write(`<iframe src="${c.dados}" style="position:fixed;inset:0;width:100%;height:100%;border:none;"></iframe>`);
+}
+
+function render(){
+  document.body.classList.toggle('modo-edicao-ativo', modoEdicao);
+  const btnModo = document.getElementById('btnModoEdicao');
+  btnModo.textContent = modoEdicao ? "🔒 Sair do Modo de Edição" : "🔓 Modo de Edição";
+  btnModo.classList.toggle('active', modoEdicao);
+
+  const corpo = document.getElementById('corpoTabela');
+  corpo.innerHTML = "";
+  const busca = document.getElementById('busca').value.trim().toLowerCase();
+  const filtroTipo = document.getElementById('filtroTipo').value;
+  const filtroResp = document.getElementById('filtroResponsavel').value;
+  const filtroStatus = document.getElementById('filtroStatus').value;
+  let totalGeral = 0;
+
+  let visiveis = dados.map((item, idx)=>({item, idx}))
+    .filter(({item})=>{
+      if(busca && !nomeExibicao(item).toLowerCase().includes(busca)) return false;
+      if(filtroTipo && item.tipoVar!==filtroTipo) return false;
+      if(filtroResp && item.responsavel!==filtroResp) return false;
+      if(filtroStatus && statusLinha(item, tipoFmtFor(item.tipoVar)).chave!==filtroStatus) return false;
+      return true;
+    });
+
+  if(sortState.key){
+    visiveis.sort((a,b)=> sortState.dir * comparar(a.item,b.item,sortState.key));
+  }
+
+  document.querySelectorAll('th.sortable').forEach(th=>{
+    th.classList.toggle('active', th.dataset.key===sortState.key);
+    const arrow = th.querySelector('.arrow');
+    arrow.textContent = th.dataset.key===sortState.key ? (sortState.dir===1?'▲':'▼') : '▲▼';
+  });
+
+  visiveis.forEach(({item, idx})=>{
+    const {variavel, total, fmt} = calcularLinha(item);
+    totalGeral += total;
+
+    const bloqTudo = false;
+    const bloqVar = false;
+
+    const tr = document.createElement('tr');
+
+    let clienteHtml;
+    if(modoEdicao){
+      clienteHtml = `
+        <div class="nome-edit-box">
+          <input type="text" class="editable nome-input" data-idx="${idx}" value="${escAttr(nomeExibicao(item))}">
+          <input type="text" class="fonte-input" data-idx="${idx}" value="${escAttr(item.fonte||'')}" placeholder="fonte / observação">
+          <label class="alerta-toggle"><input type="checkbox" class="alerta-input" data-idx="${idx}" ${item.alerta?'checked':''}> marcar como alerta ⚠️</label>
+        </div>`;
+    } else {
+      clienteHtml = nomeExibicao(item);
+    }
+
+    const chipsHtml = item.plano.length
+      ? item.plano.map(p=>`<span class="chip">${p}<span class="x" data-idx="${idx}" data-val="${p}">×</span></span>`).join('')
+      : `<span class="placeholder">clique para definir</span>`;
+
+    const tipoOptions = getAllTipos().map(t=>`<option value="${t.label}" ${t.label===item.tipoVar?'selected':''}>${t.label}</option>`).join('');
+
+    let aliqDisplay = '';
+    if(item.aliquota!==null && item.aliquota!==undefined){
+      aliqDisplay = fmt==="pct" ? percentual(item.aliquota) : moeda(item.aliquota);
+    }
+    const aliqPlaceholder = bloqVar ? '-' : (fmt==="pct" ? '% sobre valor' : 'definir');
+
+    let baseDisplay = '';
+    if(item.base!==null && item.base!==undefined && item.base!==""){
+      baseDisplay = fmt==="pct" ? moeda(item.base) : String(item.base);
+    }
+    const basePlaceholder = bloqVar ? '-' : (fmt==="pct" ? 'GMV do mês (R$)' : 'qtd. pedidos/mensagens');
+
+    const regraHtml = modoEdicao
+      ? `<textarea class="regra-input" data-idx="${idx}" rows="3">${item.regra||''}</textarea>`
+      : `<span class="regra-icon" title="${escAttr(item.regra)}">${iconeRegra(fmt, item.tipoVar)}</span>`;
+
+    const st = statusLinha(item, fmt);
+    const statusHtml = `<span class="badge-status ${st.cls}">${st.icon} ${st.label}</span>`;
+
+    const contratoHtml = item.contrato
+      ? `<div class="contrato-anexo">
+          <a href="#" class="contrato-link" data-idx="${idx}" title="Abrir contrato">📄 ${escAttr(item.contrato.nome)}</a>
+          <div class="contrato-acoes">
+            <button type="button" class="btn-mini" data-idx="${idx}" data-acao="reanalisar" title="Analisar valores novamente">🔍 Analisar</button>
+            <button type="button" class="btn-mini" data-idx="${idx}" data-acao="remover-contrato" title="Remover contrato">🗑️</button>
+          </div>
+        </div>`
+      : `<label class="upload-label">📎 Anexar<input type="file" class="upload-contrato-input" data-idx="${idx}" accept=".pdf,.docx" style="display:none;"></label>`;
+
+    tr.innerHTML = `
+      <td class="col-cliente">${clienteHtml}</td>
+      <td class="col-resp"><input type="text" class="editable resp-input" list="listaResponsaveis" data-idx="${idx}" value="${item.responsavel||''}" placeholder="definir"></td>
+      <td class="col-plano"><div class="chips-box" data-idx="${idx}">${chipsHtml}</div></td>
+      <td class="num"><input type="text" inputmode="decimal" class="editable fixa-input" data-idx="${idx}" value="${moeda(item.fixa)}" ${bloqTudo?'disabled':''}></td>
+      <td>
+        <select class="editable tipo-input" data-idx="${idx}" ${bloqTudo?'disabled':''}>
+          ${tipoOptions}
+        </select>
+      </td>
+      <td class="num"><input type="text" inputmode="decimal" class="editable aliq-input ${bloqVar||bloqTudo?'locked':''}" data-idx="${idx}" data-fmt="${fmt}" value="${aliqDisplay}" ${bloqVar||bloqTudo?'disabled':''} placeholder="${aliqPlaceholder}"></td>
+      <td class="col-regra ${modoEdicao?'editando':''}">${regraHtml}</td>
+      <td class="num"><input type="text" inputmode="decimal" class="editable base-input ${bloqVar||bloqTudo?'locked':''}" data-idx="${idx}" data-fmt="${fmt}" value="${baseDisplay}" ${bloqVar||bloqTudo?'disabled':''} placeholder="${basePlaceholder}"></td>
+      <td class="num"><input type="text" class="readonly-calc" value="${moeda(variavel)}" readonly></td>
+      <td class="num"><input type="text" class="readonly-calc" value="${moeda(total)}" readonly style="font-size:13.5px;"></td>
+      <td>${statusHtml}</td>
+      <td class="col-contrato">${contratoHtml}</td>
+      <td class="col-acoes"><button class="btn-danger remover-btn" data-idx="${idx}" title="Remover cliente">🗑️</button></td>
+    `;
+    corpo.appendChild(tr);
+  });
+
+  document.getElementById('totalGeral').textContent = moeda(totalGeral);
+
+  const aplicaveis = dados.filter(d => tipoFmtFor(d.tipoVar)!=="nao_contratado");
+  const prontos = aplicaveis.filter(d => statusLinha(d, tipoFmtFor(d.tipoVar)).chave==="ok");
+  document.getElementById('contadorStatus').textContent = `✅ ${prontos.length} de ${aplicaveis.length} prontos`;
+  document.getElementById('statusGeral').textContent = `${prontos.length}/${aplicaveis.length} prontos`;
+
+  corpo.querySelectorAll('.nome-input').forEach(el=>el.addEventListener('change', e=>{
+    const idx = e.target.dataset.idx;
+    dados[idx].nome = e.target.value.trim() || dados[idx].nome;
+    dados[idx].nomeManual = true;
+    salvar(); render();
+  }));
+  corpo.querySelectorAll('.fonte-input').forEach(el=>el.addEventListener('change', e=>{
+    dados[e.target.dataset.idx].fonte = e.target.value; salvar(); render();
+  }));
+  corpo.querySelectorAll('.alerta-input').forEach(el=>el.addEventListener('change', e=>{
+    dados[e.target.dataset.idx].alerta = e.target.checked; salvar(); render();
+  }));
+  corpo.querySelectorAll('.regra-input').forEach(el=>el.addEventListener('change', e=>{
+    dados[e.target.dataset.idx].regra = e.target.value; salvar(); render();
+  }));
+  corpo.querySelectorAll('.remover-btn').forEach(el=>el.addEventListener('click', e=>{
+    const idx = e.target.dataset.idx;
+    if(confirm(`Remover "${nomeExibicao(dados[idx])}" do painel? Essa ação não pode ser desfeita.`)){
+      dados.splice(idx,1);
+      salvar(); popularFiltroResponsavel(); popularListaResponsaveis(); render();
+    }
+  }));
+  corpo.querySelectorAll('.resp-input').forEach(el=>{
+    el.addEventListener('change', e=>{
+      dados[e.target.dataset.idx].responsavel = e.target.value.trim();
+      salvar(); popularFiltroResponsavel(); popularListaResponsaveis(); render();
+    });
+  });
+  corpo.querySelectorAll('.fixa-input').forEach(el=>{
+    el.addEventListener('focus', e=>{
+      const idx = e.target.dataset.idx;
+      e.target.value = (dados[idx].fixa||0).toFixed(2).replace('.', ',');
+      e.target.select();
+    });
+    el.addEventListener('change', e=>{
+      const idx = e.target.dataset.idx;
+      const parsed = parseNumeroBR(e.target.value);
+      dados[idx].fixa = parsed===null?0:parsed;
+      salvar(); render();
+    });
+  });
+  corpo.querySelectorAll('.tipo-input').forEach(el=>el.addEventListener('change', e=>{
+    dados[e.target.dataset.idx].tipoVar = e.target.value; salvar(); render();
+  }));
+  corpo.querySelectorAll('.aliq-input').forEach(el=>{
+    el.addEventListener('focus', e=>{
+      const idx = e.target.dataset.idx, fmt = e.target.dataset.fmt, val = dados[idx].aliquota;
+      if(val===null||val===undefined){ e.target.value=''; return; }
+      e.target.value = (fmt==="pct" ? (val*100) : val).toFixed(2).replace('.', ',');
+      e.target.select();
+    });
+    el.addEventListener('change', e=>{
+      const idx = e.target.dataset.idx, fmt = e.target.dataset.fmt;
+      const parsed = parseNumeroBR(e.target.value);
+      dados[idx].aliquota = parsed===null ? null : (fmt==="pct" ? parsed/100 : parsed);
+      salvar(); render();
+    });
+  });
+  corpo.querySelectorAll('.base-input').forEach(el=>{
+    el.addEventListener('focus', e=>{
+      const idx = e.target.dataset.idx, fmt = e.target.dataset.fmt, val = dados[idx].base;
+      if(val===null||val===undefined||val===""){ e.target.value=''; return; }
+      e.target.value = fmt==="pct" ? parseFloat(val).toFixed(2).replace('.', ',') : String(val);
+      e.target.select();
+    });
+    el.addEventListener('change', e=>{
+      const idx = e.target.dataset.idx;
+      dados[idx].base = parseNumeroBR(e.target.value);
+      salvar(); render();
+    });
+  });
+  corpo.querySelectorAll('.chips-box').forEach(el=>el.addEventListener('click', e=>{
+    if(e.target.classList.contains('x')){
+      e.stopPropagation();
+      const idx = e.target.dataset.idx, val = e.target.dataset.val;
+      dados[idx].plano = dados[idx].plano.filter(p=>p!==val);
+      salvar(); render();
+      return;
+    }
+    abrirPopoverPlano(el, el.dataset.idx);
+  }));
+  corpo.querySelectorAll('.upload-contrato-input').forEach(el=>el.addEventListener('change', e=>{
+    const idx = e.target.dataset.idx;
+    const file = e.target.files[0];
+    if(file) processarUploadContrato(idx, file);
+  }));
+  corpo.querySelectorAll('[data-acao="remover-contrato"]').forEach(el=>el.addEventListener('click', e=>{
+    removerContrato(e.currentTarget.dataset.idx);
+  }));
+  corpo.querySelectorAll('[data-acao="reanalisar"]').forEach(el=>el.addEventListener('click', e=>{
+    reanalisarContrato(e.currentTarget.dataset.idx);
+  }));
+  corpo.querySelectorAll('.contrato-link').forEach(el=>el.addEventListener('click', e=>{
+    e.preventDefault();
+    abrirContrato(e.currentTarget.dataset.idx);
+  }));
+}
+
+function abrirPopoverPlano(anchorEl, idx){
+  popoverIdx = idx;
+  const pop = document.getElementById('planoPopover');
+  const item = dados[idx];
+  pop.innerHTML = PLANO_PRESETS.map(p=>`
+    <label><input type="checkbox" value="${p}" ${item.plano.includes(p)?'checked':''}> ${p}</label>
+  `).join('') + `<hr><input type="text" id="planoCustomInput" placeholder="Adicionar outro valor e Enter"><div class="hint">Valores fixos: ${PLANO_PRESETS.join(', ')}. Você também pode digitar um valor livre.</div>`;
+
+  pop.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      const val = cb.value;
+      if(cb.checked){ if(!dados[idx].plano.includes(val)) dados[idx].plano.push(val); }
+      else { dados[idx].plano = dados[idx].plano.filter(p=>p!==val); }
+      salvar(); render(); reabrirPopover(idx);
+    });
+  });
+  const customInput = pop.querySelector('#planoCustomInput');
+  customInput.addEventListener('keydown', e=>{
+    if(e.key==='Enter' && customInput.value.trim()){
+      const val = customInput.value.trim();
+      if(!dados[idx].plano.includes(val)) dados[idx].plano.push(val);
+      salvar(); render(); reabrirPopover(idx);
+    }
+  });
+
+  const rect = anchorEl.getBoundingClientRect();
+  pop.style.top = (window.scrollY + rect.bottom + 4) + "px";
+  pop.style.left = (window.scrollX + rect.left) + "px";
+  pop.classList.add('open');
+}
+function reabrirPopover(idx){
+  const box = document.querySelector(`.chips-box[data-idx="${idx}"]`);
+  if(box) abrirPopoverPlano(box, idx);
+}
+document.addEventListener('click', e=>{
+  const pop = document.getElementById('planoPopover');
+  if(!pop.contains(e.target) && !e.target.closest('.chips-box')){
+    pop.classList.remove('open');
+    popoverIdx = null;
+  }
+});
+
+document.querySelectorAll('th.sortable').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.key;
+    if(sortState.key===key) sortState.dir *= -1;
+    else { sortState.key = key; sortState.dir = 1; }
+    render();
+  });
+});
+
+function exportarCsv(){
+  const linhas = [["Cliente","Responsável","Plano","Mensalidade Fixa","Tipo de Variável","Alíquota/Valor Unit.","Base Informada","Valor da Variável","Total a Faturar","Status","Fonte/Observação"]];
+  let totalVariavel = 0, totalFaturar = 0;
+  dados.forEach(item=>{
+    const {variavel,total,fmt} = calcularLinha(item);
+    totalVariavel += variavel;
+    totalFaturar += total;
+    const aliqTxt = fmt==="pct" ? percentual(item.aliquota) : (fmt==="unit" ? moeda(item.aliquota||0) : "-");
+    const baseTxt = fmt==="pct" ? moeda(item.base||0) : (item.base??"");
+    const st = statusLinha(item, fmt);
+    linhas.push([nomeExibicao(item), item.responsavel||"", item.plano.join(" + "), moeda(item.fixa), item.tipoVar, aliqTxt, baseTxt, moeda(variavel), moeda(total), st.label, item.fonte]);
+  });
+  linhas.push(["TOTAL","","","","","","", moeda(totalVariavel), moeda(totalFaturar), "", ""]);
+  const csv = linhas.map(l=>l.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(";")).join("\n");
+  const blob = new Blob(["﻿"+csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = "painel_mensalidades_marca_seleta.csv"; a.click();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('busca').addEventListener('input', render);
+document.getElementById('filtroTipo').addEventListener('change', render);
+document.getElementById('filtroResponsavel').addEventListener('change', render);
+document.getElementById('filtroStatus').addEventListener('change', render);
+document.getElementById('btnCsv').addEventListener('click', exportarCsv);
+document.getElementById('btnReset').addEventListener('click', ()=>{
+  if(confirm("Restaurar todos os valores originais? Edições manuais (incluindo clientes adicionados/removidos) serão perdidas.")){
+    localStorage.removeItem(STORAGE_KEY);
+    dados = cargaInicial();
+    popularFiltroResponsavel(); popularListaResponsaveis();
+    render();
+  }
+});
+document.getElementById('btnModoEdicao').addEventListener('click', ()=>{
+  modoEdicao = !modoEdicao;
+  localStorage.setItem(EDICAO_KEY, modoEdicao ? '1' : '0');
+  render();
+});
+document.getElementById('btnAddCliente').addEventListener('click', ()=>{
+  dados.push({nome:"Novo Cliente", nomeManual:true, plano:[], fixa:0, tipoVar:"A confirmar", aliquota:null, regra:"", fonte:"", alerta:false, responsavel:"", base:null});
+  salvar(); popularFiltroResponsavel(); popularListaResponsaveis(); render();
+});
+
+const modalOverlay = document.getElementById('modalOverlay');
+document.getElementById('btnNovoTipo').addEventListener('click', ()=>{
+  document.getElementById('novoTipoNome').value = "";
+  modalOverlay.classList.add('open');
+});
+document.getElementById('btnCancelarTipo').addEventListener('click', ()=> modalOverlay.classList.remove('open'));
+document.getElementById('btnSalvarTipo').addEventListener('click', ()=>{
+  const nome = document.getElementById('novoTipoNome').value.trim();
+  if(!nome){ alert("Digite um nome para o tipo de variável."); return; }
+  const fmt = document.querySelector('input[name=novoTipoFmt]:checked').value;
+  const custom = getTiposCustom();
+  if(getAllTipos().some(t=>t.label.toLowerCase()===nome.toLowerCase())){
+    alert("Já existe um tipo de variável com esse nome.");
+    return;
+  }
+  custom.push({label:nome, fmt});
+  localStorage.setItem(TIPOS_CUSTOM_KEY, JSON.stringify(custom));
+  popularFiltroTipo();
+  render();
+  modalOverlay.classList.remove('open');
+});
+
+// ---- Wiring da prévia de extração de contrato ----
+document.getElementById('btnIgnorarExtracao').addEventListener('click', ()=>{
+  document.getElementById('modalExtracaoOverlay').classList.remove('open');
+  extracaoAtual = null;
+});
+document.getElementById('btnAplicarExtracao').addEventListener('click', ()=>{
+  if(!extracaoAtual) return;
+  const {idx, fixa, tipoVar, aliquota} = extracaoAtual;
+  if(fixa!==null) dados[idx].fixa = fixa;
+  if(tipoVar){ dados[idx].tipoVar = tipoVar; dados[idx].aliquota = aliquota; }
+  salvar();
+  render();
+  document.getElementById('modalExtracaoOverlay').classList.remove('open');
+  extracaoAtual = null;
+});
+
+// ---- Wiring do login ----
+document.getElementById('btnLogin').addEventListener('click', tentarLogin);
+document.getElementById('loginSenha').addEventListener('keydown', e=>{ if(e.key==='Enter') tentarLogin(); });
+document.getElementById('loginEmail').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('loginSenha').focus(); });
+document.getElementById('btnLogout').addEventListener('click', async ()=>{
+  await supabase.auth.signOut();
+  mostrarLogin();
+  document.getElementById('loginEmail').focus();
+});
+
+dados = cargaInicial();
+popularFiltroTipo();
+popularFiltroResponsavel();
+popularListaResponsaveis();
+render();
+
+inicializarAuth();
+</script>
+</body>
+</html>

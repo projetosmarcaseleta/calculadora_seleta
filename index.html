@@ -6,7 +6,6 @@
 <title>Calculadora de Serviços — Marca Seleta</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 /* ═══════════════════════════════════════════════
@@ -210,17 +209,8 @@ header {
   flex: 1;
   position: relative;
 }
-.prog-step:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  left: calc(50% + 22px);
-  right: calc(-50% + 22px);
-  top: 18px;
-  height: 2px;
-  background: rgba(255,255,255,.1);
-  transition: background .4s;
-}
-.prog-step.done:not(:last-child)::after { background: var(--blue); }
+.prog-step:not(:last-child)::after { display: none; }
+.prog-step.done:not(:last-child)::after { display: none; }
 
 .prog-dot {
   width: 36px; height: 36px;
@@ -888,6 +878,10 @@ footer a { color: var(--blue); text-decoration: none; }
 }
 .pontual-input::placeholder { color: var(--muted); }
 .pontual-input:focus { border-color: var(--pink); }
+#vol-ticket-medio option {
+  background: #0A1635;
+  color: #FFFFFF;
+}
 
 .pontual-toggles { margin-bottom: 18px; }
 .toggle-row {
@@ -1397,6 +1391,7 @@ footer a { color: var(--blue); text-decoration: none; }
 ::-webkit-scrollbar-track { background: var(--dark); }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius:3px; }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -1458,14 +1453,9 @@ footer a { color: var(--blue); text-decoration: none; }
               <div class="prog-label">Volume</div>
             </div>
           </div>
+
           <div class="prog-step" id="prog-3">
             <div class="prog-dot">3</div>
-            <div class="prog-info">
-              <div class="prog-label">Seus dados</div>
-            </div>
-          </div>
-          <div class="prog-step" id="prog-4">
-            <div class="prog-dot">4</div>
             <div class="prog-info">
               <div class="prog-label">Resultado</div>
             </div>
@@ -1483,44 +1473,39 @@ footer a { color: var(--blue); text-decoration: none; }
             <div class="service-grid">
               <div class="svc-card" data-svc="catalogacao" onclick="selectService(this)">
                 <span class="svc-icon">📦</span>
-                <div class="svc-name">Backoffice / Catalogação</div>
+                <div class="svc-name">Catalogação Recorrente</div>
                 <div class="svc-desc">Cadastro, padronização e transmissão de anúncios em escala via Anymarket.</div>
-                <span class="svc-tag" style="background:var(--pink)">Escala de Catálogo</span>
+                <span class="svc-tag" style="background:#0075FF">Serviço Recorrente</span>
               </div>
-
               <div class="svc-card" data-svc="sac" onclick="selectService(this)">
-                <span class="svc-icon">💬</span>
-                <div class="svc-name">SAC Operacional</div>
+                <span class="svc-icon">🤖</span>
+                <div class="svc-name">SAC com IA</div>
                 <div class="svc-desc">Atendimento, reclamações, devoluções e gestão de reputação nos marketplaces.</div>
-                <span class="svc-tag" style="background:var(--orange)">Atendimento Escalável</span>
+                <span class="svc-tag" style="background:#0075FF">Serviço Recorrente</span>
               </div>
-
               <div class="svc-card" data-svc="ambos" onclick="selectService(this)">
                 <span class="svc-icon">⚙️</span>
-                <div class="svc-name">Pacote Operação</div>
+                <div class="svc-name">Catalogação + SAC com IA</div>
                 <div class="svc-desc">Catalogação + SAC em um só contrato — catálogo estruturado e atendimento organizado.</div>
-                <span class="svc-tag" style="background:var(--pink)">Catalogação + SAC</span>
+                <span class="svc-tag" style="background:#0075FF">Serviço Recorrente</span>
               </div>
-
-              <div class="svc-card" data-svc="pontual" onclick="selectService(this)">
-                <span class="svc-icon">🗂️</span>
-                <div class="svc-name">Catalogação Pontual</div>
-                <div class="svc-desc">Serviço avulso de publicação, enriquecimento e produção de conteúdo — sem mensalidade.</div>
-                <span class="svc-tag" style="background:var(--teal)">Serviço Avulso</span>
-              </div>
-
               <div class="svc-card" data-svc="assessoria" onclick="selectService(this)">
                 <span class="svc-icon">🎯</span>
                 <div class="svc-name">Assessoria Marketplace</div>
-                <div class="svc-desc">Acompanhamento especializado com foco em gestão, indicadores, reputação e performance em marketplaces.</div>
-                <span class="svc-tag" style="background:var(--blue)">Acompanhamento Recorrente</span>
+                <div class="svc-desc">Acompanhamento com foco em gestão, indicadores, reputação e performance.</div>
+                <span class="svc-tag" style="background:#0075FF">Serviço Recorrente</span>
               </div>
-
               <div class="svc-card" data-svc="full" onclick="selectService(this)">
                 <span class="svc-icon">🏆</span>
                 <div class="svc-name">Pacote Full</div>
                 <div class="svc-desc">Assessoria + Catalogação + SAC — parceria operacional completa em um único contrato.</div>
-                <span class="svc-tag" style="background:var(--blue)">Solução Completa</span>
+                <span class="svc-tag" style="background:#0075FF">Serviço Recorrente</span>
+              </div>
+              <div class="svc-card" data-svc="pontual" onclick="selectService(this)">
+                <span class="svc-icon">🗂️</span>
+                <div class="svc-name">Catalogação Pontual</div>
+                <div class="svc-desc">Serviço avulso de publicação, enriquecimento e produção de conteúdo — sem mensalidade.</div>
+                <span class="svc-tag" style="background:#22C55E">Serviço Pontual</span>
               </div>
             </div>
           </div>
@@ -1552,8 +1537,25 @@ footer a { color: var(--blue); text-decoration: none; }
             <!-- Volume para FULL (Assessoria + Catalogação + SAC) -->
             <div id="vol-full" class="hidden">
               <div>
-                <div class="section-divider" style="--divider-color:var(--blue)">Assessoria Marketplace — escolha seu plano</div>
-                <div id="plano-list-full" class="plano-list"></div>
+                <div class="section-divider" style="--divider-color:var(--blue)">Assessoria Marketplace — incluída no pacote</div>
+                <!-- Fixed plan card for Full -->
+                <div class="plano-card" style="position:relative;margin-bottom:12px">
+                  <div class="pop-badge">✅ Incluso no Pacote Full</div>
+                  <div class="plano-top" style="padding-top:28px">
+                    <div class="plano-left" style="gap:12px">
+                      <div>
+                        <div class="plano-name" style="font-size:16px">Assessoria Marketplace</div>
+                        <div class="plano-desc" style="margin-top:6px;font-size:12px;color:var(--muted)">
+                          Gestão de indicadores · Reunião semanal · Plano de ação · Monitoramento de reputação · Boas práticas nos canais
+                        </div>
+                        <div class="plano-tags" style="margin-top:8px">
+                          <span class="plano-tag">1h de reunião/semana</span>
+                          <span class="plano-tag">Acompanhamento contínuo</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="contas-assessoria-box" style="margin-top:14px">
                   <div class="contas-info-note">
                     📌 O plano padrão inclui até <strong>2 contas</strong> de marketplace. Contas adicionais têm custo extra calculado na simulação.
@@ -1647,8 +1649,28 @@ footer a { color: var(--blue); text-decoration: none; }
                 <div class="pontual-prazo" id="sum-prazo"></div>
               </div>
 
-              <div class="pontual-min-note" style="margin-top:12px">
-                O valor do pacote aparece após você preencher seus dados de contato.
+
+              <!-- Ticket Médio — para cálculo de ROI -->
+              <div class="pontual-section type-standard" id="ticket-medio-wrap" style="margin-top:10px">
+                <div class="pontual-section-header">
+                  <div class="pontual-section-title">
+                    <span class="pontual-section-icon">🏷️</span>
+                    Ticket médio dos seus produtos
+                  </div>
+                  <div class="pontual-section-sub">Usamos para estimar seu potencial de retorno</div>
+                </div>
+                <div style="margin-top:10px">
+                  <select id="vol-ticket-medio" class="pontual-input"
+                    style="width:100%;max-width:340px;background:#0F2055;border:1.5px solid rgba(255,255,255,.2);border-radius:var(--radius-sm);color:#FFFFFF;padding:10px 14px;font-size:14px;cursor:pointer;-webkit-appearance:none;appearance:none"
+                    onchange="state.leadTicketMedio=this.value">
+                    <option value="">Selecione o ticket médio</option>
+                    <option value="100-200">R$ 100 a R$ 200</option>
+                    <option value="200-300">R$ 200 a R$ 300</option>
+                    <option value="300-400">R$ 300 a R$ 400</option>
+                    <option value="400-500">R$ 400 a R$ 500</option>
+                    <option value="500+">Acima de R$ 500</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -1676,73 +1698,9 @@ footer a { color: var(--blue); text-decoration: none; }
           </div>
 
           <!-- ── STEP 3: Lead form ── -->
+<!-- ── STEP 4: Resultado ── -->
           <div id="step-3" class="step hidden">
-            <button class="btn-back" onclick="goStep(2)">Voltar</button>
-            <div class="step-title">Quase lá! Informe seus dados</div>
-            <div class="step-sub">Preencha para ver o valor personalizado da sua operação.</div>
-
-            <div class="lead-highlight">
-              <div class="lead-highlight-icon">🔍</div>
-              <div class="lead-highlight-text">
-                <strong>Sua simulação está pronta!</strong>
-                <p>Preencha seus dados pessoais e da empresa para ver o valor personalizado.</p>
-              </div>
-            </div>
-
-            <!-- Dados pessoais -->
-            <div class="form-section-divider">
-              <div class="form-section-divider-line"></div>
-              <div class="form-section-divider-label">Seus dados</div>
-              <div class="form-section-divider-line"></div>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="lead-name">Nome completo *</label>
-              <input class="form-input" id="lead-name" type="text" placeholder="Seu nome completo" autocomplete="name" required>
-            </div>
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label class="form-label" for="lead-email">E-mail *</label>
-                <input class="form-input" id="lead-email" type="email" placeholder="seu@empresa.com.br" autocomplete="email" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="lead-phone">WhatsApp *</label>
-                <input class="form-input" id="lead-phone" type="tel" placeholder="(44) 9 9999-9999" autocomplete="tel" required>
-              </div>
-            </div>
-
-            <!-- Dados da empresa -->
-            <div class="form-section-divider">
-              <div class="form-section-divider-line"></div>
-              <div class="form-section-divider-label">Dados da empresa</div>
-              <div class="form-section-divider-line"></div>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="lead-empresa">Nome da empresa *</label>
-              <input class="form-input" id="lead-empresa" type="text" placeholder="Razão social ou nome fantasia" required>
-            </div>
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label class="form-label" for="lead-skus">Quantidade de SKUs *</label>
-                <input class="form-input" id="lead-skus" type="number" min="1" placeholder="Ex: 500" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="lead-ticket">Ticket médio dos produtos *</label>
-                <select class="form-input form-input-select" id="lead-ticket" required>
-                  <option value="">Selecione a faixa</option>
-                  <option value="100-200">R$ 100 a R$ 200</option>
-                  <option value="200-300">R$ 200 a R$ 300</option>
-                  <option value="300-400">R$ 300 a R$ 400</option>
-                  <option value="400-500">R$ 400 a R$ 500</option>
-                  <option value="500+">Acima de R$ 500</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="privacy-note" style="margin-top:16px">Todos os campos são obrigatórios. Seus dados são usados apenas para contato e elaboração da proposta.</div>
-          </div>
-
-          <!-- ── STEP 4: Resultado ── -->
-          <div id="step-4" class="step hidden">
+            <button class="btn-back" onclick="goStep(2)" style="margin-bottom:16px">Voltar e editar volume</button>
             <div class="result-header">
               <div class="result-congrats">Simulação gerada com sucesso</div>
               <div class="result-name" id="result-greeting"></div>
@@ -1791,111 +1749,7 @@ footer a { color: var(--blue); text-decoration: none; }
     </div>
   </section>
 
-  <!-- CONSULTORIA DEDICADA & GESTÃO DE ADS -->
-  <section class="am-section">
-    <div class="container">
-      <div class="am-card" style="flex-direction:column; align-items:stretch; gap:20px; justify-content:flex-start; flex-wrap:nowrap;">
-
-        <!-- Header -->
-        <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:20px;">
-          <div>
-            <div class="am-badge">✦ Serviço premium sob consulta</div>
-            <div class="am-title">Consultoria Dedicada &amp; Gestão de Ads</div>
-            <div class="am-desc" style="max-width:600px">
-              Acompanhamento estratégico intensivo com gestão ativa de anúncios, inteligência competitiva e suporte especializado em Anymarket — para operações que precisam de alto nível de performance e dedicação.
-            </div>
-          </div>
-          <a href="https://api.whatsapp.com/send?phone=554491442095&text=Ol%C3%A1%21+Tenho+interesse+na+Consultoria+Dedicada+%26+Gest%C3%A3o+de+Ads+da+Marca+Seleta.+Gostaria+de+receber+um+or%C3%A7amento."
-             class="btn-am" target="_blank" style="align-self:center; white-space:nowrap;">
-            Solicitar orçamento →
-          </a>
-        </div>
-
-        <!-- 5 pilares em grid -->
-        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; align-items:start; align-content:start;">
-
-          <!-- Pilar 1 -->
-          <div style="background:rgba(0,117,255,.05); border:1px solid rgba(0,117,255,.18); border-radius:10px; padding:16px 18px;">
-            <div style="font-size:13px; font-weight:700; color:var(--white); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-              <span style="font-size:16px;">🎯</span> Gestão Estratégica
-            </div>
-            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px;">
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--blue);font-weight:700;">›</span>Reuniões semanais.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--blue);font-weight:700;">›</span>Plano de ação contínuo.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--blue);font-weight:700;">›</span>Priorização das iniciativas.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--blue);font-weight:700;">›</span>Análise de indicadores estratégicos.</li>
-            </ul>
-          </div>
-
-          <!-- Pilar 2 -->
-          <div style="background:rgba(255,39,173,.05); border:1px solid rgba(255,39,173,.18); border-radius:10px; padding:16px 18px;">
-            <div style="font-size:13px; font-weight:700; color:var(--white); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-              <span style="font-size:16px;">📣</span> Gestão de Ads
-            </div>
-            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px;">
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Planejamento de campanhas.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Otimização contínua.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Controle de orçamento.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Análise ROAS, ACOS e conversão.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--pink);font-weight:700;">›</span>Recomendações de expansão.</li>
-            </ul>
-          </div>
-
-          <!-- Pilar 3 -->
-          <div style="background:rgba(254,76,0,.05); border:1px solid rgba(254,76,0,.18); border-radius:10px; padding:16px 18px;">
-            <div style="font-size:13px; font-weight:700; color:var(--white); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-              <span style="font-size:16px;">🔍</span> Inteligência Competitiva
-            </div>
-            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px;">
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--orange);font-weight:700;">›</span>Monitoramento de concorrentes.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--orange);font-weight:700;">›</span>Avaliação de preços e posicionamento.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--orange);font-weight:700;">›</span>Oportunidades de crescimento.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--orange);font-weight:700;">›</span>Tendências de mercado.</li>
-            </ul>
-          </div>
-
-          <!-- Pilar 4 -->
-          <div style="background:rgba(74,200,203,.05); border:1px solid rgba(74,200,203,.18); border-radius:10px; padding:16px 18px;">
-            <div style="font-size:13px; font-weight:700; color:var(--white); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-              <span style="font-size:16px;">📊</span> Marketplace Intelligence
-            </div>
-            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px;">
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--teal);font-weight:700;">›</span>Monitoramento da saúde da operação.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--teal);font-weight:700;">›</span>Identificação de gargalos.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--teal);font-weight:700;">›</span>Diagnóstico de riscos.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:var(--teal);font-weight:700;">›</span>Recomendações práticas para evolução da conta.</li>
-            </ul>
-          </div>
-
-          <!-- Pilar 5 -->
-          <div style="background:rgba(139,92,246,.05); border:1px solid rgba(139,92,246,.18); border-radius:10px; padding:16px 18px;">
-            <div style="font-size:13px; font-weight:700; color:var(--white); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-              <span style="font-size:16px;">⚙️</span> Apoio ao Anymarket
-            </div>
-            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px;">
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:#8B5CF6;font-weight:700;">›</span>Boas práticas.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:#8B5CF6;font-weight:700;">›</span>Estrutura operacional.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:#8B5CF6;font-weight:700;">›</span>Expansão para canais.</li>
-              <li style="font-size:11px; color:var(--muted); padding-left:12px; position:relative;"><span style="position:absolute;left:0;color:#8B5CF6;font-weight:700;">›</span>Evolução da governança operacional.</li>
-            </ul>
-          </div>
-
-        </div><!-- /grid pilares -->
-
-        <!-- Nota final -->
-        <div style="background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); border-radius:8px; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;">
-          <div style="font-size:12px; color:var(--muted); max-width:600px; line-height:1.6;">
-            💡 Este é um serviço premium com <strong style="color:var(--white)">escopo e valor personalizado</strong> conforme a complexidade da operação. Fale com nosso time para receber uma proposta sob medida.
-          </div>
-          <a href="https://api.whatsapp.com/send?phone=554491442095&text=Ol%C3%A1%21+Tenho+interesse+na+Consultoria+Dedicada+%26+Gest%C3%A3o+de+Ads+da+Marca+Seleta.+Gostaria+de+receber+um+or%C3%A7amento."
-             class="btn-am" target="_blank">
-            Solicitar orçamento →
-          </a>
-        </div>
-
-      </div>
-    </div>
-  </section>
+  
 
   <!-- TRUST -->
   <section class="trust-section">
@@ -1932,9 +1786,11 @@ footer a { color: var(--blue); text-decoration: none; }
 </div><!-- /page -->
 
 <script>
+
+// ─── Supabase Config ───
 const supabaseUrl = 'https://mygdxrenhrfpaxpmytsi.supabase.co';
 const supabaseKey = 'sb_publishable_p-b9glhdiA0QZZbATvD6ZQ_9OeO-qlm';
-var supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+var supabase = (window.supabase && window.supabase.createClient) ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
 
 /* ═══════════════════════════════════════════════════════════════
    ✏️  CONFIGURAÇÃO DE PREÇOS — EDITE AQUI COM FACILIDADE
@@ -1948,9 +1804,9 @@ const CONFIG = {
 
   /* ─── CATALOGAÇÃO / BACKOFFICE ─── */
   catalogacao: {
-    name: "Backoffice / Catalogação",
+    name: "Catalogação Recorrente",
     icon: "📦",
-    setup: 1000, // ✏️ Setup único de Backoffice/Catalogação
+    setup: 1000, // ✏️ Setup único de Catalogação Recorrente
     volumes: [
       {
         id: "cat-1",
@@ -2001,7 +1857,7 @@ const CONFIG = {
 
   /* ─── SAC OPERACIONAL — novo modelo de contratação ─── */
   sac: {
-    name: "SAC Operacional",
+    name: "SAC com IA",
     icon: "💬",
     setup: 1000, // ✏️ Setup único de SAC
     /* Pré-vendas: base até 500 msg/mês · excedente R$ 1/msg */
@@ -2053,29 +1909,29 @@ const CONFIG = {
     adicionalPorConta: 1000, // ✏️ R$ por conta adicional acima do limite base
     planos: [
       {
-        id: "essencial",
-        name: "12 meses",
-        contrato: "12 meses",
-        desc: "Para empresas que precisam de acompanhamento contínuo e apoio à gestão da operação de marketplace.",
-        price: 1800,
-        tags: ["1h de reunião/semana", "Acompanhamento contínuo"]
+        id: "mensal1",
+        name: "1 mês",
+        contrato: "1 mês",
+        desc: "Para empresas que querem começar com flexibilidade total e avaliar os primeiros resultados.",
+        price: 3000,
+        tags: ["1h de reunião/semana", "Entrada flexível"]
       },
       {
-        id: "crescimento",
-        name: "6 meses",
-        contrato: "6 meses",
+        id: "mensal2",
+        name: "2 meses",
+        contrato: "2 meses",
         desc: "Para operações em expansão que precisam de acompanhamento mais próximo e evolução operacional.",
-        price: 2200,
-        popular: true,
+        price: 2500,
         tags: ["1h de reunião/semana", "Operações em crescimento"]
       },
       {
-        id: "performance",
+        id: "mensal3",
         name: "3 meses",
         contrato: "3 meses",
-        desc: "Para empresas que precisam acelerar a estruturação ou enfrentar desafios específicos de marketplace.",
-        price: 2500,
-        tags: ["1h de reunião/semana", "Aceleração e desafios"]
+        desc: "Para empresas que precisam de acompanhamento contínuo e apoio à gestão da operação de marketplace.",
+        price: 2000,
+        popular: true,
+        tags: ["1h de reunião/semana", "Acompanhamento contínuo"]
       }
     ],
     includes: [
@@ -2210,11 +2066,11 @@ function nextStep() {
     if (state.service === 'pontual') {
       if (!state.pontualConfig || !state.pontualConfig.totalTransm) return;
     }
+    // Lê o ticket médio do select adicionado no step-2
+    const ticketEl = document.getElementById('vol-ticket-medio');
+    if (ticketEl) state.leadTicketMedio = ticketEl.value;
+    buildResult();
     goStep(3);
-    return;
-  }
-  if (state.step === 3) {
-    submitLead();
     return;
   }
   goStep(state.step + 1);
@@ -2225,13 +2081,13 @@ function updateFooter() {
   const btn = $('btn-next');
   if (!footer || !btn) return;
 
-  if (state.step === 4) {
+  if (state.step === 3) {
     footer.classList.add('hidden');
     return;
   }
   footer.classList.remove('hidden');
 
-  if (state.step === 3) {
+  if (state.step === 2) {
     btn.textContent = '🔍 Ver minha simulação →';
   } else if (state.step === 2 && (state.service === 'pontual' || state.service === 'assessoria' || state.service === 'full')) {
     btn.textContent = 'Informar meus dados →';
@@ -2297,54 +2153,41 @@ function selectVolume(el) {
 
 // ─── Submit lead → show result ───
 function submitLead() {
-  const name    = $('lead-name').value.trim();
-  const email   = $('lead-email').value.trim();
-  const phone   = $('lead-phone').value.trim();
-  const empresa = $('lead-empresa').value.trim();
-  const skus    = $('lead-skus').value.trim();
-  const ticket  = $('lead-ticket').value;
-
-  const fields = [
-    [!name,                      'lead-name',    'Informe seu nome completo.'],
-    [!email||!email.includes('@'),'lead-email',   'Informe um e-mail válido.'],
-    [!phone,                     'lead-phone',   'Informe seu WhatsApp.'],
-    [!empresa,                   'lead-empresa', 'Informe o nome da empresa.'],
-    [!skus||Number(skus)<1,      'lead-skus',    'Informe a quantidade de SKUs.'],
-    [!ticket,                    'lead-ticket',  'Selecione o ticket médio dos produtos.'],
-  ];
-  for (const [err, id, msg] of fields) {
-    if (err) { $(id).focus(); $(id).style.borderColor='var(--danger)'; alert(msg); return; }
-    else { $(id).style.borderColor=''; }
+  const ticketEl = document.getElementById('vol-ticket-medio');
+  if (ticketEl && ticketEl.value) {
+    state.leadTicketMedio = ticketEl.value;
   }
 
-  state.leadName       = name;
-  state.leadEmail      = email;
-  state.leadPhone      = phone;
-  state.leadEmpresa    = empresa;
-  state.leadSKUs       = skus;
-  state.leadTicketMedio = ticket;
+  state.leadName = 'Simulação no Site';
+  state.leadEmail = '';
+  state.leadPhone = '';
+  state.leadEmpresa = '';
+  state.leadSKUs = '';
 
-  // Aqui você pode integrar com Webhook/CRM/Make/Zapier:
   sendToWebhook({
-    name, email, phone, empresa, skus, ticket,
-    service:          state.service,
-    volCat:           state.volCat,
-    sacState:         state.sacState,
-    pontualTotal:     state.pontualTotal,
-    pontualConfig:    state.pontualConfig,
-    planoAssessoria:  state.planoAssessoria,
-    planoFull:        state.planoFull,
+    name: state.leadName,
+    email: state.leadEmail,
+    phone: state.leadPhone,
+    empresa: state.leadEmpresa,
+    skus: state.leadSKUs,
+    ticket: state.leadTicketMedio,
+    service: state.service,
+    volCat: state.volCat,
+    sacState: state.sacState,
+    pontualTotal: state.pontualTotal,
+    pontualConfig: state.pontualConfig,
+    planoAssessoria: state.planoAssessoria,
+    planoFull: state.planoFull,
     contasAssessoria: state.contasAssessoria || 2
   });
 
   buildResult();
-  goStep(4);
+  goStep(3);
 }
 
-// ─── Build result screen ───
 function buildResult() {
-  const firstName = state.leadName.split(' ')[0];
-  $('result-greeting').textContent = `Aqui está sua simulação, ${firstName}!`;
+  const firstName = (state.leadName||'').split(' ')[0];
+  $('result-greeting').textContent = firstName ? `Aqui está sua simulação, ${firstName}!` : 'Aqui está a sua simulação!';
 
   let totalPrice = 0;
   const cards = [];
@@ -2421,9 +2264,9 @@ function buildResult() {
     catBd.push({ label: 'Mensalidade: ' + v.label, value: v.price });
     if (v.overageLabel) catBd.push({ label: '↳ ' + v.overageLabel, value: null });
     if (CONFIG.catalogacao.setup) {
-      catBd.push({ label: 'Setup único (Backoffice)', value: CONFIG.catalogacao.setup });
+      catBd.push({ label: 'Setup único (Catalogação Recorrente)', value: CONFIG.catalogacao.setup });
     }
-    cards.push({ label: 'Backoffice / Catalogação', name: v.label, price: v.price, color: 'var(--pink)', breakdown: catBd });
+    cards.push({ label: 'Catalogação Recorrente', name: v.label, price: v.price, color: 'var(--pink)', breakdown: catBd });
     CONFIG.catalogacao.includes.forEach(i => includes.push(i));
   }
 
@@ -2438,7 +2281,7 @@ function buildResult() {
     if (ss.preVendas.selected) sacBd.push({ label: 'Pré-vendas: até ' + sp.preVendas.max + ' msg/mês · excedente R$ 1,00/msg', value: sp.preVendas.base });
     if (ss.chatPos.selected)   sacBd.push({ label: 'Chat/Pós-vendas: até ' + sp.chatPos.max + ' msg/mês · excedente R$ 1,00/msg', value: sp.chatPos.base });
     if (CONFIG.sac.setup) sacBd.push({ label: 'Setup único (SAC)', value: CONFIG.sac.setup });
-    cards.push({ label: 'SAC Operacional', name: sacDesc, price: sacTotal, color: 'var(--orange)', breakdown: sacBd });
+    cards.push({ label: 'SAC com IA', name: sacDesc, price: sacTotal, color: 'var(--orange)', breakdown: sacBd });
     CONFIG.sac.includes.forEach(i => includes.push(i));
   }
 
@@ -2473,7 +2316,7 @@ function buildResult() {
   // Calcular total de setup separado da mensalidade
   var setupItems = [];
   if (['catalogacao','ambos','full'].includes(state.service) && CONFIG.catalogacao.setup)
-    setupItems.push({ label: 'Setup Backoffice/Catalogação', value: CONFIG.catalogacao.setup });
+    setupItems.push({ label: 'Setup Catalogação Recorrente', value: CONFIG.catalogacao.setup });
   if (['sac','ambos','full'].includes(state.service) && CONFIG.sac.setup)
     setupItems.push({ label: 'Setup SAC Operacional', value: CONFIG.sac.setup });
   if (['assessoria','full'].includes(state.service) && CONFIG.assessoria.setup)
@@ -2528,6 +2371,7 @@ function buildResult() {
     var totalLabel = isPontual2 ? 'Estimativa do projeto' : isFull2 ? 'Pacote Full \u2014 mensalidade' : 'Investimento mensal estimado';
     var totalSub   = isPontual2 ? 'estimativa \u00fanica \u00b7 sujeito a confirma\u00e7\u00e3o'
                    : (state.service === 'assessoria' && state.planoAssessoria) ? state.planoAssessoria.name + ' de contrato'
+                   : state.service === 'full' ? 'mensalidade recorrente'
                    : '/m\u00eas';
     var setupRows = setupItems.map(function(si){
       return '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">' +
@@ -2585,9 +2429,9 @@ function buildResult() {
       var ticketMid   = ticketMidpoints[state.leadTicketMedio] || 0;
       var ticketLabel = ticketLabels[state.leadTicketMedio]    || '';
 
-      // Anúncios únicos criados (não transmissões)
-      var totalAnuncios     = (c.anunciosStd || 0) + (c.anunciosKit || 0);
-      // Cenário conservador: 50% dos anúncios com pelo menos 6 vendas em 6 meses
+      // Total de transmissões contratadas (anúncios × marketplaces)
+      var totalAnuncios     = (c.transmStd || 0) + (c.transmKit || 0);
+      // 50% das transmissões geram vendas (conservador)
       var anunciosAtivos    = Math.floor(totalAnuncios * 0.5);
       var vendasPorAnuncio  = 6;
       var faturamento6m     = anunciosAtivos * vendasPorAnuncio * ticketMid;
@@ -2600,9 +2444,7 @@ function buildResult() {
       roiWrap.innerHTML = showRoi ? `
         <div class="roi-card">
           <div class="roi-title">📈 Seu potencial de retorno</div>
-          <div class="roi-subtitle">
-            Cenário conservador: 50% dos anúncios (${fmtN(anunciosAtivos)} de ${fmtN(totalAnuncios)}) com 6 vendas × ticket médio ${ticketLabel} × 6 meses
-          </div>
+
           <div class="roi-compare">
             <div class="roi-box roi-box-pay">
               <div class="roi-box-label">Você investe</div>
@@ -2613,7 +2455,7 @@ function buildResult() {
             <div class="roi-box roi-box-earn">
               <div class="roi-box-label">Potencial de faturamento</div>
               <div class="roi-box-value">${fmtR2(faturamento6m)}</div>
-              <div class="roi-box-sub" style="color:var(--success)">em 6 meses (cenário conservador)</div>
+              <div class="roi-box-sub" style="color:var(--success)">em 6 meses</div>
             </div>
           </div>
           <div class="roi-multiplier">
@@ -2621,7 +2463,7 @@ function buildResult() {
           </div>
           <div class="roi-note">
             *Estimativa conservadora: 50% dos ${fmtN(totalAnuncios)} anúncios publicados (${fmtN(anunciosAtivos)} produtos)
-            atingem ao menos 6 vendas nos 6 primeiros meses, com ticket médio de ${ticketLabel}.
+            atingem ao menos 6 vendas nos 6 primeiros meses, com ticket médio de ${fmtR2(ticketMid)}.
             Resultados reais podem variar conforme segmento, precificação e operação.
           </div>
         </div>` : '';
@@ -2677,6 +2519,12 @@ function buildResult() {
         '</div>';
     } else {
       assDetailWrap.innerHTML = '';
+    }
+
+    // Nota de prazo para Pacote Full
+    var fullNoteWrap = $('result-full-contract-note');
+    if (fullNoteWrap) {
+      fullNoteWrap.style.display = state.service === 'full' ? '' : 'none';
     }
   }
 
@@ -2759,57 +2607,53 @@ function buildWhatsappMsg(name, total, cards) {
 
 // ─── Webhook / integração (opcional) ───
 function sendToWebhook(data) {
-  // Salvar lead no localStorage para o CRM
+  var ticketMidpoints = { 'ate_30': 15, '30_60': 45, '60_100': 80, '100_200': 150, 'acima_200': 250 };
+  var ticketLabels = { 'ate_30': 'Até R$ 30', '30_60': 'R$ 30 a R$ 60', '60_100': 'R$ 60 a R$ 100', '100_200': 'R$ 100 a R$ 200', 'acima_200': 'Acima de R$ 200' };
+
+  var ticketMid = ticketMidpoints[state.leadTicketMedio] || 0;
+  var ticketLabel = ticketLabels[state.leadTicketMedio] || '';
+
+  var lead = {
+    id: 'lead_' + Date.now(),
+    data_criacao: new Date().toISOString(),
+    status: 'novo',
+    origem: 'Calculadora de Preço',
+    ref_code: sessionStorage.getItem('ms_ref_code') || null,
+    name: data.name || 'Simulação no Site',
+    email: data.email || '',
+    phone: data.phone || '',
+    empresa: data.empresa || '',
+    skus: data.skus || '',
+    ticket: data.ticket || '',
+    ticket_label: ticketLabel,
+    servico: data.service,
+    detalhes: {
+      volCat: data.volCat,
+      sacState: data.sacState,
+      pontualTotal: data.pontualTotal,
+      pontualConfig: data.pontualConfig,
+      planoAssessoria: data.planoAssessoria,
+      planoFull: data.planoFull,
+      contasAssessoria: data.contasAssessoria
+    }
+  };
+
   try {
-    var lead = {
-      id:             'lead_' + Date.now(),
-      refCode:        sessionStorage.getItem('ms_ref_code') || null,
-      name:           data.name,
-      email:          data.email,
-      phone:          data.phone || '',
-      empresa:        data.empresa || '',
-      skus:           data.skus    || '',
-      ticket:         data.ticket  || '',
-      service:        data.service,
-      serviceLabel:   getServiceLabel(data.service),
-      plan:           getPlanLabel(data),
-      value:          calcTotalForLead(data),
-      setupValue:     calcSetupForLead(data),
-      status:         'novo',
-      createdAt:      new Date().toISOString(),
-      notes:          [],
-      sacState:       data.sacState           || null,
-      volCat:         data.volCat             || null,
-      pontualConfig:  data.pontualConfig      || null,
-      planoAssessoria:data.planoAssessoria    || null,
-      planoFull:      data.planoFull          || null,
-      contasAssessoria: data.contasAssessoria || 2
-    };
     var leads = JSON.parse(localStorage.getItem('ms_crm_leads') || '[]');
     leads.unshift(lead);
     localStorage.setItem('ms_crm_leads', JSON.stringify(leads));
+  } catch(e){}
 
-    // Enviar para o Supabase
+  if (supabase) {
     supabase.from('leads').insert([lead]).then(function(res) {
-      if (res.error) {
-        console.error('Erro ao enviar lead para Supabase:', res.error);
-      } else {
-        console.log('Lead enviado com sucesso para Supabase!');
-      }
-    });
-  } catch(e) { console.warn('Falha ao processar envio do lead:', e); }
-
-  /* ✏️ WEBHOOK externo (Make/Zapier/RD Station) — descomente e configure:
-  fetch('https://hook.make.com/seu-webhook', {
-    method: 'POST', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify(lead)
-  }).catch(console.warn);
-  */
+      if (res.error) console.warn('Supabase lead insert error:', res.error);
+    }).catch(function(e){ console.warn('Supabase error:', e); });
+  }
 }
 
 function getServiceLabel(svc) {
-  var labels = { catalogacao:'Backoffice/Catalogação', sac:'SAC Operacional',
-    ambos:'Pacote Operação', full:'Pacote Full', pontual:'Catalogação Pontual',
+  var labels = { catalogacao:'Catalogação Recorrente', sac:'SAC com IA',
+    ambos:'Catalogação + SAC', full:'Pacote Full', pontual:'Catalogação Pontual',
     assessoria:'Assessoria Marketplace' };
   return labels[svc] || svc;
 }
@@ -2857,10 +2701,11 @@ function restart() {
   
   document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
   document.querySelectorAll('.vol-option').forEach(v => v.classList.remove('selected'));
-  ['lead-name','lead-email','lead-phone','lead-empresa','lead-skus',
+  ['lead-name','lead-email','lead-phone','lead-empresa','lead-skus'].forEach(function(id){ if ($(id)) $(id).value = ''; }); // safe
     'pt-anuncios-std','pt-anuncios-kit'].forEach(id => { if ($(id)) $(id).value = ''; });
   if ($('lead-ticket')) $('lead-ticket').value = '';
   state.leadEmpresa = ''; state.leadSKUs = ''; state.leadTicketMedio = '';
+  const tkEl = document.getElementById('vol-ticket-medio'); if (tkEl) tkEl.value = '';
   ['pt-mkp-std','pt-mkp-kit'].forEach(id => { if ($(id)) $(id).value = '1'; });
   ['preview-standard','preview-kit'].forEach(id => { const el = $(id); if (el) el.innerHTML = '—'; });
   const sumEl = $('pontual-summary'); if (sumEl) sumEl.style.display = 'none';
@@ -2906,7 +2751,8 @@ function showVolStep() {
     s.textContent = 'Escolha o volume de catalogação e os serviços de SAC desejados.';
   } else if (state.service === 'full') {
     $('vol-full').classList.remove('hidden');
-    buildPlanosAssessoria('plano-list-full', 'planoFull');
+    // Pacote Full: plano fixo R$2.000/mês, selecionado automaticamente
+    state.planoFull = { id: 'full-fixo', name: 'Pacote Full', contrato: 'a definir com o time', price: 2000, popular: true };
     updateContasAssessoria(state.contasAssessoria || 2);
     buildSacPanelIn($('vol-full').querySelector('.sac-panel-slot'));
     t.textContent = 'Configure o Pacote Full';
@@ -3015,7 +2861,7 @@ function sacDescription() {
   var parts = [];
   if (s.preVendas.selected) parts.push('Pré-vendas: até ' + p.preVendas.max + ' msg/mês');
   if (s.chatPos.selected)   parts.push('Chat/Pós-vendas: até ' + p.chatPos.max + ' msg/mês');
-  return parts.join(' · ') || 'SAC Operacional';
+  return parts.join(' · ') || 'SAC com IA';
 }
 
 // ─── Contas adicionais de assessoria ───
@@ -3175,27 +3021,26 @@ function calcPontual() {
   if (ref) {
     var refCode = ref.toUpperCase();
     sessionStorage.setItem('ms_ref_code', refCode);
-    
-    // Fallback localStorage
     try {
       var refsUsed = JSON.parse(localStorage.getItem('ms_ref_clicks') || '{}');
       refsUsed[refCode] = (refsUsed[refCode] || 0) + 1;
       localStorage.setItem('ms_ref_clicks', JSON.stringify(refsUsed));
     } catch(e) {}
 
-    // Incrementa cliques no Supabase
-    supabase.from('ref_clicks').select('clicks').eq('refCode', refCode).then(function(res) {
-      if (res.data && res.data.length > 0) {
-        var newClicks = (res.data[0].clicks || 0) + 1;
-        supabase.from('ref_clicks').update({ clicks: newClicks }).eq('refCode', refCode).then(function(upRes) {
-          if (upRes.error) console.error('Erro ao atualizar cliques no Supabase:', upRes.error);
-        });
-      } else {
-        supabase.from('ref_clicks').insert([{ refCode: refCode, clicks: 1 }]).then(function(insRes) {
-          if (insRes.error) console.error('Erro ao inserir cliques no Supabase:', insRes.error);
-        });
-      }
-    });
+    if (supabase) {
+      supabase.from('ref_clicks').select('clicks').eq('refCode', refCode).then(function(res) {
+        if (res.data && res.data.length > 0) {
+          var newClicks = (res.data[0].clicks || 0) + 1;
+          supabase.from('ref_clicks').update({ clicks: newClicks }).eq('refCode', refCode).then(function(upRes) {
+            if (upRes.error) console.error('Erro ao atualizar cliques no Supabase:', upRes.error);
+          });
+        } else {
+          supabase.from('ref_clicks').insert([{ refCode: refCode, clicks: 1 }]).then(function(insRes) {
+            if (insRes.error) console.error('Erro ao inserir cliques no Supabase:', insRes.error);
+          });
+        }
+      }).catch(function(e){});
+    }
   }
 })();
 
