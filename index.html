@@ -2701,8 +2701,7 @@ function restart() {
   
   document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
   document.querySelectorAll('.vol-option').forEach(v => v.classList.remove('selected'));
-  ['lead-name','lead-email','lead-phone','lead-empresa','lead-skus'].forEach(function(id){ if ($(id)) $(id).value = ''; }); // safe
-    'pt-anuncios-std','pt-anuncios-kit'].forEach(id => { if ($(id)) $(id).value = ''; });
+  ['lead-name','lead-email','lead-phone','lead-empresa','lead-skus','pt-anuncios-std','pt-anuncios-kit'].forEach(id => { if ($(id)) $(id).value = ''; });
   if ($('lead-ticket')) $('lead-ticket').value = '';
   state.leadEmpresa = ''; state.leadSKUs = ''; state.leadTicketMedio = '';
   const tkEl = document.getElementById('vol-ticket-medio'); if (tkEl) tkEl.value = '';
