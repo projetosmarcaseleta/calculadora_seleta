@@ -138,41 +138,28 @@
 </style>
 </head>
 <body>
-<div class="login-overlay" id="loginOverlay">
-  <svg class="login-bg-art bg-1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="95" y="25" width="70" height="85" rx="8"/>
-    <path d="M110 25 v-10 a4 4 0 0 1 8 0 v10"/>
-    <path d="M130 25 v-10 a4 4 0 0 1 8 0 v10"/>
-    <path d="M150 25 v-10 a4 4 0 0 1 8 0 v10"/>
-    <path d="M10 40 h15 l12 55 h60 l14 -40 h-78"/>
-    <circle cx="45" cy="120" r="8"/>
-    <circle cx="85" cy="120" r="8"/>
-    <circle cx="165" cy="150" r="20"/>
-    <rect x="15" y="150" width="45" height="20" rx="10" transform="rotate(-25 37 160)"/>
-  </svg>
-  <svg class="login-bg-art bg-2" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="95" y="25" width="70" height="85" rx="8"/>
-    <path d="M110 25 v-10 a4 4 0 0 1 8 0 v10"/>
-    <path d="M130 25 v-10 a4 4 0 0 1 8 0 v10"/>
-    <path d="M150 25 v-10 a4 4 0 0 1 8 0 v10"/>
-    <path d="M10 40 h15 l12 55 h60 l14 -40 h-78"/>
-    <circle cx="45" cy="120" r="8"/>
-    <circle cx="85" cy="120" r="8"/>
-    <circle cx="165" cy="150" r="20"/>
-    <rect x="15" y="150" width="45" height="20" rx="10" transform="rotate(-25 37 160)"/>
-  </svg>
-  <div class="login-card">
-    <div class="login-brand" style="flex-direction:column;align-items:center;margin-bottom:12px;">
-      <img src="logo-marcaseleta.png" alt="Marca Seleta" style="height:48px;object-fit:contain;" />
+<div id="login-overlay" class="login-overlay" style="background: rgba(6, 9, 22, 0.95); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; position: fixed; inset: 0;">
+  <div class="modal" style="width: 100%; max-width: 380px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); background: #0A1635; border-radius: 16px; padding: 28px 24px; color: #fff;">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <div style="font-family: Arial, sans-serif; font-size: 20px; font-weight: 800; color: #fff; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
+        <img src="logo-marcaseleta.png" alt="Marca Seleta" style="height: 36px; object-fit: contain;" />
+      </div>
+      <div style="font-size: 11px; color: #7B9CC4; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">
+        Painel Gerencial de Mensalidades — Acesso Restrito</div>
     </div>
-    <h2>Painel Gerencial de Mensalidades</h2>
-    <p class="login-sub">Acesso restrito a gestores</p>
-    <label>E-mail</label>
-    <input type="email" id="loginEmail" placeholder="nome@db1.com.br" autocomplete="username">
-    <label>Senha</label>
-    <input type="password" id="loginSenha" placeholder="Senha" autocomplete="current-password">
-    <div class="login-erro" id="loginErro"></div>
-    <button class="btn-primary" id="btnLogin" style="width:100%;margin-top:10px;">Entrar</button>
+
+    <div>
+      <div style="margin-bottom: 16px;">
+        <label style="font-size: 10px; margin-bottom: 6px; display: block; color: #7B9CC4; font-weight: 700; text-transform: uppercase;">E-mail</label>
+        <input type="email" id="login-email" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; outline: none; box-sizing: border-box;" placeholder="seuemail@empresa.com" required>
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label style="font-size: 10px; margin-bottom: 6px; display: block; color: #7B9CC4; font-weight: 700; text-transform: uppercase;">Senha</label>
+        <input type="password" id="login-password" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; outline: none; box-sizing: border-box;" placeholder="••••••••" required>
+      </div>
+      <div id="login-error" style="color: #ef4444; font-size: 12px; margin-bottom: 12px; display: none; text-align: center;"></div>
+      <button id="btn-do-login" onclick="handleLogin()" style="width: 100%; justify-content: center; padding: 12px; font-size: 13px; border-radius: 8px; background: #0075FF; color: #fff; font-weight: 700; border: none; cursor: pointer;">Entrar</button>
+    </div>
   </div>
 </div>
 <div class="wrap oculto" id="painelApp">
@@ -365,17 +352,20 @@ const SUPABASE_KEY = 'sb_publishable_p-b9glhdiA0QZZbATvD6ZQ_9OeO-qlm';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 function mostrarApp(email){
-  document.getElementById('loginOverlay').classList.add('hidden');
+  const overlay = document.getElementById('login-overlay');
+  if (overlay) overlay.style.display = 'none';
   document.getElementById('painelApp').classList.remove('oculto');
   document.getElementById('usuarioLogado').innerHTML = `Logado como: <b>${email}</b>`;
 }
 function mostrarLogin(){
-  document.getElementById('loginOverlay').classList.remove('hidden');
+  const overlay = document.getElementById('login-overlay');
+  if (overlay) overlay.style.display = 'flex';
   document.getElementById('painelApp').classList.add('oculto');
-  document.getElementById('loginSenha').value = '';
+  const passEl = document.getElementById('login-password');
+  if (passEl) passEl.value = '';
 }
 async function verificarGestor(email){
-  // Mesma lógica do admin: igor é sempre gestor; demais verificam isGestor na tabela
+  if(!email) return false;
   if(email.toLowerCase() === 'igor.costa@db1.com.br') return true;
   const { data: profile } = await supabase
     .from('team_members')
@@ -384,33 +374,63 @@ async function verificarGestor(email){
     .maybeSingle();
   return profile && (profile.isGestor === true || profile.tipo === 'responsavel');
 }
-async function tentarLogin(){
-  const email = document.getElementById('loginEmail').value.trim();
-  const senha = document.getElementById('loginSenha').value;
-  const erroEl = document.getElementById('loginErro');
-  const btn = document.getElementById('btnLogin');
-  erroEl.textContent = '';
+async function handleLogin(){
+  const emailInput = document.getElementById('login-email');
+  const passInput = document.getElementById('login-password');
+  const erroEl = document.getElementById('login-error');
+  const btn = document.getElementById('btn-do-login');
+
+  const email = emailInput ? emailInput.value.trim() : '';
+  const senha = passInput ? passInput.value : '';
+
+  if(erroEl) erroEl.style.display = 'none';
+
   if(!email || !senha){
-    erroEl.textContent = 'Preencha o e-mail e a senha.';
+    if(erroEl){
+      erroEl.textContent = 'Preencha o e-mail e a senha.';
+      erroEl.style.display = 'block';
+    }
     return;
   }
-  btn.disabled = true;
-  btn.textContent = 'Entrando...';
+
+  if(btn){
+    btn.disabled = true;
+    btn.textContent = 'Entrando...';
+  }
+
   const { data, error } = await supabase.auth.signInWithPassword({ email, password: senha });
-  btn.disabled = false;
-  btn.textContent = 'Entrar';
+
+  if(btn){
+    btn.disabled = false;
+    btn.textContent = 'Entrar';
+  }
+
   if(error){
-    erroEl.textContent = 'E-mail ou senha incorretos.';
+    if(erroEl){
+      erroEl.textContent = 'E-mail ou senha incorretos: ' + error.message;
+      erroEl.style.display = 'block';
+    }
     return;
   }
+
   const isGestor = await verificarGestor(data.user.email);
   if(!isGestor){
     await supabase.auth.signOut();
-    erroEl.textContent = 'Acesso negado: apenas gestores podem acessar este painel.';
+    if(erroEl){
+      erroEl.textContent = 'Acesso negado: apenas gestores podem acessar este painel.';
+      erroEl.style.display = 'block';
+    }
     return;
   }
+
   mostrarApp(data.user.email);
 }
+
+async function handleLogout(){
+  await supabase.auth.signOut();
+  window.location.reload();
+}
+
 async function inicializarAuth(){
   const { data: { session } } = await supabase.auth.getSession();
   if(session){
@@ -420,11 +440,14 @@ async function inicializarAuth(){
     } else {
       await supabase.auth.signOut();
       mostrarLogin();
-      document.getElementById('loginErro').textContent = 'Acesso negado: apenas gestores podem acessar este painel.';
+      const erroEl = document.getElementById('login-error');
+      if(erroEl){
+        erroEl.textContent = 'Acesso negado: apenas gestores podem acessar este painel.';
+        erroEl.style.display = 'block';
+      }
     }
   } else {
     mostrarLogin();
-    document.getElementById('loginEmail').focus();
   }
 }
 
@@ -1064,14 +1087,12 @@ document.getElementById('btnAplicarExtracao').addEventListener('click', ()=>{
 });
 
 // ---- Wiring do login ----
-document.getElementById('btnLogin').addEventListener('click', tentarLogin);
-document.getElementById('loginSenha').addEventListener('keydown', e=>{ if(e.key==='Enter') tentarLogin(); });
-document.getElementById('loginEmail').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('loginSenha').focus(); });
-document.getElementById('btnLogout').addEventListener('click', async ()=>{
-  await supabase.auth.signOut();
-  mostrarLogin();
-  document.getElementById('loginEmail').focus();
-});
+const passEl = document.getElementById('login-password');
+if (passEl) passEl.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+const emailEl = document.getElementById('login-email');
+if (emailEl) emailEl.addEventListener('keydown', e => { if (e.key === 'Enter') passEl && passEl.focus(); });
+const btnLogout = document.getElementById('btnLogout');
+if (btnLogout) btnLogout.addEventListener('click', handleLogout);
 
 dados = cargaInicial();
 popularFiltroTipo();
