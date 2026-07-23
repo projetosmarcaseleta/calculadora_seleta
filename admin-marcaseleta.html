@@ -1196,148 +1196,160 @@
       border-bottom: 1px solid rgba(255, 255, 255, .07);
     }
 
-      .meta-user-table td {
-        padding: 7px 12px;
-        border-bottom: 1px solid rgba(255, 255, 255, .04);
-        vertical-align: middle
-      }
+    .meta-user-table td {
+      padding: 7px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, .04);
+      vertical-align: middle
+    }
 
-      .meta-user-table tr:last-child td {
-        border: none
-      }
+    .meta-user-table tr:last-child td {
+      border: none
+    }
 
-      .meta-period-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 14px
-      }
+    .meta-period-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px
+    }
 
-      .meta-period-card {
-        background: rgba(255, 255, 255, .03);
-        border: 1px solid rgba(255, 255, 255, .07);
-        border-radius: var(--r-sm);
-        padding: 14px 16px
-      }
+    .meta-period-card {
+      background: rgba(255, 255, 255, .03);
+      border: 1px solid rgba(255, 255, 255, .07);
+      border-radius: var(--r-sm);
+      padding: 14px 16px
+    }
 
-      .meta-period-title {
-        font-size: 11px;
-        font-weight: 700;
-        margin-bottom: 12px;
-        display: flex;
-        align-items: center;
-        gap: 6px
-      }
+    .meta-period-title {
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
 
-      .meta-input-group {
-        margin-bottom: 10px
-      }
+    .meta-input-group {
+      margin-bottom: 10px
+    }
 
-      .meta-input-group label {
-        display: block;
-        font-size: 10px;
-        color: var(--muted);
-        text-transform: uppercase;
-        letter-spacing: .04em;
-        margin-bottom: 4px
-      }
+    .meta-input-group label {
+      display: block;
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: 4px
+    }
 
-      .meta-input-group input {
-        width: 100%;
-        background: rgba(255, 255, 255, .05);
-        border: 1.5px solid rgba(255, 255, 255, .1);
-        border-radius: var(--r-sm);
-        padding: 7px 11px;
-        color: var(--white);
-        font-size: 12px;
-        transition: border-color .2s
-      }
+    .meta-input-group input {
+      width: 100%;
+      background: rgba(255, 255, 255, .05);
+      border: 1.5px solid rgba(255, 255, 255, .1);
+      border-radius: var(--r-sm);
+      padding: 7px 11px;
+      color: var(--white);
+      font-size: 12px;
+      transition: border-color .2s
+    }
 
-      .meta-input-group input:focus {
-        outline: none;
-        border-color: var(--blue)
-      }
+    .meta-input-group input:focus {
+      outline: none;
+      border-color: var(--blue)
+    }
 
-      /* ── DETAIL PANEL ── */
-      .detail-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px
-      }
+    /* ── DETAIL PANEL ── */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
 
-      .detail-field {
-        padding: 10px 12px;
-        background: rgba(255, 255, 255, .03);
-        border-radius: var(--r-sm)
-      }
+    .detail-field {
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, .03);
+      border-radius: var(--r-sm)
+    }
 
-      .detail-label {
-        font-size: 10px;
-        color: var(--muted);
-        text-transform: uppercase;
-        letter-spacing: .05em;
-        margin-bottom: 3px
-      }
+    .detail-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 3px
+    }
 
-      .detail-val {
-        font-size: 13px;
-        color: var(--white);
-        font-weight: 500
-      }
+    .detail-val {
+      font-size: 13px;
+      color: var(--white);
+      font-weight: 500
+    }
 
-      .detail-val.big {
-        font-size: 20px;
-        font-family: var(--font-h);
-        font-weight: 800;
-        color: var(--warn)
-      }
+    .detail-val.big {
+      font-size: 20px;
+      font-family: var(--font-h);
+      font-weight: 800;
+      color: var(--warn)
+    }
 
-      /* ── MINI CHART (bar) ── */
-      .mini-bars {
-        display: flex;
-        gap: 2px;
-        align-items: flex-end;
-        height: 28px
-      }
+    /* ── MINI CHART (bar) ── */
+    .mini-bars {
+      display: flex;
+      gap: 2px;
+      align-items: flex-end;
+      height: 28px
+    }
 
-      .mini-bar {
-        background: var(--blue);
-        border-radius: 2px 2px 0 0;
-        min-width: 6px;
-        opacity: .7;
-        transition: opacity .2s
-      }
+    .mini-bar {
+      background: var(--blue);
+      border-radius: 2px 2px 0 0;
+      min-width: 6px;
+      opacity: .7;
+      transition: opacity .2s
+    }
 
-      .mini-bar:hover {
-        opacity: 1
-      }
+    .mini-bar:hover {
+      opacity: 1
+    }
   </style>
 </head>
 
 <body>
-<!-- LOGIN OVERLAY -->
-<div id="login-overlay" class="overlay hidden" style="background: rgba(6, 9, 22, 0.95); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; position: fixed; inset: 0;">
-  <div class="modal" style="width: 100%; max-width: 380px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); background: #0A1635; border-radius: 16px; padding: 28px 24px;">
-    <div style="text-align: center; margin-bottom: 24px;">
-      <div style="font-family: var(--font-h); font-size: 20px; font-weight: 800; color: var(--white); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
-        <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--blue), var(--blue2)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px;">🗲</div>
-        marca<span style="color: var(--blue);">seleta</span>
+  <!-- LOGIN OVERLAY -->
+  <div id="login-overlay" class="overlay hidden"
+    style="background: rgba(6, 9, 22, 0.95); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; position: fixed; inset: 0;">
+    <div class="modal"
+      style="width: 100%; max-width: 380px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); background: #0A1635; border-radius: 16px; padding: 28px 24px;">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <div
+          style="font-family: var(--font-h); font-size: 20px; font-weight: 800; color: var(--white); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
+          <div
+            style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--blue), var(--blue2)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px;">
+            🗲</div>
+          marca<span style="color: var(--blue);">seleta</span>
+        </div>
+        <div
+          style="font-size: 11px; color: var(--muted); font-family: var(--font-h); text-transform: uppercase; letter-spacing: 0.05em;">
+          CRM Admin</div>
       </div>
-      <div style="font-size: 11px; color: var(--muted); font-family: var(--font-h); text-transform: uppercase; letter-spacing: 0.05em;">CRM Admin</div>
-    </div>
-    
-    <div>
-      <div class="form-group" style="margin-bottom: 16px;">
-        <label class="form-label" style="font-size: 10px; margin-bottom: 6px; display: block; color: var(--muted); font-weight: 700; text-transform: uppercase;">E-mail</label>
-        <input type="email" id="login-email" class="form-input" placeholder="seuemail@empresa.com" style="width: 100%;" required>
+
+      <div>
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label"
+            style="font-size: 10px; margin-bottom: 6px; display: block; color: var(--muted); font-weight: 700; text-transform: uppercase;">E-mail</label>
+          <input type="email" id="login-email" class="form-input" placeholder="seuemail@empresa.com"
+            style="width: 100%;" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label class="form-label"
+            style="font-size: 10px; margin-bottom: 6px; display: block; color: var(--muted); font-weight: 700; text-transform: uppercase;">Senha</label>
+          <input type="password" id="login-password" class="form-input" placeholder="••••••••" style="width: 100%;"
+            required>
+        </div>
+        <button class="btn btn-primary" id="btn-do-login" onclick="handleLogin()"
+          style="width: 100%; justify-content: center; padding: 10px; font-size: 12px; border-radius: 8px;">Entrar</button>
       </div>
-      <div class="form-group" style="margin-bottom: 20px;">
-        <label class="form-label" style="font-size: 10px; margin-bottom: 6px; display: block; color: var(--muted); font-weight: 700; text-transform: uppercase;">Senha</label>
-        <input type="password" id="login-password" class="form-input" placeholder="••••••••" style="width: 100%;" required>
-      </div>
-      <button class="btn btn-primary" id="btn-do-login" onclick="handleLogin()" style="width: 100%; justify-content: center; padding: 10px; font-size: 12px; border-radius: 8px;">Entrar</button>
     </div>
   </div>
-</div>
 
 
   <!-- TOPBAR -->
@@ -1350,11 +1362,13 @@
       <span class="admin-badge">⚙ Admin</span>
     </div>
     <div class="topbar-links">
-    <a class="topbar-link" href="crm-marcaseleta.html">← CRM</a>
-    <a class="topbar-link" href="calculadora-marca-seleta.html" target="_blank">Calculadora ↗</a>
-    <a class="topbar-link" href="Painel Gerencial - Mensalidades Marca Seleta.html" target="_blank" style="color:var(--teal);font-weight:600;" title="Acesso restrito a Gestores">🧾 Mensalidades ↗</a>
-    <button class="btn btn-danger btn-sm" onclick="handleLogout()" style="margin-left:10px; padding: 5px 10px;">Sair</button>
-  </div>
+      <a class="topbar-link" href="crm-marcaseleta.html">← CRM</a>
+      <a class="topbar-link" href="calculadora.marcaseleta.shop" target="_blank">Calculadora ↗</a>
+      <a class="topbar-link" href="Painel Gerencial - Mensalidades Marca Seleta.html" target="_blank"
+        style="color:var(--teal);font-weight:600;" title="Acesso restrito a Gestores">🧾 Mensalidades ↗</a>
+      <button class="btn btn-danger btn-sm" onclick="handleLogout()"
+        style="margin-left:10px; padding: 5px 10px;">Sair</button>
+    </div>
   </div>
 
   <!-- TABS -->
@@ -2135,7 +2149,7 @@
             <input class="form-input" id="um-telefone" placeholder="(44) 9 9999-9999">
           </div>
         </div>
-        
+
         <div class="form-group" id="um-password-group" style="margin-bottom: 11px;">
           <label class="form-label">Senha de Acesso (mín. 6 caracteres)</label>
           <input class="form-input" id="um-password" type="password" placeholder="Defina a senha inicial">
@@ -2147,9 +2161,12 @@
             <option value="inativo">Inativo</option>
           </select>
         </div>
-        <div class="form-group" style="display: flex; align-items: center; gap: 8px; margin-top: 12px; margin-bottom: 12px;">
+        <div class="form-group"
+          style="display: flex; align-items: center; gap: 8px; margin-top: 12px; margin-bottom: 12px;">
           <input type="checkbox" id="um-is-gestor" style="width: 16px; height: 16px; cursor: pointer;">
-          <label for="um-is-gestor" class="form-label" style="margin-bottom: 0; cursor: pointer; text-transform: none; font-size: 11px; color: var(--white); font-weight: 500; letter-spacing: 0;">Administrador / Gestor (Acesso ao Painel Admin)</label>
+          <label for="um-is-gestor" class="form-label"
+            style="margin-bottom: 0; cursor: pointer; text-transform: none; font-size: 11px; color: var(--white); font-weight: 500; letter-spacing: 0;">Administrador
+            / Gestor (Acesso ao Painel Admin)</label>
         </div>
 
 
@@ -2210,18 +2227,18 @@
     </div>
   </div>
 
-  
+
   <script>
-    const U_KEY   = 'ms_crm_users';
-    const L_KEY   = 'ms_crm_leads';
+    const U_KEY = 'ms_crm_users';
+    const L_KEY = 'ms_crm_leads';
     const CFG_KEY = 'ms_admin_cfg';
     const REF_KEY = 'ms_ref_clicks';
 
     const SVC_LABELS = {
-      assessoria:'Assessoria', catalogacao:'Catalogação',
-      sac:'SAC', ambos:'Pcte Operação', full:'Pacote Full', pontual:'Pontual'
+      assessoria: 'Assessoria', catalogacao: 'Catalogação',
+      sac: 'SAC', ambos: 'Pcte Operação', full: 'Pacote Full', pontual: 'Pontual'
     };
-    const TIPO_LABEL = { bdr:'BDR / SDR', closer:'Closer', indicador:'Indicador' };
+    const TIPO_LABEL = { bdr: 'BDR / SDR', closer: 'Closer', indicador: 'Indicador' };
 
     // ── SUPABASE / STORAGE ──────────────────────────────────────────
     const supabaseUrl = 'https://mygdxrenhrfpaxpmytsi.supabase.co';
@@ -2234,33 +2251,33 @@
     var _leads = [];
     var _services = [];
     var _cfg = {
-      baseUrl:'', ptsLead:1, ptsFechado:10,
-      com:{ assessoria:5, catalogacao:5, sac:5, ambos:5, full:5, pontual:5 }
+      baseUrl: '', ptsLead: 1, ptsFechado: 10,
+      com: { assessoria: 5, catalogacao: 5, sac: 5, ambos: 5, full: 5, pontual: 5 }
     };
     var _refClicks = {};
 
-    function getUsers()  { return _users; }
-    function getLeads()  { return _leads; }
+    function getUsers() { return _users; }
+    function getLeads() { return _leads; }
     function getServices() { return _services; }
     function getRefClicks() { return _refClicks; }
-    function getCfg()    { return _cfg; }
+    function getCfg() { return _cfg; }
 
     function saveUsers(u) {
       var oldUsers = _users;
       _users = u;
-      try { localStorage.setItem(U_KEY, JSON.stringify(u)); } catch(e) {}
+      try { localStorage.setItem(U_KEY, JSON.stringify(u)); } catch (e) { }
 
       var currentIds = new Set(u.map(x => x.id));
       var deletedIds = oldUsers.filter(x => !currentIds.has(x.id)).map(x => x.id);
 
       if (deletedIds.length > 0) {
-        supabase.from('team_members').delete().in('id', deletedIds).then(function(res) {
+        supabase.from('team_members').delete().in('id', deletedIds).then(function (res) {
           if (res.error) console.error('Erro ao deletar usuário no Supabase:', res.error);
         });
       }
 
       if (u.length > 0) {
-        var formatted = u.map(function(item) {
+        var formatted = u.map(function (item) {
           return {
             id: item.id,
             nome: item.nome,
@@ -2276,7 +2293,7 @@
             createdAt: item.createdAt
           };
         });
-        supabase.from('team_members').upsert(formatted).then(function(res) {
+        supabase.from('team_members').upsert(formatted).then(function (res) {
           if (res.error) console.error('Erro ao salvar usuários no Supabase:', res.error);
         });
       }
@@ -2286,27 +2303,27 @@
       var oldServices = _services;
       _services = s;
       const SVC_KEY = 'ms_crm_services';
-      try { localStorage.setItem(SVC_KEY, JSON.stringify(s)); } catch(e) {}
+      try { localStorage.setItem(SVC_KEY, JSON.stringify(s)); } catch (e) { }
 
       var currentIds = new Set(s.map(x => x.id));
       var deletedIds = oldServices.filter(x => !currentIds.has(x.id)).map(x => x.id);
 
       if (deletedIds.length > 0) {
-        supabase.from('services').delete().in('id', deletedIds).then(function(res) {
+        supabase.from('services').delete().in('id', deletedIds).then(function (res) {
           if (res.error) console.error('Erro ao deletar serviço no Supabase:', res.error);
         });
       }
 
       if (s.length > 0) {
-        supabase.from('services').upsert(s).then(function(res) {
+        supabase.from('services').upsert(s).then(function (res) {
           if (res.error) console.error('Erro ao salvar serviços no Supabase:', res.error);
         });
       }
     }
 
-    function fmtR(v) { return 'R$ ' + (v||0).toLocaleString('pt-BR',{minimumFractionDigits:0}); }
+    function fmtR(v) { return 'R$ ' + (v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 0 }); }
     function fmtDate(iso) { return iso ? new Date(iso).toLocaleDateString('pt-BR') : '—'; }
-    function sanitize(s) { return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function sanitize(s) { return String(s || '').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
     // ── SERVICE STORAGE ──────────────────────────────────────────
     const SVC_KEY = 'ms_crm_services';
@@ -2314,16 +2331,16 @@
     // ── SERVICE RENDER ────────────────────────────────────────────
     function renderServices() {
       const search = document.getElementById('svc-search').value.toLowerCase();
-      const tipo   = document.getElementById('svc-tipo-filter').value;
+      const tipo = document.getElementById('svc-tipo-filter').value;
       let svcs = getServices();
-      if (search) svcs = svcs.filter(s=>(s.nome||'').toLowerCase().includes(search)||(s.descricao||'').toLowerCase().includes(search));
-      if (tipo)   svcs = svcs.filter(s=>s.tipo===tipo);
+      if (search) svcs = svcs.filter(s => (s.nome || '').toLowerCase().includes(search) || (s.descricao || '').toLowerCase().includes(search));
+      if (tipo) svcs = svcs.filter(s => s.tipo === tipo);
 
-      const TIPO_LABELS = { recorrente:'Recorrente', pontual:'Pontual', personalizado:'Personalizado' };
+      const TIPO_LABELS = { recorrente: 'Recorrente', pontual: 'Pontual', personalizado: 'Personalizado' };
       const tbody = document.getElementById('services-tbody');
       tbody.innerHTML = '';
-      document.getElementById('services-empty').classList.toggle('hidden',svcs.length>0);
-      document.querySelector('#tab-servicos table').style.display = svcs.length?'':'none';
+      document.getElementById('services-empty').classList.toggle('hidden', svcs.length > 0);
+      document.querySelector('#tab-servicos table').style.display = svcs.length ? '' : 'none';
 
       svcs.forEach(svc => {
         const color = svc.color || 'var(--blue)';
@@ -2335,11 +2352,11 @@
               <div style="font-weight:600;color:var(--white)">${sanitize(svc.nome)}</div>
             </div>
           </td>
-          <td><span class="tipo-badge" style="background:${color}22;color:${color};border:1px solid ${color}44">${TIPO_LABELS[svc.tipo]||svc.tipo}</span></td>
-          <td style="color:var(--blue);font-weight:700">${svc.valor?fmt(svc.valor):'Sob consulta'}</td>
-          <td style="color:var(--muted)">${sanitize(svc.prazo||'—')}</td>
-          <td><div class="svc-description" title="${sanitize(svc.descricao||'')}">${sanitize(svc.descricao||'—')}</div></td>
-          <td><span class="status-badge ${svc.status==='ativo'?'s-ativo':'s-inativo'}">${svc.status==='ativo'?'● Ativo':'○ Inativo'}</span></td>
+          <td><span class="tipo-badge" style="background:${color}22;color:${color};border:1px solid ${color}44">${TIPO_LABELS[svc.tipo] || svc.tipo}</span></td>
+          <td style="color:var(--blue);font-weight:700">${svc.valor ? fmt(svc.valor) : 'Sob consulta'}</td>
+          <td style="color:var(--muted)">${sanitize(svc.prazo || '—')}</td>
+          <td><div class="svc-description" title="${sanitize(svc.descricao || '')}">${sanitize(svc.descricao || '—')}</div></td>
+          <td><span class="status-badge ${svc.status === 'ativo' ? 's-ativo' : 's-inativo'}">${svc.status === 'ativo' ? '● Ativo' : '○ Inativo'}</span></td>
           <td>
             <div class="td-actions">
               <button class="btn btn-ghost btn-xs" onclick="openServiceModal('${svc.id}')">✏</button>
@@ -2350,76 +2367,76 @@
       });
 
       const total = getServices();
-      document.getElementById('ss-total').textContent = total.filter(s=>s.status==='ativo').length;
-      document.getElementById('ss-recorrente').textContent = total.filter(s=>s.tipo==='recorrente').length;
-      document.getElementById('ss-pontual').textContent = total.filter(s=>s.tipo==='pontual').length;
+      document.getElementById('ss-total').textContent = total.filter(s => s.status === 'ativo').length;
+      document.getElementById('ss-recorrente').textContent = total.filter(s => s.tipo === 'recorrente').length;
+      document.getElementById('ss-pontual').textContent = total.filter(s => s.tipo === 'pontual').length;
       document.getElementById('tc-servicos').textContent = total.length;
     }
 
-    function fmt(v){ return 'R$ '+(v||0).toLocaleString('pt-BR',{minimumFractionDigits:0}); }
+    function fmt(v) { return 'R$ ' + (v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 0 }); }
 
     // ── SERVICE MODAL ─────────────────────────────────────────────
     let editingSvcId = null;
     let selectedColor = 'var(--blue)';
 
     function selectColor(el) {
-      document.querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('selected'));
+      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
       el.classList.add('selected');
       selectedColor = el.dataset.color;
     }
 
     function openServiceModal(id) {
-      editingSvcId = id||null;
+      editingSvcId = id || null;
       const svcs = getServices();
-      const s = id ? svcs.find(x=>x.id===id) : null;
+      const s = id ? svcs.find(x => x.id === id) : null;
       document.getElementById('service-modal-title').textContent = s ? 'Editar Serviço' : 'Novo Serviço Personalizado';
-      document.getElementById('sm-nome').value       = s?.nome       || '';
-      document.getElementById('sm-tipo').value       = s?.tipo       || 'recorrente';
-      document.getElementById('sm-status').value     = s?.status     || 'ativo';
-      document.getElementById('sm-valor').value      = s?.valor      || '';
-      document.getElementById('sm-prazo').value      = s?.prazo      || '';
-      document.getElementById('sm-descricao').value  = s?.descricao  || '';
+      document.getElementById('sm-nome').value = s?.nome || '';
+      document.getElementById('sm-tipo').value = s?.tipo || 'recorrente';
+      document.getElementById('sm-status').value = s?.status || 'ativo';
+      document.getElementById('sm-valor').value = s?.valor || '';
+      document.getElementById('sm-prazo').value = s?.prazo || '';
+      document.getElementById('sm-descricao').value = s?.descricao || '';
       selectedColor = s?.color || 'var(--blue)';
-      document.querySelectorAll('.color-swatch').forEach(sw=>{
-        sw.classList.toggle('selected', sw.dataset.color===selectedColor);
+      document.querySelectorAll('.color-swatch').forEach(sw => {
+        sw.classList.toggle('selected', sw.dataset.color === selectedColor);
       });
       document.getElementById('service-modal-overlay').classList.remove('hidden');
       document.getElementById('sm-nome').focus();
     }
 
     function closeServiceModal(e) {
-      if(e&&e.target!==document.getElementById('service-modal-overlay'))return;
+      if (e && e.target !== document.getElementById('service-modal-overlay')) return;
       document.getElementById('service-modal-overlay').classList.add('hidden');
     }
 
     function saveService() {
       const nome = document.getElementById('sm-nome').value.trim();
-      if (!nome) { document.getElementById('sm-nome').focus(); showToast('Informe o nome do serviço.','error'); return; }
+      if (!nome) { document.getElementById('sm-nome').focus(); showToast('Informe o nome do serviço.', 'error'); return; }
       const svcs = getServices();
       const svc = {
-        id:         editingSvcId || 'svc_'+Date.now(),
+        id: editingSvcId || 'svc_' + Date.now(),
         nome,
-        tipo:       document.getElementById('sm-tipo').value,
-        status:     document.getElementById('sm-status').value,
-        valor:      parseFloat(document.getElementById('sm-valor').value)||0,
-        prazo:      document.getElementById('sm-prazo').value.trim(),
-        descricao:  document.getElementById('sm-descricao').value.trim(),
-        color:      selectedColor,
-        createdAt:  editingSvcId ? (svcs.find(s=>s.id===editingSvcId)?.createdAt||new Date().toISOString()) : new Date().toISOString()
+        tipo: document.getElementById('sm-tipo').value,
+        status: document.getElementById('sm-status').value,
+        valor: parseFloat(document.getElementById('sm-valor').value) || 0,
+        prazo: document.getElementById('sm-prazo').value.trim(),
+        descricao: document.getElementById('sm-descricao').value.trim(),
+        color: selectedColor,
+        createdAt: editingSvcId ? (svcs.find(s => s.id === editingSvcId)?.createdAt || new Date().toISOString()) : new Date().toISOString()
       };
-      if (editingSvcId) { const idx=svcs.findIndex(s=>s.id===editingSvcId); svcs[idx]=svc; }
+      if (editingSvcId) { const idx = svcs.findIndex(s => s.id === editingSvcId); svcs[idx] = svc; }
       else svcs.unshift(svc);
       saveServices(svcs);
       closeServiceModal();
       renderServices();
-      showToast(editingSvcId?'Serviço atualizado!':'Serviço criado!');
-      editingSvcId=null;
+      showToast(editingSvcId ? 'Serviço atualizado!' : 'Serviço criado!');
+      editingSvcId = null;
     }
 
     function deleteService(id) {
-      const s = getServices().find(x=>x.id===id);
-      if (!s||!confirm('Excluir serviço "'+s.nome+'"?')) return;
-      saveServices(getServices().filter(x=>x.id!==id));
+      const s = getServices().find(x => x.id === id);
+      if (!s || !confirm('Excluir serviço "' + s.nome + '"?')) return;
+      saveServices(getServices().filter(x => x.id !== id));
       renderServices();
     }
 
@@ -2428,36 +2445,36 @@
       document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', ['usuarios', 'ranking', 'servicos', 'config', 'clientes', 'churn'][i] === id));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       document.getElementById('tab-' + id).classList.add('active');
-      if (id === 'ranking')  renderRanking();
-      if (id === 'config')   loadMetas();
+      if (id === 'ranking') renderRanking();
+      if (id === 'config') loadMetas();
       if (id === 'servicos') renderServices();
       if (id === 'clientes') renderClientes();
-      if (id === 'churn')    renderChurn();
+      if (id === 'churn') renderChurn();
     }
 
     // ── STATS ─────────────────────────────────────────────────────
     function updateStats() {
       const users = getUsers();
-      document.getElementById('s-total').textContent  = users.length;
-      document.getElementById('s-bdr').textContent    = users.filter(u=>u.tipo==='bdr').length;
-      document.getElementById('s-closer').textContent = users.filter(u=>u.tipo==='closer').length;
-      document.getElementById('s-ind').textContent    = users.filter(u=>u.tipo==='indicador').length;
-      document.getElementById('tc-usuarios').textContent   = users.length;
-      document.getElementById('tc-indicadores').textContent = users.filter(u=>u.tipo==='indicador').length;
+      document.getElementById('s-total').textContent = users.length;
+      document.getElementById('s-bdr').textContent = users.filter(u => u.tipo === 'bdr').length;
+      document.getElementById('s-closer').textContent = users.filter(u => u.tipo === 'closer').length;
+      document.getElementById('s-ind').textContent = users.filter(u => u.tipo === 'indicador').length;
+      document.getElementById('tc-usuarios').textContent = users.length;
+      document.getElementById('tc-indicadores').textContent = users.filter(u => u.tipo === 'indicador').length;
     }
 
     // ── RENDER USERS ──────────────────────────────────────────────
     function renderUsers() {
       const users = getUsers();
       const search = document.getElementById('u-search').value.toLowerCase();
-      const tipo   = document.getElementById('u-tipo').value;
+      const tipo = document.getElementById('u-tipo').value;
       const status = document.getElementById('u-status').value;
-      const cfg    = getCfg();
+      const cfg = getCfg();
       const clicks = getRefClicks();
 
       let list = users;
-      if (search) list = list.filter(u => (u.nome||'').toLowerCase().includes(search) || (u.email||'').toLowerCase().includes(search));
-      if (tipo)   list = list.filter(u => u.tipo === tipo);
+      if (search) list = list.filter(u => (u.nome || '').toLowerCase().includes(search) || (u.email || '').toLowerCase().includes(search));
+      if (tipo) list = list.filter(u => u.tipo === tipo);
       if (status) list = list.filter(u => u.status === status);
 
       const tbody = document.getElementById('users-tbody');
@@ -2469,7 +2486,7 @@
         const tr = document.createElement('tr');
         const isInd = u.tipo === 'indicador';
         const baseUrl = cfg.baseUrl || window.location.origin + '/';
-        const link = isInd ? baseUrl + '?ref=' + (u.codigo||'') : '';
+        const link = isInd ? baseUrl + '?ref=' + (u.codigo || '') : '';
         const clks = isInd ? (clicks[u.codigo] || 0) : '';
 
         tr.innerHTML = `
@@ -2477,20 +2494,20 @@
             <div class="td-name">${sanitize(u.nome)}</div>
             <div class="td-sub">${fmtDate(u.createdAt)}</div>
           </td>
-          <td><span class="tipo-badge t-${u.tipo}">${TIPO_LABEL[u.tipo]||u.tipo}</span></td>
+          <td><span class="tipo-badge t-${u.tipo}">${TIPO_LABEL[u.tipo] || u.tipo}</span></td>
           <td>
-            <div>${sanitize(u.email||'—')}</div>
-            <div class="td-sub">${sanitize(u.telefone||'')}</div>
+            <div>${sanitize(u.email || '—')}</div>
+            <div class="td-sub">${sanitize(u.telefone || '')}</div>
           </td>
           <td>${isInd ? `
             <div class="link-cell">
-              <span class="link-url" title="${link}">${link||'—'}</span>
+              <span class="link-url" title="${link}">${link || '—'}</span>
               ${link ? `<button class="btn btn-copy copy-icon btn-xs" onclick="navigator.clipboard.writeText('${link}').then(()=>showToast('Link copiado!'))">📋</button>` : ''}
             </div>
-            <div class="td-sub" style="margin-top:3px">${clks} clique${clks!==1?'s':''}</div>
+            <div class="td-sub" style="margin-top:3px">${clks} clique${clks !== 1 ? 's' : ''}</div>
           ` : '<span style="color:var(--muted);font-size:12px">N/A</span>'}</td>
-          <td>${isInd ? `<span style="color:var(--warn);font-weight:700">${u.comissao||0}%</span>` : '—'}</td>
-          <td><span class="status-badge s-${u.status}">${u.status==='ativo'?'● Ativo':'○ Inativo'}</span></td>
+          <td>${isInd ? `<span style="color:var(--warn);font-weight:700">${u.comissao || 0}%</span>` : '—'}</td>
+          <td><span class="status-badge s-${u.status}">${u.status === 'ativo' ? '● Ativo' : '○ Inativo'}</span></td>
           <td>
             <div class="td-actions">
               ${isInd ? `<button class="btn btn-warn btn-xs" onclick="openDetail('${u.id}')">📊</button>` : ''}
@@ -2505,38 +2522,40 @@
 
     // ── RENDER RANKING ─────────────────────────────────────────────
     function renderRanking() {
-      const users  = getUsers().filter(u => u.tipo === 'indicador' && u.status === 'ativo');
-      const leads  = getLeads();
+      const users = getUsers().filter(u => u.tipo === 'indicador' && u.status === 'ativo');
+      const leads = getLeads();
       const clicks = getRefClicks();
-      const cfg    = getCfg();
+      const cfg = getCfg();
 
-      const fromVal   = document.getElementById('r-from').value;
-      const toVal     = document.getElementById('r-to').value;
+      const fromVal = document.getElementById('r-from').value;
+      const toVal = document.getElementById('r-to').value;
       const svcFilter = document.getElementById('r-service').value;
-      const stFilter  = document.getElementById('r-status').value;
+      const stFilter = document.getElementById('r-status').value;
 
       const ranking = users.map(u => {
         var myLeads = leads.filter(l => l.refCode === u.codigo);
 
         // Apply filters
         if (fromVal) myLeads = myLeads.filter(l => l.createdAt >= fromVal);
-        if (toVal)   myLeads = myLeads.filter(l => l.createdAt <= toVal + 'T23:59:59');
+        if (toVal) myLeads = myLeads.filter(l => l.createdAt <= toVal + 'T23:59:59');
         if (svcFilter) myLeads = myLeads.filter(l => l.service === svcFilter);
-        if (stFilter)  myLeads = myLeads.filter(l => l.status === stFilter);
+        if (stFilter) myLeads = myLeads.filter(l => l.status === stFilter);
 
-        var fechados  = myLeads.filter(l => l.status === 'fechado');
-        var pipeline  = myLeads.filter(l => !['fechado','perdido'].includes(l.status));
-        var valFechado = fechados.reduce((s,l)=>s+(l.value||0),0);
-        var valPipe   = pipeline.reduce((s,l)=>s+(l.value||0),0);
-        var comPct    = parseFloat(u.comissao) || parseFloat(cfg.com?.[u.tipo]) || 0;
-        var comissao  = valFechado * comPct / 100;
-        var ptLead    = parseInt(cfg.ptsLead)    || 1;
-        var ptFech    = parseInt(cfg.ptsFechado) || 10;
-        var pontos    = myLeads.length * ptLead + fechados.length * ptFech;
+        var fechados = myLeads.filter(l => l.status === 'fechado');
+        var pipeline = myLeads.filter(l => !['fechado', 'perdido'].includes(l.status));
+        var valFechado = fechados.reduce((s, l) => s + (l.value || 0), 0);
+        var valPipe = pipeline.reduce((s, l) => s + (l.value || 0), 0);
+        var comPct = parseFloat(u.comissao) || parseFloat(cfg.com?.[u.tipo]) || 0;
+        var comissao = valFechado * comPct / 100;
+        var ptLead = parseInt(cfg.ptsLead) || 1;
+        var ptFech = parseInt(cfg.ptsFechado) || 10;
+        var pontos = myLeads.length * ptLead + fechados.length * ptFech;
 
-        return { u, myLeads, fechados, pipeline, valFechado, valPipe, comissao, pontos,
-                 cliques: clicks[u.codigo] || 0 };
-      }).sort((a,b) => b.fechados.length - a.fechados.length || b.pontos - a.pontos);
+        return {
+          u, myLeads, fechados, pipeline, valFechado, valPipe, comissao, pontos,
+          cliques: clicks[u.codigo] || 0
+        };
+      }).sort((a, b) => b.fechados.length - a.fechados.length || b.pontos - a.pontos);
 
       const tbody = document.getElementById('ranking-tbody');
       tbody.innerHTML = '';
@@ -2545,14 +2564,14 @@
 
       ranking.forEach((r, i) => {
         const pos = i + 1;
-        const posClass = pos===1?'p1':pos===2?'p2':pos===3?'p3':'other';
-        const posLabel = pos===1?'🥇':pos===2?'🥈':pos===3?'🥉':'#'+pos;
-        const initials = (r.u.nome||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-        const colors   = ['var(--blue)','var(--pink)','var(--teal)','var(--orange)','var(--purple)'];
+        const posClass = pos === 1 ? 'p1' : pos === 2 ? 'p2' : pos === 3 ? 'p3' : 'other';
+        const posLabel = pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : '#' + pos;
+        const initials = (r.u.nome || '?').split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+        const colors = ['var(--blue)', 'var(--pink)', 'var(--teal)', 'var(--orange)', 'var(--purple)'];
         const avatarColor = colors[pos % colors.length];
 
         const tr = document.createElement('tr');
-        tr.className = pos<=3?`rank-${pos}`:'';
+        tr.className = pos <= 3 ? `rank-${pos}` : '';
         tr.innerHTML = `
           <td><div class="rank-pos ${posClass}">${posLabel}</div></td>
           <td>
@@ -2560,7 +2579,7 @@
               <div class="avatar" style="background:${avatarColor}22;color:${avatarColor};border:1.5px solid ${avatarColor}40">${initials}</div>
               <div>
                 <div class="rank-name">${sanitize(r.u.nome)}</div>
-                <div class="rank-code">REF: ${r.u.codigo||'—'}</div>
+                <div class="rank-code">REF: ${r.u.codigo || '—'}</div>
               </div>
             </div>
           </td>
@@ -2581,28 +2600,28 @@
     function openDetail(userId) {
       const users = getUsers();
       const leads = getLeads();
-      const cfg   = getCfg();
-      const u     = users.find(x => x.id === userId);
+      const cfg = getCfg();
+      const u = users.find(x => x.id === userId);
       if (!u) return;
 
-      const clicks   = getRefClicks();
-      const myLeads  = leads.filter(l => l.refCode === u.codigo);
+      const clicks = getRefClicks();
+      const myLeads = leads.filter(l => l.refCode === u.codigo);
       const fechados = myLeads.filter(l => l.status === 'fechado');
-      const pipeline = myLeads.filter(l => !['fechado','perdido'].includes(l.status));
-      const valFechado = fechados.reduce((s,l)=>s+(l.value||0),0);
-      const valPipe    = pipeline.reduce((s,l)=>s+(l.value||0),0);
-      const comPct     = parseFloat(u.comissao) || 0;
-      const comissao   = valFechado * comPct / 100;
-      const ptLead     = parseInt(cfg.ptsLead)    || 1;
-      const ptFech     = parseInt(cfg.ptsFechado) || 10;
-      const pontos     = myLeads.length * ptLead + fechados.length * ptFech;
-      const baseUrl    = cfg.baseUrl || window.location.origin + '/';
-      const link       = baseUrl + '?ref=' + (u.codigo||'');
-      const cliques    = clicks[u.codigo] || 0;
+      const pipeline = myLeads.filter(l => !['fechado', 'perdido'].includes(l.status));
+      const valFechado = fechados.reduce((s, l) => s + (l.value || 0), 0);
+      const valPipe = pipeline.reduce((s, l) => s + (l.value || 0), 0);
+      const comPct = parseFloat(u.comissao) || 0;
+      const comissao = valFechado * comPct / 100;
+      const ptLead = parseInt(cfg.ptsLead) || 1;
+      const ptFech = parseInt(cfg.ptsFechado) || 10;
+      const pontos = myLeads.length * ptLead + fechados.length * ptFech;
+      const baseUrl = cfg.baseUrl || window.location.origin + '/';
+      const link = baseUrl + '?ref=' + (u.codigo || '');
+      const cliques = clicks[u.codigo] || 0;
 
       // Service breakdown
       const svcCount = {};
-      myLeads.forEach(l => { svcCount[l.service] = (svcCount[l.service]||0)+1; });
+      myLeads.forEach(l => { svcCount[l.service] = (svcCount[l.service] || 0) + 1; });
 
       document.getElementById('detail-modal-title').textContent = '📊 ' + u.nome;
 
@@ -2633,10 +2652,10 @@
           <div style="margin-bottom:16px">
             <div class="form-section">Leads por Serviço</div>
             <div style="display:flex;flex-wrap:wrap;gap:8px">
-              ${Object.entries(svcCount).map(([svc,cnt])=>`
+              ${Object.entries(svcCount).map(([svc, cnt]) => `
                 <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:8px 14px;text-align:center">
                   <div style="font-size:16px;font-weight:800;color:var(--blue)">${cnt}</div>
-                  <div style="font-size:10px;color:var(--muted)">${SVC_LABELS[svc]||svc}</div>
+                  <div style="font-size:10px;color:var(--muted)">${SVC_LABELS[svc] || svc}</div>
                 </div>
               `).join('')}
             </div>
@@ -2647,12 +2666,12 @@
             <div class="form-section">Últimas Indicações</div>
             <table style="width:100%;border-collapse:collapse;font-size:12px">
               <thead><tr>
-                ${['Nome','Serviço','Valor','Status','Data'].map(h=>`<th style="text-align:left;padding:6px 8px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.07);font-size:10px;text-transform:uppercase">${h}</th>`).join('')}
+                ${['Nome', 'Serviço', 'Valor', 'Status', 'Data'].map(h => `<th style="text-align:left;padding:6px 8px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.07);font-size:10px;text-transform:uppercase">${h}</th>`).join('')}
               </tr></thead>
               <tbody>
-                ${myLeads.slice(0,10).map(l=>`<tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+                ${myLeads.slice(0, 10).map(l => `<tr style="border-bottom:1px solid rgba(255,255,255,.04)">
                   <td style="padding:7px 8px;color:var(--white)">${sanitize(l.name)}</td>
-                  <td style="padding:7px 8px;color:var(--muted)">${SVC_LABELS[l.service]||l.service||'—'}</td>
+                  <td style="padding:7px 8px;color:var(--muted)">${SVC_LABELS[l.service] || l.service || '—'}</td>
                   <td style="padding:7px 8px;font-weight:700;color:var(--blue)">${fmtR(l.value)}</td>
                   <td style="padding:7px 8px"><span class="status-badge s-${l.status}" style="font-size:9px">${l.status}</span></td>
                   <td style="padding:7px 8px;color:var(--muted)">${fmtDate(l.createdAt)}</td>
@@ -2679,14 +2698,14 @@
       const u = userId ? users.find(x => x.id === userId) : null;
 
       document.getElementById('user-modal-title').textContent = u ? 'Editar Usuário' : 'Novo Usuário';
-      document.getElementById('um-nome').value     = u?.nome     || '';
-      document.getElementById('um-email').value    = u?.email    || '';
+      document.getElementById('um-nome').value = u?.nome || '';
+      document.getElementById('um-email').value = u?.email || '';
       document.getElementById('um-telefone').value = u?.telefone || '';
-      document.getElementById('um-tipo').value     = u?.tipo     || 'bdr';
-      document.getElementById('um-status').value   = u?.status   || 'ativo';
-      document.getElementById('um-codigo').value   = u?.codigo   || '';
+      document.getElementById('um-tipo').value = u?.tipo || 'bdr';
+      document.getElementById('um-status').value = u?.status || 'ativo';
+      document.getElementById('um-codigo').value = u?.codigo || '';
       document.getElementById('um-comissao').value = u?.comissao || '';
-      document.getElementById('um-pontos').value   = u?.pontos   || '';
+      document.getElementById('um-pontos').value = u?.pontos || '';
       document.getElementById('um-is-gestor').checked = u?.isGestor || false;
 
       if (userId) {
@@ -2702,7 +2721,7 @@
       document.getElementById('um-nome').focus();
     }
 
-    function editUser(id)   { openUserModal(id); }
+    function editUser(id) { openUserModal(id); }
 
     function closeUserModal(e) {
       if (e && e.target !== document.getElementById('user-modal-overlay')) return;
@@ -2715,19 +2734,19 @@
     }
 
     function gerarCodigo() {
-      const nome  = document.getElementById('um-nome').value.trim();
-      const base  = nome ? nome.split(' ')[0].toUpperCase().replace(/[^A-Z]/g,'') : 'IND';
-      const code  = base + Math.random().toString(36).slice(2,6).toUpperCase();
+      const nome = document.getElementById('um-nome').value.trim();
+      const base = nome ? nome.split(' ')[0].toUpperCase().replace(/[^A-Z]/g, '') : 'IND';
+      const code = base + Math.random().toString(36).slice(2, 6).toUpperCase();
       document.getElementById('um-codigo').value = code;
       updateLinkPreview();
     }
 
     function updateLinkPreview() {
       const code = document.getElementById('um-codigo').value.trim();
-      const box  = document.getElementById('link-preview-box');
+      const box = document.getElementById('link-preview-box');
       const urlEl = document.getElementById('um-link-url');
       if (!code) { box.style.display = 'none'; return; }
-      const cfg  = getCfg();
+      const cfg = getCfg();
       const base = cfg.baseUrl || window.location.origin + '/';
       const link = base + '?ref=' + code;
       urlEl.textContent = link;
@@ -2740,12 +2759,12 @@
     }
 
     function saveUser() {
-      const nome  = document.getElementById('um-nome').value.trim();
-      const tipo  = document.getElementById('um-tipo').value;
-      if (!nome)  { document.getElementById('um-nome').focus(); showToast('Informe o nome.','error'); return; }
-      if (!tipo)  { document.getElementById('um-tipo').focus(); showToast('Selecione o tipo.','error'); return; }
+      const nome = document.getElementById('um-nome').value.trim();
+      const tipo = document.getElementById('um-tipo').value;
+      if (!nome) { document.getElementById('um-nome').focus(); showToast('Informe o nome.', 'error'); return; }
+      if (!tipo) { document.getElementById('um-tipo').focus(); showToast('Selecione o tipo.', 'error'); return; }
       if (tipo === 'indicador' && !document.getElementById('um-codigo').value.trim()) {
-        document.getElementById('um-codigo').focus(); showToast('Gere ou informe o código.','error'); return;
+        document.getElementById('um-codigo').focus(); showToast('Gere ou informe o código.', 'error'); return;
       }
 
       const users = getUsers();
@@ -2758,17 +2777,17 @@
       }
 
       const user = {
-        id:        editingUserId || 'user_' + Date.now(),
+        id: editingUserId || 'user_' + Date.now(),
         nome, tipo,
-        email:     document.getElementById('um-email').value.trim(),
-        telefone:  document.getElementById('um-telefone').value.trim(),
-        status:    document.getElementById('um-status').value,
-        isGestor:  document.getElementById('um-is-gestor').checked,
-        createdAt: editingUserId ? (users.find(u=>u.id===editingUserId)?.createdAt || new Date().toISOString()) : new Date().toISOString(),
+        email: document.getElementById('um-email').value.trim(),
+        telefone: document.getElementById('um-telefone').value.trim(),
+        status: document.getElementById('um-status').value,
+        isGestor: document.getElementById('um-is-gestor').checked,
+        createdAt: editingUserId ? (users.find(u => u.id === editingUserId)?.createdAt || new Date().toISOString()) : new Date().toISOString(),
         ...(tipo === 'indicador' ? {
-          codigo:   code,
+          codigo: code,
           comissao: parseFloat(document.getElementById('um-comissao').value) || 0,
-          pontos:   parseInt(document.getElementById('um-pontos').value)    || 10,
+          pontos: parseInt(document.getElementById('um-pontos').value) || 10,
         } : {})
       };
 
@@ -2796,7 +2815,7 @@
           auth: { persistSession: false }
         });
 
-        signupClient.auth.signUp({ email: emailVal, password: passwordVal }).then(function(res) {
+        signupClient.auth.signUp({ email: emailVal, password: passwordVal }).then(function (res) {
           if (res.error) {
             console.error('Erro ao criar login no Supabase:', res.error);
             showToast('Erro ao criar login: ' + res.error.message, 'error');
@@ -2825,37 +2844,37 @@
     // ── SETTINGS ──────────────────────────────────────────────────
     function loadCfg() {
       const cfg = getCfg();
-      document.getElementById('cfg-base-url').value       = cfg.baseUrl || '';
-      document.getElementById('cfg-pts-lead').value       = cfg.ptsLead || 1;
-      document.getElementById('cfg-pts-fechado').value    = cfg.ptsFechado || 10;
+      document.getElementById('cfg-base-url').value = cfg.baseUrl || '';
+      document.getElementById('cfg-pts-lead').value = cfg.ptsLead || 1;
+      document.getElementById('cfg-pts-fechado').value = cfg.ptsFechado || 10;
       document.getElementById('cfg-com-assessoria').value = cfg.com?.assessoria || 5;
-      document.getElementById('cfg-com-catalogacao').value= cfg.com?.catalogacao || 5;
-      document.getElementById('cfg-com-sac').value        = cfg.com?.sac || 5;
-      document.getElementById('cfg-com-ambos').value      = cfg.com?.ambos || 5;
-      document.getElementById('cfg-com-full').value       = cfg.com?.full || 5;
-      document.getElementById('cfg-com-pontual').value    = cfg.com?.pontual || 5;
+      document.getElementById('cfg-com-catalogacao').value = cfg.com?.catalogacao || 5;
+      document.getElementById('cfg-com-sac').value = cfg.com?.sac || 5;
+      document.getElementById('cfg-com-ambos').value = cfg.com?.ambos || 5;
+      document.getElementById('cfg-com-full').value = cfg.com?.full || 5;
+      document.getElementById('cfg-com-pontual').value = cfg.com?.pontual || 5;
       updateCfgPreview();
     }
 
     function saveCfg(showMsg) {
       const cfg = {
-        baseUrl:    document.getElementById('cfg-base-url').value.trim(),
-        ptsLead:    parseInt(document.getElementById('cfg-pts-lead').value)    || 1,
+        baseUrl: document.getElementById('cfg-base-url').value.trim(),
+        ptsLead: parseInt(document.getElementById('cfg-pts-lead').value) || 1,
         ptsFechado: parseInt(document.getElementById('cfg-pts-fechado').value) || 10,
         com: {
           assessoria: parseFloat(document.getElementById('cfg-com-assessoria').value) || 5,
-          catalogacao:parseFloat(document.getElementById('cfg-com-catalogacao').value) || 5,
-          sac:        parseFloat(document.getElementById('cfg-com-sac').value)        || 5,
-          ambos:      parseFloat(document.getElementById('cfg-com-ambos').value)      || 5,
-          full:       parseFloat(document.getElementById('cfg-com-full').value)       || 5,
-          pontual:    parseFloat(document.getElementById('cfg-com-pontual').value)    || 5,
+          catalogacao: parseFloat(document.getElementById('cfg-com-catalogacao').value) || 5,
+          sac: parseFloat(document.getElementById('cfg-com-sac').value) || 5,
+          ambos: parseFloat(document.getElementById('cfg-com-ambos').value) || 5,
+          full: parseFloat(document.getElementById('cfg-com-full').value) || 5,
+          pontual: parseFloat(document.getElementById('cfg-com-pontual').value) || 5,
         }
       };
       _cfg = cfg;
-      try { localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); } catch(e) {}
-      
+      try { localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); } catch (e) { }
+
       // Salvar no Supabase
-      supabase.from('config').upsert([{ key: 'ms_admin_cfg', value: cfg }]).then(function(res) {
+      supabase.from('config').upsert([{ key: 'ms_admin_cfg', value: cfg }]).then(function (res) {
         if (res.error) console.error('Erro ao salvar config no Supabase:', res.error);
       });
 
@@ -2872,28 +2891,28 @@
     // ── EXPORT RANKING ─────────────────────────────────────────────
     function exportRankingCSV() {
       const rows = [];
-      const hds  = ['Posição','Nome','Código','Cliques','Leads','Fechados','Valor Fechado','Comissão','Pontos'];
+      const hds = ['Posição', 'Nome', 'Código', 'Cliques', 'Leads', 'Fechados', 'Valor Fechado', 'Comissão', 'Pontos'];
       rows.push(hds.join(','));
       const users = getUsers().filter(u => u.tipo === 'indicador');
       const leads = getLeads();
       const clicks = getRefClicks();
-      const cfg   = getCfg();
+      const cfg = getCfg();
 
       users.forEach((u, i) => {
-        const myLeads  = leads.filter(l => l.refCode === u.codigo);
+        const myLeads = leads.filter(l => l.refCode === u.codigo);
         const fechados = myLeads.filter(l => l.status === 'fechado');
-        const valFechado = fechados.reduce((s,l)=>s+(l.value||0),0);
-        const comPct   = parseFloat(u.comissao) || 0;
+        const valFechado = fechados.reduce((s, l) => s + (l.value || 0), 0);
+        const comPct = parseFloat(u.comissao) || 0;
         const comissao = valFechado * comPct / 100;
-        const pontos   = myLeads.length * (parseInt(cfg.ptsLead)||1) + fechados.length * (parseInt(cfg.ptsFechado)||10);
-        rows.push([i+1, u.nome, u.codigo||'', clicks[u.codigo]||0,
-          myLeads.length, fechados.length, valFechado, comissao.toFixed(2), pontos
-        ].map(v=>`"${v}"`).join(','));
+        const pontos = myLeads.length * (parseInt(cfg.ptsLead) || 1) + fechados.length * (parseInt(cfg.ptsFechado) || 10);
+        rows.push([i + 1, u.nome, u.codigo || '', clicks[u.codigo] || 0,
+        myLeads.length, fechados.length, valFechado, comissao.toFixed(2), pontos
+        ].map(v => `"${v}"`).join(','));
       });
 
       const a = document.createElement('a');
       a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(rows.join('\n'));
-      a.download = 'ranking-indicadores-' + new Date().toISOString().slice(0,10) + '.csv';
+      a.download = 'ranking-indicadores-' + new Date().toISOString().slice(0, 10) + '.csv';
       a.click();
     }
 
@@ -2901,7 +2920,7 @@
     function showToast(msg, type) {
       const t = document.createElement('div');
       t.style.cssText = `position:fixed;bottom:24px;right:24px;z-index:9999;
-        background:${type==='error'?'var(--danger)':'var(--success)'};color:white;
+        background:${type === 'error' ? 'var(--danger)' : 'var(--success)'};color:white;
         padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;
         box-shadow:0 4px 20px rgba(0,0,0,.4);animation:fadeIn .3s`;
       t.textContent = msg;
@@ -2914,10 +2933,10 @@
       if (e.key === 'Escape') {
         document.getElementById('user-modal-overlay').classList.add('hidden');
         document.getElementById('detail-modal-overlay').classList.add('hidden');
-        const m1 = document.getElementById('cliente-modal-overlay'); if(m1) m1.classList.add('hidden');
-        const m2 = document.getElementById('churn-modal-overlay'); if(m2) m2.classList.add('hidden');
+        const m1 = document.getElementById('cliente-modal-overlay'); if (m1) m1.classList.add('hidden');
+        const m2 = document.getElementById('churn-modal-overlay'); if (m2) m2.classList.add('hidden');
       }
-      if ((e.ctrlKey||e.metaKey) && e.key === 'n') { e.preventDefault(); openUserModal(); }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'n') { e.preventDefault(); openUserModal(); }
     });
 
     // ─── AUTH & INITIALIZATION ───────────────────────────────────────
@@ -2926,16 +2945,16 @@
       if (session) {
         const email = session.user.email;
         const isIgor = email.toLowerCase() === 'igor.costa@db1.com.br';
-        
+
         // Buscar perfil na tabela team_members
         const { data: profile } = await supabase
           .from('team_members')
           .select('*')
           .eq('email', email)
           .maybeSingle();
-          
+
         const isGestor = isIgor || (profile && (profile.isGestor === true || profile.tipo === 'responsavel'));
-        
+
         if (isGestor) {
           document.getElementById('login-overlay').style.display = 'none';
           await loadSupabaseData();
@@ -2959,14 +2978,14 @@
           telefone: m.telefone || m.phone,
           phone: m.phone || m.telefone
         }));
-        try { localStorage.setItem(U_KEY, JSON.stringify(_users)); } catch(e) {}
+        try { localStorage.setItem(U_KEY, JSON.stringify(_users)); } catch (e) { }
       }
 
       // Leads
       const leadsRes = await supabase.from('leads').select('*');
       if (!leadsRes.error) {
         _leads = leadsRes.data || [];
-        try { localStorage.setItem(L_KEY, JSON.stringify(_leads)); } catch(e) {}
+        try { localStorage.setItem(L_KEY, JSON.stringify(_leads)); } catch (e) { }
       }
 
       // Services
@@ -2974,14 +2993,14 @@
       if (!servicesRes.error) {
         _services = servicesRes.data || [];
         const SVC_KEY = 'ms_crm_services';
-        try { localStorage.setItem(SVC_KEY, JSON.stringify(_services)); } catch(e) {}
+        try { localStorage.setItem(SVC_KEY, JSON.stringify(_services)); } catch (e) { }
       }
 
       // Config
       const configRes = await supabase.from('config').select('*').eq('key', 'ms_admin_cfg');
       if (!configRes.error && configRes.data && configRes.data.length > 0) {
         _cfg = configRes.data[0].value || _cfg;
-        try { localStorage.setItem(CFG_KEY, JSON.stringify(_cfg)); } catch(e) {}
+        try { localStorage.setItem(CFG_KEY, JSON.stringify(_cfg)); } catch (e) { }
       }
 
       // Ref clicks
@@ -2991,7 +3010,7 @@
         (clicksRes.data || []).forEach(c => {
           _refClicks[c.refCode] = c.clicks || 0;
         });
-        try { localStorage.setItem(REF_KEY, JSON.stringify(_refClicks)); } catch(e) {}
+        try { localStorage.setItem(REF_KEY, JSON.stringify(_refClicks)); } catch (e) { }
       }
 
       // Render UI
@@ -3005,11 +3024,11 @@
       renderChurn();
 
       // Set default date filters to last 30 days
-      const today = new Date().toISOString().slice(0,10);
-      const ago30 = new Date(Date.now()-30*86400000).toISOString().slice(0,10);
+      const today = new Date().toISOString().slice(0, 10);
+      const ago30 = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
       document.getElementById('r-from').value = ago30;
-      document.getElementById('r-to').value   = today;
-      
+      document.getElementById('r-to').value = today;
+
       if (document.getElementById('tab-ranking').classList.contains('active')) {
         renderRanking();
       }
@@ -3019,20 +3038,20 @@
       const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value;
       const btn = document.getElementById('btn-do-login');
-      
+
       if (!email || !password) {
         alert('Por favor, preencha o e-mail e a senha.');
         return;
       }
-      
+
       btn.disabled = true;
       btn.textContent = 'Entrando...';
-      
+
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      
+
       btn.disabled = false;
       btn.textContent = 'Entrar';
-      
+
       if (error) {
         alert('Erro ao fazer login: ' + error.message);
       } else {
@@ -3048,7 +3067,7 @@
 
     // ── METAS DE VENDAS ──────────────────────────────────────────
     const META_KEY = 'ms_admin_metas';
-    function getMetas() { try{return JSON.parse(localStorage.getItem(META_KEY)||'{}');}catch(e){return{};} }
+    function getMetas() { try { return JSON.parse(localStorage.getItem(META_KEY) || '{}'); } catch (e) { return {}; } }
     function saveMeta(key, data) {
       var m = getMetas();
       if (!m.global) m.global = {};
@@ -3076,22 +3095,22 @@
     var currentMetaTab = 'mensal';
     function switchMetaTab(type) {
       currentMetaTab = type;
-      ['mensal','trimestral','anual'].forEach(function(t){
-        var btn = document.getElementById('mtab-'+t);
-        if (btn) { btn.className = t===type ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm'; }
+      ['mensal', 'trimestral', 'anual'].forEach(function (t) {
+        var btn = document.getElementById('mtab-' + t);
+        if (btn) { btn.className = t === type ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm'; }
       });
-      document.getElementById('meta-sel-mensal').style.display     = type==='mensal'     ? 'flex' : 'none';
-      document.getElementById('meta-sel-trimestral').style.display = type==='trimestral' ? 'flex' : 'none';
-      document.getElementById('meta-sel-anual').style.display      = type==='anual'      ? 'flex' : 'none';
-      var labels = {mensal:'Mensal', trimestral:'Trimestral', anual:'Anual'};
+      document.getElementById('meta-sel-mensal').style.display = type === 'mensal' ? 'flex' : 'none';
+      document.getElementById('meta-sel-trimestral').style.display = type === 'trimestral' ? 'flex' : 'none';
+      document.getElementById('meta-sel-anual').style.display = type === 'anual' ? 'flex' : 'none';
+      var labels = { mensal: 'Mensal', trimestral: 'Trimestral', anual: 'Anual' };
       document.getElementById('meta-form-title').textContent = '+ Adicionar Meta ' + labels[type];
       renderMetaList();
     }
     function switchUserMetaType() {
       var type = document.getElementById('meta-u-type').value;
-      document.getElementById('meta-u-sel-m').style.display = type==='mensal'     ? 'flex' : 'none';
-      document.getElementById('meta-u-sel-q').style.display = type==='trimestral' ? 'flex' : 'none';
-      document.getElementById('meta-u-sel-a').style.display = type==='anual'      ? 'block' : 'none';
+      document.getElementById('meta-u-sel-m').style.display = type === 'mensal' ? 'flex' : 'none';
+      document.getElementById('meta-u-sel-q').style.display = type === 'trimestral' ? 'flex' : 'none';
+      document.getElementById('meta-u-sel-a').style.display = type === 'anual' ? 'block' : 'none';
     }
 
     function getCurrentMetaKey() {
@@ -3124,26 +3143,26 @@
 
     function saveMetaPeriod() {
       var key = getCurrentMetaKey();
-      if (!key) { showToast('Selecione um período.','error'); return; }
+      if (!key) { showToast('Selecione um período.', 'error'); return; }
       var data = {
-        total:      parseFloat(document.getElementById('meta-f-total')?.value)||0,
-        recorrente: parseFloat(document.getElementById('meta-f-recorrente')?.value)||0,
-        pontual:    parseFloat(document.getElementById('meta-f-pontual')?.value)||0,
-        leads:      parseInt(document.getElementById('meta-f-leads')?.value)||0,
-        tipo:       currentMetaTab
+        total: parseFloat(document.getElementById('meta-f-total')?.value) || 0,
+        recorrente: parseFloat(document.getElementById('meta-f-recorrente')?.value) || 0,
+        pontual: parseFloat(document.getElementById('meta-f-pontual')?.value) || 0,
+        leads: parseInt(document.getElementById('meta-f-leads')?.value) || 0,
+        tipo: currentMetaTab
       };
       saveMeta(key, data);
-      ['meta-f-total','meta-f-recorrente','meta-f-pontual','meta-f-leads'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+      ['meta-f-total', 'meta-f-recorrente', 'meta-f-pontual', 'meta-f-leads'].forEach(function (id) { var el = document.getElementById(id); if (el) el.value = ''; });
       renderMetaList();
       showToast('Meta salva!');
     }
     function saveUserMetaPeriod() {
       var uid = document.getElementById('meta-u-user')?.value;
-      if (!uid) { showToast('Selecione um responsável.','error'); return; }
+      if (!uid) { showToast('Selecione um responsável.', 'error'); return; }
       var key = getUserMetaKey();
       var type = document.getElementById('meta-u-type').value;
-      saveUserMeta(uid, key, { total: parseFloat(document.getElementById('meta-u-total')?.value)||0, tipo: type });
-      var el = document.getElementById('meta-u-total'); if(el) el.value='';
+      saveUserMeta(uid, key, { total: parseFloat(document.getElementById('meta-u-total')?.value) || 0, tipo: type });
+      var el = document.getElementById('meta-u-total'); if (el) el.value = '';
       renderMetaList();
       showToast('Meta do usuário salva!');
     }
@@ -3151,12 +3170,12 @@
     function renderMetaList() {
       var m = getMetas();
       var global = m.global || {};
-      var filtered = Object.entries(global).filter(function(e){ return e[1].tipo === currentMetaTab; });
-      filtered.sort(function(a,b){ return a[0] < b[0] ? 1 : -1; });
-      var monthNames = {'01':'Jan','02':'Fev','03':'Mar','04':'Abr','05':'Mai','06':'Jun','07':'Jul','08':'Ago','09':'Set','10':'Out','11':'Nov','12':'Dez'};
+      var filtered = Object.entries(global).filter(function (e) { return e[1].tipo === currentMetaTab; });
+      filtered.sort(function (a, b) { return a[0] < b[0] ? 1 : -1; });
+      var monthNames = { '01': 'Jan', '02': 'Fev', '03': 'Mar', '04': 'Abr', '05': 'Mai', '06': 'Jun', '07': 'Jul', '08': 'Ago', '09': 'Set', '10': 'Out', '11': 'Nov', '12': 'Dez' };
       function prettyKey(key, tipo) {
-        if (tipo === 'mensal') { var p=key.split('-'); return (monthNames[p[1]]||p[1])+'/'+p[0]; }
-        if (tipo === 'trimestral') { var p=key.split('-'); return p[1]+' '+p[0]; }
+        if (tipo === 'mensal') { var p = key.split('-'); return (monthNames[p[1]] || p[1]) + '/' + p[0]; }
+        if (tipo === 'trimestral') { var p = key.split('-'); return p[1] + ' ' + p[0]; }
         return key;
       }
       var listEl = document.getElementById('meta-list-global');
@@ -3165,44 +3184,44 @@
         listEl.innerHTML = '<div style="font-size:11px;color:var(--muted);text-align:center;padding:12px">Nenhuma meta cadastrada para este tipo de período.</div>';
       } else {
         var html = '';
-        filtered.forEach(function(e) {
+        filtered.forEach(function (e) {
           var key = e[0], d = e[1];
           html += '<div class="meta-list-item">'
-                + '<div class="meta-list-period">' + prettyKey(key, d.tipo) + '</div>'
-                + '<div class="meta-list-vals">'
-                + '<div class="meta-list-val">Total: <span>' + fmt(d.total) + '</span></div>'
-                + (d.recorrente ? '<div class="meta-list-val">Recorrente: <span>' + fmt(d.recorrente) + '</span></div>' : '')
-                + (d.pontual    ? '<div class="meta-list-val">Pontual: <span>' + fmt(d.pontual) + '</span></div>' : '')
-                + (d.leads      ? '<div class="meta-list-val">Leads: <span>' + d.leads + '</span></div>' : '')
-                + '</div>'
-                + '<div class="td-actions">'
-                + '<button class="btn btn-danger btn-xs" data-mkey="' + key + '" onclick="deleteMeta(this.dataset.mkey);renderMetaList()">✕</button>'
-                + '</div>'
-                + '</div>';
+            + '<div class="meta-list-period">' + prettyKey(key, d.tipo) + '</div>'
+            + '<div class="meta-list-vals">'
+            + '<div class="meta-list-val">Total: <span>' + fmt(d.total) + '</span></div>'
+            + (d.recorrente ? '<div class="meta-list-val">Recorrente: <span>' + fmt(d.recorrente) + '</span></div>' : '')
+            + (d.pontual ? '<div class="meta-list-val">Pontual: <span>' + fmt(d.pontual) + '</span></div>' : '')
+            + (d.leads ? '<div class="meta-list-val">Leads: <span>' + d.leads + '</span></div>' : '')
+            + '</div>'
+            + '<div class="td-actions">'
+            + '<button class="btn btn-danger btn-xs" data-mkey="' + key + '" onclick="deleteMeta(this.dataset.mkey);renderMetaList()">✕</button>'
+            + '</div>'
+            + '</div>';
         });
         listEl.innerHTML = html;
       }
 
       // User metas
       var users = m.users || {};
-      var team  = getUsers();
+      var team = getUsers();
       var userListEl = document.getElementById('meta-list-users');
       if (!userListEl) return;
       var uRows = '';
-      Object.entries(users).forEach(function(ue) {
+      Object.entries(users).forEach(function (ue) {
         var uid = ue[0], umetas = ue[1];
-        var member = team.find(function(t){ return t.id === uid; });
+        var member = team.find(function (t) { return t.id === uid; });
         if (!member) return;
-        Object.entries(umetas).forEach(function(me) {
+        Object.entries(umetas).forEach(function (me) {
           var mkey = me[0], md = me[1];
           uRows += '<div class="meta-list-item">'
-                 + '<div style="font-size:10px;font-weight:700;color:var(--teal);min-width:130px">' + sanitize(member.nome) + '</div>'
-                 + '<div class="meta-list-period" style="min-width:90px">' + prettyKey(mkey, md.tipo) + '</div>'
-                 + '<div class="meta-list-vals"><div class="meta-list-val">Meta: <span>' + fmt(md.total) + '</span></div></div>'
-                 + '<div class="td-actions">'
-                 + '<button class="btn btn-danger btn-xs" data-uid="' + uid + '" data-mkey="' + mkey + '" onclick="deleteUserMeta(this.dataset.uid,this.dataset.mkey);renderMetaList()">✕</button>'
-                 + '</div>'
-                 + '</div>';
+            + '<div style="font-size:10px;font-weight:700;color:var(--teal);min-width:130px">' + sanitize(member.nome) + '</div>'
+            + '<div class="meta-list-period" style="min-width:90px">' + prettyKey(mkey, md.tipo) + '</div>'
+            + '<div class="meta-list-vals"><div class="meta-list-val">Meta: <span>' + fmt(md.total) + '</span></div></div>'
+            + '<div class="td-actions">'
+            + '<button class="btn btn-danger btn-xs" data-uid="' + uid + '" data-mkey="' + mkey + '" onclick="deleteUserMeta(this.dataset.uid,this.dataset.mkey);renderMetaList()">✕</button>'
+            + '</div>'
+            + '</div>';
         });
       });
       userListEl.innerHTML = uRows || '<div style="font-size:11px;color:var(--muted);text-align:center;padding:10px">Nenhuma meta de usuário cadastrada.</div>';
@@ -3211,9 +3230,9 @@
     function populateUserMetaSelect() {
       var sel = document.getElementById('meta-u-user');
       if (!sel) return;
-      var team = getUsers().filter(function(u){ return u.status==='ativo'; });
+      var team = getUsers().filter(function (u) { return u.status === 'ativo'; });
       sel.innerHTML = '<option value="">Selecione o responsável...</option>' +
-        team.map(function(u){ return '<option value="'+sanitize(u.id)+'">'+sanitize(u.nome)+'</option>'; }).join('');
+        team.map(function (u) { return '<option value="' + sanitize(u.id) + '">' + sanitize(u.nome) + '</option>'; }).join('');
     }
 
     function loadMetas() {
@@ -3223,19 +3242,19 @@
 
     // ── CLIENTES ATIVOS ────────────────────────────────────────
     const CLI_KEY = 'ms_clientes_ativos';
-    const CH_KEY  = 'ms_churn';
-    function getClientes(){ try{return JSON.parse(localStorage.getItem(CLI_KEY)||'[]');}catch(e){return[];} }
-    function saveClientes(l){ localStorage.setItem(CLI_KEY,JSON.stringify(l)); }
-    function getChurns(){    try{return JSON.parse(localStorage.getItem(CH_KEY)||'[]');}catch(e){return[];} }
-    function saveChurns(l){  localStorage.setItem(CH_KEY,JSON.stringify(l)); }
-    function fmtMoney(v){ return v?'R$ '+(+v).toLocaleString('pt-BR',{minimumFractionDigits:2}):'—'; }
+    const CH_KEY = 'ms_churn';
+    function getClientes() { try { return JSON.parse(localStorage.getItem(CLI_KEY) || '[]'); } catch (e) { return []; } }
+    function saveClientes(l) { localStorage.setItem(CLI_KEY, JSON.stringify(l)); }
+    function getChurns() { try { return JSON.parse(localStorage.getItem(CH_KEY) || '[]'); } catch (e) { return []; } }
+    function saveChurns(l) { localStorage.setItem(CH_KEY, JSON.stringify(l)); }
+    function fmtMoney(v) { return v ? 'R$ ' + (+v).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '—'; }
 
     function renderClientes() {
-      var search   = document.getElementById('cli-search')?.value?.toLowerCase()||'';
-      var curva    = document.getElementById('cli-curva')?.value||'';
+      var search = document.getElementById('cli-search')?.value?.toLowerCase() || '';
+      var curva = document.getElementById('cli-curva')?.value || '';
       var list = getClientes();
-      if (search)  list = list.filter(function(c){ return (c.nome||'').toLowerCase().includes(search)||(c.gerente||'').toLowerCase().includes(search); });
-      if (curva)   list = list.filter(function(c){ return (c.curva||'-')===curva; });
+      if (search) list = list.filter(function (c) { return (c.nome || '').toLowerCase().includes(search) || (c.gerente || '').toLowerCase().includes(search); });
+      if (curva) list = list.filter(function (c) { return (c.curva || '-') === curva; });
 
       var tbody = document.getElementById('clientes-tbody');
       var emptyEl = document.getElementById('clientes-empty');
@@ -3244,82 +3263,86 @@
       if (emptyEl) emptyEl.classList.toggle('hidden', list.length > 0);
       document.querySelector('#tab-clientes table').style.display = list.length ? '' : 'none';
 
-      list.forEach(function(c) {
-        var curvaClass = {A:'curva-a',B:'curva-b',C:'curva-c'}[c.curva]||'curva-d';
+      list.forEach(function (c) {
+        var curvaClass = { A: 'curva-a', B: 'curva-b', C: 'curva-c' }[c.curva] || 'curva-d';
         var tr = document.createElement('tr');
         var cells = [
           '<td style="font-weight:600;color:var(--white)">' + sanitize(c.nome) + '</td>',
-          '<td style="color:var(--muted)">' + sanitize(c.servicos||'—') + '</td>',
-          '<td>' + sanitize(c.gerente||'—') + '</td>',
-          '<td class="money-cell' + ((!c.faturamento||c.faturamento==0)?' zero':'') + '">' + fmtMoney(c.faturamento) + '</td>',
-          '<td class="money-cell' + ((!c.fixoAssessoria||c.fixoAssessoria==0)?' zero':'') + '">' + fmtMoney(c.fixoAssessoria) + '</td>',
-          '<td class="money-cell' + ((!c.fixoConsultoria||c.fixoConsultoria==0)?' zero':'') + '">' + fmtMoney(c.fixoConsultoria) + '</td>',
-          '<td class="money-cell' + ((!c.fixoSac||c.fixoSac==0)?' zero':'') + '">' + fmtMoney(c.fixoSac) + '</td>',
-          '<td class="money-cell' + ((!c.fixoBackoffice||c.fixoBackoffice==0)?' zero':'') + '">' + fmtMoney(c.fixoBackoffice) + '</td>',
-          '<td><span class="curva-badge ' + curvaClass + '">' + (c.curva||'—') + '</span></td>',
-          '<td class="money-cell' + ((!c.varTr||c.varTr==0)?' zero':'') + '">' + fmtMoney(c.varTr) + '</td>',
-          '<td class="money-cell' + ((!c.varSac||c.varSac==0)?' zero':'') + '">' + fmtMoney(c.varSac) + '</td>',
-          '<td class="money-cell' + ((!c.varBackoffice||c.varBackoffice==0)?' zero':'') + '">' + fmtMoney(c.varBackoffice) + '</td>',
+          '<td style="color:var(--muted)">' + sanitize(c.servicos || '—') + '</td>',
+          '<td>' + sanitize(c.gerente || '—') + '</td>',
+          '<td class="money-cell' + ((!c.faturamento || c.faturamento == 0) ? ' zero' : '') + '">' + fmtMoney(c.faturamento) + '</td>',
+          '<td class="money-cell' + ((!c.fixoAssessoria || c.fixoAssessoria == 0) ? ' zero' : '') + '">' + fmtMoney(c.fixoAssessoria) + '</td>',
+          '<td class="money-cell' + ((!c.fixoConsultoria || c.fixoConsultoria == 0) ? ' zero' : '') + '">' + fmtMoney(c.fixoConsultoria) + '</td>',
+          '<td class="money-cell' + ((!c.fixoSac || c.fixoSac == 0) ? ' zero' : '') + '">' + fmtMoney(c.fixoSac) + '</td>',
+          '<td class="money-cell' + ((!c.fixoBackoffice || c.fixoBackoffice == 0) ? ' zero' : '') + '">' + fmtMoney(c.fixoBackoffice) + '</td>',
+          '<td><span class="curva-badge ' + curvaClass + '">' + (c.curva || '—') + '</span></td>',
+          '<td class="money-cell' + ((!c.varTr || c.varTr == 0) ? ' zero' : '') + '">' + fmtMoney(c.varTr) + '</td>',
+          '<td class="money-cell' + ((!c.varSac || c.varSac == 0) ? ' zero' : '') + '">' + fmtMoney(c.varSac) + '</td>',
+          '<td class="money-cell' + ((!c.varBackoffice || c.varBackoffice == 0) ? ' zero' : '') + '">' + fmtMoney(c.varBackoffice) + '</td>',
           '<td><div class="td-actions">' +
-            '<button class="btn btn-ghost btn-xs" data-cid="' + c.id + '" onclick="openClienteModal(this.dataset.cid)">✏</button>' +
-            '<button class="btn btn-danger btn-xs" data-cid="' + c.id + '" onclick="deleteCliente(this.dataset.cid)">✕</button>' +
+          '<button class="btn btn-ghost btn-xs" data-cid="' + c.id + '" onclick="openClienteModal(this.dataset.cid)">✏</button>' +
+          '<button class="btn btn-danger btn-xs" data-cid="' + c.id + '" onclick="deleteCliente(this.dataset.cid)">✕</button>' +
           '</div></td>'
         ];
         tr.innerHTML = cells.join('');
         tbody.appendChild(tr);
       });
       var total = getClientes();
-      var mrr = total.reduce(function(s,c){ return s+(+c.faturamento||0); },0);
+      var mrr = total.reduce(function (s, c) { return s + (+c.faturamento || 0); }, 0);
       document.getElementById('cli-total').textContent = total.length;
-      document.getElementById('cli-mrr').textContent = 'R$ '+(mrr).toLocaleString('pt-BR',{minimumFractionDigits:0});
-      document.getElementById('cli-curva-a').textContent = total.filter(function(c){return c.curva==='A';}).length;
-      document.getElementById('cli-curva-b').textContent = total.filter(function(c){return c.curva==='B';}).length;
+      document.getElementById('cli-mrr').textContent = 'R$ ' + (mrr).toLocaleString('pt-BR', { minimumFractionDigits: 0 });
+      document.getElementById('cli-curva-a').textContent = total.filter(function (c) { return c.curva === 'A'; }).length;
+      document.getElementById('cli-curva-b').textContent = total.filter(function (c) { return c.curva === 'B'; }).length;
       document.getElementById('tc-clientes').textContent = total.length;
     }
 
     let editingClienteId = null;
     function openClienteModal(id) {
-      editingClienteId = id||null;
-      var c = id ? getClientes().find(function(x){return x.id===id;}) : null;
+      editingClienteId = id || null;
+      var c = id ? getClientes().find(function (x) { return x.id === id; }) : null;
       document.getElementById('cli-modal-title').textContent = c ? 'Editar Cliente' : 'Novo Cliente Ativo';
-      var fields = {nome:'',servicos:'',gerente:'',faturamento:'',fixoAssessoria:'',fixoConsultoria:'',fixoSac:'',fixoBackoffice:'',varTr:'',varSac:'',varBackoffice:'',obs:''};
-      Object.keys(fields).forEach(function(k){
-        var el = document.getElementById('cli-'+k.replace(/([A-Z])/g,'-$1').toLowerCase().replace(/^cli-/,'cli-'));
+      var fields = { nome: '', servicos: '', gerente: '', faturamento: '', fixoAssessoria: '', fixoConsultoria: '', fixoSac: '', fixoBackoffice: '', varTr: '', varSac: '', varBackoffice: '', obs: '' };
+      Object.keys(fields).forEach(function (k) {
+        var el = document.getElementById('cli-' + k.replace(/([A-Z])/g, '-$1').toLowerCase().replace(/^cli-/, 'cli-'));
       });
-      var map = {'cli-nome':'nome','cli-gerente':'gerente','cli-servicos':'servicos','cli-faturamento':'faturamento',
-        'cli-fixo-assessoria':'fixoAssessoria','cli-fixo-consultoria':'fixoConsultoria','cli-fixo-sac':'fixoSac',
-        'cli-fixo-backoffice':'fixoBackoffice','cli-var-tr':'varTr','cli-var-sac':'varSac',
-        'cli-var-backoffice':'varBackoffice','cli-obs':'obs'};
-      Object.entries(map).forEach(function(e){ var el=document.getElementById(e[0]); if(el) el.value=c?(c[e[1]]||''):''; });
-      document.getElementById('cli-curva').value = c ? (c.curva||'-') : '-';
+      var map = {
+        'cli-nome': 'nome', 'cli-gerente': 'gerente', 'cli-servicos': 'servicos', 'cli-faturamento': 'faturamento',
+        'cli-fixo-assessoria': 'fixoAssessoria', 'cli-fixo-consultoria': 'fixoConsultoria', 'cli-fixo-sac': 'fixoSac',
+        'cli-fixo-backoffice': 'fixoBackoffice', 'cli-var-tr': 'varTr', 'cli-var-sac': 'varSac',
+        'cli-var-backoffice': 'varBackoffice', 'cli-obs': 'obs'
+      };
+      Object.entries(map).forEach(function (e) { var el = document.getElementById(e[0]); if (el) el.value = c ? (c[e[1]] || '') : ''; });
+      document.getElementById('cli-curva').value = c ? (c.curva || '-') : '-';
       document.getElementById('cliente-modal-overlay').classList.remove('hidden');
       document.getElementById('cli-nome').focus();
     }
-    function closeClienteModal(e){ if(e&&e.target!==document.getElementById('cliente-modal-overlay'))return; document.getElementById('cliente-modal-overlay').classList.add('hidden'); }
+    function closeClienteModal(e) { if (e && e.target !== document.getElementById('cliente-modal-overlay')) return; document.getElementById('cliente-modal-overlay').classList.add('hidden'); }
     function saveCliente() {
       var nome = document.getElementById('cli-nome').value.trim();
-      if (!nome) { showToast('Informe o nome do cliente.','error'); return; }
+      if (!nome) { showToast('Informe o nome do cliente.', 'error'); return; }
       var list = getClientes();
-      var map = {'cli-nome':'nome','cli-gerente':'gerente','cli-servicos':'servicos','cli-faturamento':'faturamento',
-        'cli-fixo-assessoria':'fixoAssessoria','cli-fixo-consultoria':'fixoConsultoria','cli-fixo-sac':'fixoSac',
-        'cli-fixo-backoffice':'fixoBackoffice','cli-var-tr':'varTr','cli-var-sac':'varSac',
-        'cli-var-backoffice':'varBackoffice','cli-obs':'obs'};
-      var obj = { id: editingClienteId||'cli_'+Date.now(), curva: document.getElementById('cli-curva').value, createdAt: (editingClienteId&&list.find(function(x){return x.id===editingClienteId;})?.createdAt)||new Date().toISOString() };
-      Object.entries(map).forEach(function(e){ var el=document.getElementById(e[0]); if(el) obj[e[1]]=el.value.trim(); });
-      if (editingClienteId) { var idx=list.findIndex(function(x){return x.id===editingClienteId;}); list[idx]=obj; }
+      var map = {
+        'cli-nome': 'nome', 'cli-gerente': 'gerente', 'cli-servicos': 'servicos', 'cli-faturamento': 'faturamento',
+        'cli-fixo-assessoria': 'fixoAssessoria', 'cli-fixo-consultoria': 'fixoConsultoria', 'cli-fixo-sac': 'fixoSac',
+        'cli-fixo-backoffice': 'fixoBackoffice', 'cli-var-tr': 'varTr', 'cli-var-sac': 'varSac',
+        'cli-var-backoffice': 'varBackoffice', 'cli-obs': 'obs'
+      };
+      var obj = { id: editingClienteId || 'cli_' + Date.now(), curva: document.getElementById('cli-curva').value, createdAt: (editingClienteId && list.find(function (x) { return x.id === editingClienteId; })?.createdAt) || new Date().toISOString() };
+      Object.entries(map).forEach(function (e) { var el = document.getElementById(e[0]); if (el) obj[e[1]] = el.value.trim(); });
+      if (editingClienteId) { var idx = list.findIndex(function (x) { return x.id === editingClienteId; }); list[idx] = obj; }
       else list.unshift(obj);
-      saveClientes(list); closeClienteModal(); renderClientes(); showToast(editingClienteId?'Cliente atualizado!':'Cliente adicionado!'); editingClienteId=null;
+      saveClientes(list); closeClienteModal(); renderClientes(); showToast(editingClienteId ? 'Cliente atualizado!' : 'Cliente adicionado!'); editingClienteId = null;
     }
-    function deleteCliente(id){ if(!confirm('Excluir este cliente?'))return; saveClientes(getClientes().filter(function(c){return c.id!==id;})); renderClientes(); }
+    function deleteCliente(id) { if (!confirm('Excluir este cliente?')) return; saveClientes(getClientes().filter(function (c) { return c.id !== id; })); renderClientes(); }
 
     // ── CHURN ──────────────────────────────────────────────────
     function renderChurn() {
-      var search = (document.getElementById('ch-search')||{}).value||'';
-      var motivo = (document.getElementById('ch-motivo')||{}).value||'';
+      var search = (document.getElementById('ch-search') || {}).value || '';
+      var motivo = (document.getElementById('ch-motivo') || {}).value || '';
       search = search.toLowerCase();
       var list = getChurns();
-      if (search) list = list.filter(function(c){ return (c.cliente||'').toLowerCase().includes(search); });
-      if (motivo) list = list.filter(function(c){ return c.motivo === motivo; });
+      if (search) list = list.filter(function (c) { return (c.cliente || '').toLowerCase().includes(search); });
+      if (motivo) list = list.filter(function (c) { return c.motivo === motivo; });
       var tbody = document.getElementById('churn-tbody');
       if (!tbody) return;
       tbody.innerHTML = '';
@@ -3327,55 +3350,55 @@
       var tableEl = document.querySelector('#tab-churn table');
       if (emptyEl) emptyEl.classList.toggle('hidden', list.length > 0);
       if (tableEl) tableEl.style.display = list.length ? '' : 'none';
-      var motivoLabel = {preco:'Preço',qualidade:'Qualidade',concorrente:'Concorrente',encerrouoperacao:'Encerrou operação',outros:'Outros'};
-      list.forEach(function(c) {
+      var motivoLabel = { preco: 'Preço', qualidade: 'Qualidade', concorrente: 'Concorrente', encerrouoperacao: 'Encerrou operação', outros: 'Outros' };
+      list.forEach(function (c) {
         var tr = document.createElement('tr');
         var cells = [
           '<td style="font-weight:600;color:var(--white)">' + sanitize(c.cliente) + '</td>',
-          '<td style="color:var(--muted)">' + sanitize(c.servico||'—') + '</td>',
-          '<td>' + sanitize(c.gerente||'—') + '</td>',
+          '<td style="color:var(--muted)">' + sanitize(c.servico || '—') + '</td>',
+          '<td>' + sanitize(c.gerente || '—') + '</td>',
           '<td style="color:var(--muted)">' + fmtDate(c.data) + '</td>',
           '<td class="money-cell" style="color:var(--danger)">' + fmtMoney(c.mrr) + '</td>',
-          '<td><span class="status-badge" style="background:rgba(239,68,68,.12);color:var(--danger)">' + sanitize(motivoLabel[c.motivo]||c.motivo||'—') + '</span></td>',
-          '<td style="font-size:10px;color:var(--muted);max-width:200px">' + sanitize(c.obs||'—') + '</td>',
+          '<td><span class="status-badge" style="background:rgba(239,68,68,.12);color:var(--danger)">' + sanitize(motivoLabel[c.motivo] || c.motivo || '—') + '</span></td>',
+          '<td style="font-size:10px;color:var(--muted);max-width:200px">' + sanitize(c.obs || '—') + '</td>',
           '<td><div class="td-actions">' +
-            '<button class="btn btn-ghost btn-xs" data-cid="' + c.id + '" onclick="openChurnModal(this.dataset.cid)">✏</button>' +
-            '<button class="btn btn-danger btn-xs" data-cid="' + c.id + '" onclick="deleteChurn(this.dataset.cid)">✕</button>' +
+          '<button class="btn btn-ghost btn-xs" data-cid="' + c.id + '" onclick="openChurnModal(this.dataset.cid)">✏</button>' +
+          '<button class="btn btn-danger btn-xs" data-cid="' + c.id + '" onclick="deleteChurn(this.dataset.cid)">✕</button>' +
           '</div></td>'
         ];
         tr.innerHTML = cells.join('');
         tbody.appendChild(tr);
       });
       var all = getChurns();
-      var totalMrr = all.reduce(function(s,c){return s+(+c.mrr||0);},0);
-      var thisMes = all.filter(function(c){ var d=new Date(c.data); var n=new Date(); return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth(); });
+      var totalMrr = all.reduce(function (s, c) { return s + (+c.mrr || 0); }, 0);
+      var thisMes = all.filter(function (c) { var d = new Date(c.data); var n = new Date(); return d.getFullYear() === n.getFullYear() && d.getMonth() === n.getMonth(); });
       var el;
-      el = document.getElementById('ch-total'); if(el) el.textContent = all.length;
-      el = document.getElementById('ch-mrr');   if(el) el.textContent = 'R$ '+totalMrr.toLocaleString('pt-BR',{minimumFractionDigits:0});
-      el = document.getElementById('ch-mes');   if(el) el.textContent = thisMes.length;
-      el = document.getElementById('tc-churn'); if(el) el.textContent = all.length;
+      el = document.getElementById('ch-total'); if (el) el.textContent = all.length;
+      el = document.getElementById('ch-mrr'); if (el) el.textContent = 'R$ ' + totalMrr.toLocaleString('pt-BR', { minimumFractionDigits: 0 });
+      el = document.getElementById('ch-mes'); if (el) el.textContent = thisMes.length;
+      el = document.getElementById('tc-churn'); if (el) el.textContent = all.length;
     }
-    let editingChurnId=null;
-    function openChurnModal(id){
-      editingChurnId=id||null;
-      var c=id?getChurns().find(function(x){return x.id===id;}):null;
-      document.getElementById('ch-modal-title').textContent=c?'Editar Churn':'Registrar Churn';
-      ['ch-cliente','ch-servico','ch-gerente','ch-obs'].forEach(function(k){ var el=document.getElementById(k); var fk=k.replace('ch-',''); if(el) el.value=c?(c[fk]||''):''; });
-      document.getElementById('ch-mrr').value=c?c.mrr||'':'';
-      document.getElementById('ch-data').value=c&&c.data?c.data.slice(0,10):'';
-      document.getElementById('ch-motivo-sel').value=c?c.motivo||'outros':'outros';
+    let editingChurnId = null;
+    function openChurnModal(id) {
+      editingChurnId = id || null;
+      var c = id ? getChurns().find(function (x) { return x.id === id; }) : null;
+      document.getElementById('ch-modal-title').textContent = c ? 'Editar Churn' : 'Registrar Churn';
+      ['ch-cliente', 'ch-servico', 'ch-gerente', 'ch-obs'].forEach(function (k) { var el = document.getElementById(k); var fk = k.replace('ch-', ''); if (el) el.value = c ? (c[fk] || '') : ''; });
+      document.getElementById('ch-mrr').value = c ? c.mrr || '' : '';
+      document.getElementById('ch-data').value = c && c.data ? c.data.slice(0, 10) : '';
+      document.getElementById('ch-motivo-sel').value = c ? c.motivo || 'outros' : 'outros';
       document.getElementById('churn-modal-overlay').classList.remove('hidden');
     }
-    function closeChurnModal(e){ if(e&&e.target!==document.getElementById('churn-modal-overlay'))return; document.getElementById('churn-modal-overlay').classList.add('hidden'); }
-    function saveChurn(){
-      var cliente=document.getElementById('ch-cliente').value.trim();
-      if(!cliente){showToast('Informe o cliente.','error');return;}
-      var list=getChurns();
-      var obj={id:editingChurnId||'ch_'+Date.now(),cliente,servico:document.getElementById('ch-servico').value.trim(),gerente:document.getElementById('ch-gerente').value.trim(),data:document.getElementById('ch-data').value,mrr:parseFloat(document.getElementById('ch-mrr').value)||0,motivo:document.getElementById('ch-motivo-sel').value,obs:document.getElementById('ch-obs').value.trim(),createdAt:(editingChurnId&&list.find(function(x){return x.id===editingChurnId;})?.createdAt)||new Date().toISOString()};
-      if(editingChurnId){var idx=list.findIndex(function(x){return x.id===editingChurnId;});list[idx]=obj;}else list.unshift(obj);
-      saveChurns(list);closeChurnModal();renderChurn();showToast('Churn registrado!');editingChurnId=null;
+    function closeChurnModal(e) { if (e && e.target !== document.getElementById('churn-modal-overlay')) return; document.getElementById('churn-modal-overlay').classList.add('hidden'); }
+    function saveChurn() {
+      var cliente = document.getElementById('ch-cliente').value.trim();
+      if (!cliente) { showToast('Informe o cliente.', 'error'); return; }
+      var list = getChurns();
+      var obj = { id: editingChurnId || 'ch_' + Date.now(), cliente, servico: document.getElementById('ch-servico').value.trim(), gerente: document.getElementById('ch-gerente').value.trim(), data: document.getElementById('ch-data').value, mrr: parseFloat(document.getElementById('ch-mrr').value) || 0, motivo: document.getElementById('ch-motivo-sel').value, obs: document.getElementById('ch-obs').value.trim(), createdAt: (editingChurnId && list.find(function (x) { return x.id === editingChurnId; })?.createdAt) || new Date().toISOString() };
+      if (editingChurnId) { var idx = list.findIndex(function (x) { return x.id === editingChurnId; }); list[idx] = obj; } else list.unshift(obj);
+      saveChurns(list); closeChurnModal(); renderChurn(); showToast('Churn registrado!'); editingChurnId = null;
     }
-    function deleteChurn(id){if(!confirm('Excluir este churn?'))return;saveChurns(getChurns().filter(function(c){return c.id!==id;}));renderChurn();}
+    function deleteChurn(id) { if (!confirm('Excluir este churn?')) return; saveChurns(getChurns().filter(function (c) { return c.id !== id; })); renderChurn(); }
 
     // Start app
     checkAuthAndLoad();
