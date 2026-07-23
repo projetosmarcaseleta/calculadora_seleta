@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>marcaseleta — Painel Gerencial de Mensalidades</title>
+<link rel="icon" type="image/png" href="logo.png" />
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root{
@@ -161,25 +162,8 @@
     <rect x="15" y="150" width="45" height="20" rx="10" transform="rotate(-25 37 160)"/>
   </svg>
   <div class="login-card">
-    <div class="login-brand">
-      <svg class="login-logo-icon" width="64" height="64" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="16" y="38" width="44" height="44" rx="10" fill="#4A63C4" transform="rotate(45 38 60)"/>
-        <g transform="translate(68,28)">
-          <g fill="#4A63C4">
-            <rect x="-4" y="-19" width="8" height="10" rx="2"/>
-            <rect x="-4" y="-19" width="8" height="10" rx="2" transform="rotate(45)"/>
-            <rect x="-4" y="-19" width="8" height="10" rx="2" transform="rotate(90)"/>
-            <rect x="-4" y="-19" width="8" height="10" rx="2" transform="rotate(135)"/>
-            <rect x="-4" y="-19" width="8" height="10" rx="2" transform="rotate(180)"/>
-            <rect x="-4" y="-19" width="8" height="10" rx="2" transform="rotate(225)"/>
-            <rect x="-4" y="-19" width="8" height="10" rx="2" transform="rotate(270)"/>
-            <rect x="-4" y="-19" width="8" height="10" rx="2" transform="rotate(315)"/>
-          </g>
-          <circle r="13" fill="#4A63C4"/>
-          <circle r="5" fill="#ffffff"/>
-        </g>
-      </svg>
-      <span class="login-logo-word">marcaseleta</span>
+    <div class="login-brand" style="flex-direction:column;align-items:center;margin-bottom:12px;">
+      <img src="logo-marcaseleta.png" alt="Marca Seleta" style="height:48px;object-fit:contain;" />
     </div>
     <h2>Painel Gerencial de Mensalidades</h2>
     <p class="login-sub">Acesso restrito a gestores</p>
@@ -192,13 +176,9 @@
   </div>
 </div>
 <div class="wrap oculto" id="painelApp">
-  <div class="topo-marca">
-    <span class="brand-mark">
-      <span class="brand-diamond"></span>
-      <span class="brand-gear">⚙️</span>
-    </span>
-    <div class="brand-textos">
-      <span class="brand-word">marcaseleta</span>
+  <div class="topo-marca" style="display:flex;align-items:center;justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <img src="logo-marcaseleta.png" alt="Marca Seleta" style="height:36px;object-fit:contain;" />
       <span class="brand-subtitulo">Painel Gerencial de Mensalidades — Controle Financeiro</span>
     </div>
   </div>
