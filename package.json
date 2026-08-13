@@ -1,0 +1,23 @@
+{
+  "name": "calculadora_seleta",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test_calculadora.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/projetosmarcaseleta/calculadora_seleta.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/projetosmarcaseleta/calculadora_seleta/issues"
+  },
+  "homepage": "https://github.com/projetosmarcaseleta/calculadora_seleta#readme",
+  "devDependencies": {
+    "jsdom": "^29.1.1"
+  }
+}
