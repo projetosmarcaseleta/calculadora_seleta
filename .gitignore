@@ -1,19 +1,38 @@
-# Dependências
+# Dependências e Node
 node_modules/
 package-lock.json
-
-# Arquivos de Testes
-test_calculadora.js
-test.html
-
-# Logs
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.npm/
+
+# Arquivos e Pastas de Testes
+test/
+tests/
+__tests__/
+test_*.js
+*.test.js
+*.spec.js
+test.html
+test_calculadora.js
+
+# Pastas Temporárias e Rascunhos
+Novo index/
+[Nn]ovo [Ii]ndex/
+scratch/
+temp/
+tmp/
+
+# Logs e Ambientes
+*.log
+.env
+.env.*
+!.env.example
 
 # Arquivos de SO e IDEs
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
+*.swp
+*.swo
