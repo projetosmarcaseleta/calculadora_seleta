@@ -1,3 +1,8 @@
+# Cloudflare / Wrangler
+.wrangler/
+.dev.vars*
+!.dev.vars.example
+
 # Dependências e Node
 node_modules/
 package-lock.json
